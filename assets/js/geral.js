@@ -84,3 +84,6 @@ function mouseOut() {
         card[i].style.visibility = "hidden";
     }
 }
+
+
+
