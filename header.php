@@ -197,7 +197,7 @@
               </div>
             </div>
             <div class="header-info">
-              <div class="header-title"><a class="linkTitulo" href="/">Rede de Conhecimento Científico</a></div>
+              <div class="header-title"><a class="linkTitulo" href="/">Torre MCTI</a></div>
               <!-- <div class="header-subtitle">Subtítulo do Header</div> -->
             </div>
           </div>
