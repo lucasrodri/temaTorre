@@ -18,7 +18,7 @@ $description = get_the_archive_description();
 
 	<?php
 		$rede_slug = "rede-de-inovacao";
-		$rede_name = "Rede de Inovação";
+		$rede_name = nome_da_rede($rede_slug);
 		$categoria_rede = "inovacao_categoria";
 	
 		echo "<div class=\"container-lg d-block\">";

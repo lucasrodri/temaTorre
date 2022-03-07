@@ -997,3 +997,41 @@ function chama_shortcode_redes($params) {
 
 #Ex: [shortcode_redes rede_slug="rede-de-suporte" categoria_slug="suporte_categoria"] 
 add_shortcode('shortcode_redes', 'chama_shortcode_redes');
+
+/** * O servidor não consegue processar a imagem. Isso pode acontecer caso o servidor esteja ocupado ou não tenha recursos suficientes para concluir a tarefa. Enviar uma imagem menor pode ajudar. O tamanho máximo sugerido é 2560 pixeis.
+ * Use GD instead of Imagick.
+ */
+function cb_child_use_gd_editor($array) {
+    return array( 'WP_Image_Editor_GD' );
+}
+add_filter( 'wp_image_editors', 'cb_child_use_gd_editor' );
+
+
+function nome_da_rede($rede_slug) {
+	// https://wordpress.stackexchange.com/a/271030
+	$pt = get_post_type_object($rede_slug);
+
+	// These two usually contain the post type name in plural. 
+	// They may differ though.
+	//echo $pt->label;
+	//echo $pt->labels->name;
+
+	// This one holds the post type name in singular.
+	return $pt->labels->singular_name;
+}
+
+
+add_filter('pre_get_posts', 'query_post_type');
+function query_post_type($query) {
+  if ( is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
+    $post_type = get_query_var('post_type');
+    if($post_type) {
+        $post_type = $post_type;
+	}
+    else {
+        $post_type = array('post','rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte'); // replace cpt to your custom post type
+	}
+    $query->set('post_type',$post_type);
+    return $query;
+    }
+}

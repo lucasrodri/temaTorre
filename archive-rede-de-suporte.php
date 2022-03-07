@@ -18,8 +18,8 @@ $description = get_the_archive_description();
 
 	<?php
 		$rede_slug = "rede-de-suporte";
-		$rede_name = "Rede de Suporte";
-		$categoria_rede = "suporte_categoria";
+		$rede_name = nome_da_rede($rede_slug);
+		$categoria_rede = "suporte_categoria_nova";
 	
 		echo "<div class=\"container-lg d-block\">";
 			echo "<div class=\"breadcrumb-post\" style=\"margin-left: -24px;\">";
