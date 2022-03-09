@@ -65,7 +65,7 @@
 			<?php if (get_field('url')) { ?>
 				<div class="mt-3 mb-3">
 					<p class="font-weight-bold">URL</p>
-					<a href="<?php the_field('url'); ?>" target="_blank">Acesse aqui </a>
+					<a href="<?php the_field('url'); ?>" target="_blank"><?php the_field('url'); ?></a>
 				</div>
 			<?php } ?>
 
