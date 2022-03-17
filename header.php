@@ -162,7 +162,25 @@
                           <div><a class="menu-item" href="/">
                             <span class="content">Início</span></a>
                           </div>
-                          <div><a class="menu-item" href="/#contato"><span class="content">Contato</span></a>
+                          
+                          <div><a class="menu-item" href="/sobre-a-torre-mcti">
+                            <span class="content">A Torre MCTI</span></a>
+                          </div>
+
+                          <div><a class="menu-item" href="/comites">
+                            <span class="content">Comitês</span></a>
+                          </div>
+
+                          <div><a class="menu-item" href="/beneficios-da-implantacao-da-torre-mcti">
+                            <span class="content">Benefícios da implantação da Torre MCTI</span></a>
+                          </div>
+
+                          <div><a class="menu-item" href="/faq">
+                            <span class="content">FAQ</span></a>
+                          </div>
+                          
+                          <div><a class="menu-item" href="/#contato">
+                            <span class="content">Contato</span></a>
                           </div>
                         </nav>
                         <div class="menu-footer">
