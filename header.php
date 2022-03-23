@@ -162,13 +162,17 @@
                           <div><a class="menu-item" href="/">
                             <span class="content">Início</span></a>
                           </div>
-                          
-                          <div><a class="menu-item" href="/sobre-a-torre-mcti">
+
+						              <div><a class="menu-item" href="/sobre-a-torre-mcti">
                             <span class="content">A Torre MCTI</span></a>
                           </div>
 
-                          <div><a class="menu-item" href="/comites">
-                            <span class="content">Comitês</span></a>
+                          <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">Comitês</span></a>
+                            <ul>
+                              <li><a class="menu-item" href="/comite-de-especialistas"><span class="content">Comitê de Especialistas</span></a></li>
+                              <li><a class="menu-item" href="/comite-de-implementacao"><span class="content">Comitê de Implementação</span></a></li>
+                              <li><a class="menu-item" href="/comite-gestor"><span class="content">Comitê Gestor</span></a></li>
+                            </ul>
                           </div>
 
                           <div><a class="menu-item" href="/beneficios-da-implantacao-da-torre-mcti">

@@ -756,13 +756,23 @@ function dsgov_breadcrumb_redes($params) {
 function thumbnail_post() {
 	add_image_size('thumbnail_post', 1200, 400, true);
 }
-add_action('after_setup_theme', 'thumbnail_post');
+//add_action('after_setup_theme', 'thumbnail_post');
 
 
 function thumbnail_blog() {
 	add_image_size('thumbnail_blog', 253, 158, true);
 }
-add_action('after_setup_theme', 'thumbnail_blog');
+//add_action('after_setup_theme', 'thumbnail_blog');
+
+function thumbnail_redes() {
+	add_image_size('thumbnail_redes', 300, 300, true);
+}
+add_action('after_setup_theme', 'thumbnail_redes');
+
+function thumbnail_redes_retangular() {
+	add_image_size('thumbnail_redes_retangular', 450, 250, true);
+}
+add_action('after_setup_theme', 'thumbnail_redes_retangular');
 
 /*  
  * -- Funções para template do post --

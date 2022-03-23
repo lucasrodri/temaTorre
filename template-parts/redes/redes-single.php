@@ -34,6 +34,26 @@
 
 		<div class="entry-content entry-content-rcc">
 
+			<?php
+			$image = get_field('logomarca');
+			if( $image ):
+				// Image variables.
+				$url = $image['url'];
+				$title = $image['title'];
+				$alt = $image['alt'];
+
+				// Thumbnail size attributes.
+				$size = 'thumbnail_redes_retangular';
+				$thumb = $image['sizes'][ $size ];
+				$width = $image['sizes'][ $size . '-width' ];
+				$height = $image['sizes'][ $size . '-height' ];
+				?>
+
+				<div class="mt-3 mb-3" style="display: flex; justify-content: center;">
+					<img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($alt); ?>" />
+				</div>
+			<?php endif; ?>
+			
 			<?php if (get_field('visao')) { ?>
 				<div class="mt-3 mb-3">
 					<div class="visao-texto">
@@ -81,6 +101,33 @@
 						<p class="font-weight-bold">Abrangência</p>
 						<p><?php the_field('abrangencia'); ?></p>
 				</div>
+			<?php } ?>
+			
+			<?php if(current_user_can('administrator') || current_user_can('editor')) { ?>
+    		<!-- Stuff here for administrators -->
+				<h3>Informações de Contato</h3>
+
+				<?php if (get_field('responsavel')) { ?>
+					<div class="mt-3 mb-3">
+							<p class="font-weight-bold">Responsável</p>
+							<p><?php the_field('responsavel'); ?></p>
+					</div>
+				<?php } ?>
+
+				<?php if (get_field('e-mail')) { ?>
+					<div class="mt-3 mb-3">
+							<p class="font-weight-bold">E-mail</p>
+							<p><?php the_field('e-mail'); ?></p>
+					</div>
+				<?php } ?>
+
+				<?php if (get_field('telefone')) { ?>
+					<div class="mt-3 mb-3">
+							<p class="font-weight-bold">Telefone</p>
+							<p><?php the_field('telefone'); ?></p>
+					</div>
+				<?php } ?>
+
 			<?php } ?>
 
 		</div><!-- .entry-content -->

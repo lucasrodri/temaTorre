@@ -311,3 +311,10 @@
 #caldera_form_1 .form-group label {
   font-size: 16px;
 }
+
+
+/* Css para não mostrar borda no menu*/
+
+.br-menu .menu-body .drop-menu>.menu-item {
+  border-bottom: none;
+}
