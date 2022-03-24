@@ -169,9 +169,9 @@
 
                           <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">Comitês</span></a>
                             <ul>
-                              <li><a class="menu-item" href="/comite-de-especialistas"><span class="content">Comitê de Especialistas</span></a></li>
-                              <li><a class="menu-item" href="/comite-de-implementacao"><span class="content">Comitê de Implementação</span></a></li>
                               <li><a class="menu-item" href="/comite-gestor"><span class="content">Comitê Gestor</span></a></li>
+                              <li><a class="menu-item" href="/comite-de-especialistas"><span class="content">Comitê de Especialistas</span></a></li>
+                              <li><a class="menu-item" href="/comite-de-implementacao"><span class="content">Comitê de Implantação e Manutenção Operacional</span></a></li>
                             </ul>
                           </div>
 

@@ -304,6 +304,16 @@
   border-bottom: 1px dotted black;
 }
 
+.br-accordion .ajuda-redes {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  column-gap: 23px;
+  color: #1351b4;
+  font-size: 13px;
+  line-height: 16px;
+}
+
 
 /* Css para formulários caldera*/
 
