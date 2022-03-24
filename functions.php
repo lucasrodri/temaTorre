@@ -1045,3 +1045,17 @@ function query_post_type($query) {
     return $query;
     }
 }
+
+/**
+ * Set the Caldera Forms paragraph field with the ID of fld_456's maxlength to 75
+ * https://calderaforms.com/doc/caldera_forms_field_attributes/
+ */
+add_filter( 'caldera_forms_field_attributes', function( $attrs, $field, $form ){
+	/* Restrição para campo de Descrição da Instituição */
+	if( 'fld_1160245' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}
+
+	return $attrs;
+
+}, 20, 3 );
