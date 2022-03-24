@@ -939,8 +939,10 @@ function gerar_redes_principal($r_type, $r_tax)
 		</div>
 		<div class="content conteudo-redes" id="id<?php echo $i; ?>">
 
-			<span class="ajuda-redes"><i class="fas fa-question-circle" aria-hidden="true"></i> <?php echo category_description( $categoria_id ); ?> </span>
-
+			<?php if (strlen(category_description( $categoria_id )) > 1 ) {?>
+				<span class="ajuda-redes"><i class="fas fa-question-circle" aria-hidden="true"></i> <?php echo category_description( $categoria_id ); ?> </span>
+			<?php } ?>
+			
 			<?php
 
 			$filhos_args = array(
