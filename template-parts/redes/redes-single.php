@@ -143,6 +143,9 @@
 			?>
 
 			<div class="row">
+				<div class="col-md-12 texto-disclaimer">
+					<span>As informações apresentadas nas redes foram providas pelas instituições e não são de responsabilidade da equipe da Torre MCTI</span>
+				</div>
 				<div class="col-md-6">
 
 					<?php
