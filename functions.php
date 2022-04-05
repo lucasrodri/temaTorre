@@ -940,7 +940,7 @@ function gerar_redes_principal($r_type, $r_tax)
 		<div class="content conteudo-redes" id="id<?php echo $i; ?>">
 
 			<?php if (strlen(category_description( $categoria_id )) > 1 ) {?>
-				<span class="ajuda-redes"><i class="fas fa-question-circle" aria-hidden="true"></i> <?php echo category_description( $categoria_id ); ?> </span>
+				<span class="ajuda-redes"><i class="fas fa-info-circle" aria-hidden="true"></i> <?php echo category_description( $categoria_id ); ?> </span>
 			<?php } ?>
 			
 			<?php
