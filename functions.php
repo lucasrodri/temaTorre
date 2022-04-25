@@ -1036,6 +1036,7 @@ function nome_da_rede($rede_slug) {
 }
 
 
+/* Função para mostrar os posts das redes em categorias e tags */
 add_filter('pre_get_posts', 'query_post_type');
 function query_post_type($query) {
   if ( is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
@@ -1051,6 +1052,17 @@ function query_post_type($query) {
     }
 }
 
+/* Função para restringir a busca aos posts das redes */
+//https://thomasgriffin.com/how-to-exclude-pages-from-wordpress-search-results/
+add_action( 'pre_get_posts', 'tg_exclude_pages_from_search_results' );
+function tg_exclude_pages_from_search_results( $query ) {
+  if ( $query->is_main_query() && $query->is_search() && ! is_admin() ) {
+    //$query->set( 'post_type', array( 'post' ) );
+    $post_type = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte'); // 
+    $query->set('post_type',$post_type);
+  }    
+}
+
 /**
  * Set the Caldera Forms paragraph field with the ID of fld_456's maxlength to 75
  * https://calderaforms.com/doc/caldera_forms_field_attributes/
@@ -1060,7 +1072,32 @@ add_filter( 'caldera_forms_field_attributes', function( $attrs, $field, $form ){
 	if( 'fld_1160245' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
 		$attrs[ 'maxlength' ] = 800;
 	}
+	
+	/* Restrição para campo de Rede de Suporte */
+	if( 'fld_8213740' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}
+	
+	/* Restrição para campo de Rede de Formação */
+	if( 'fld_400027' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}
 
+	/* Restrição para campo de Rede de Pesquisa */
+	if( 'fld_8071056' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}
+	
+	/* Restrição para campo de Rede de Inovação */
+	if( 'fld_8697533' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}
+	
+	/* Restrição para campo de Rede de Tecnologia */
+	if( 'fld_9753761' === $field[ 'ID' ] && 'paragraph' === Caldera_Forms_Field_Util::get_type( $field, $form ) ){
+		$attrs[ 'maxlength' ] = 800;
+	}		
+	
 	return $attrs;
 
 }, 20, 3 );

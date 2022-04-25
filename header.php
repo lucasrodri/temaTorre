@@ -226,7 +226,7 @@
           <div class="header-search">
             <div class="br-input has-icon">
               <label for="main-searchbox">Texto da pesquisa</label>
-              <input class="has-icon" id="main-searchbox" type="search" placeholder="O que você procura?" />
+              <input class="has-icon" id="main-searchbox" type="search" placeholder="O que você procura?" data-swplive="true" />
               <button class="br-button circle small" type="button" aria-label="Pesquisar" onclick="myFunctionBusca()"><i class="fas fa-search" aria-hidden="true"></i>
               </button>
             </div>

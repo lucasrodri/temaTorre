@@ -102,7 +102,14 @@
 						<p><?php the_field('abrangencia'); ?></p>
 				</div>
 			<?php } ?>
-			
+
+<?php if (get_field('natureza_juridica')) { ?>
+				<div class="mt-3 mb-3">
+						<p class="font-weight-bold">Natureza jurídica da instituição</p>
+						<p><?php the_field('natureza_juridica'); ?></p>
+				</div>
+			<?php } ?>
+
 			<?php if(current_user_can('administrator') || current_user_can('editor')) { ?>
     		<!-- Stuff here for administrators -->
 				<h3>Informações de Contato</h3>
