@@ -163,10 +163,14 @@
                             <span class="content">Início</span></a>
                           </div>
 
-						              <div><a class="menu-item" href="/sobre-a-torre-mcti">
-                            <span class="content">A Torre MCTI</span></a>
-                          </div>
-
+						  <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">A Torre MCTI</span></a>
+                            <ul>
+                              <li><a class="menu-item" href="/sobre-a-torre-mcti/"><span class="content">Sobre a torre MCTI</span></a></li>
+                              <li><a class="menu-item" href="/#conheca"><span class="content">Conheça as instituições membro</span></a></li>
+                              <li><a class="menu-item" href="/orientacoes"><span class="content">Orientações para cadastro</span></a></li>
+                            </ul>
+                          </div>	
+							
                           <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">Comitês</span></a>
                             <ul>
                               <li><a class="menu-item" href="/comite-gestor"><span class="content">Comitê Gestor</span></a></li>
