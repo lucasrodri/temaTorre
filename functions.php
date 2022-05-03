@@ -1101,3 +1101,239 @@ add_filter( 'caldera_forms_field_attributes', function( $attrs, $field, $form ){
 	return $attrs;
 
 }, 20, 3 );
+
+add_shortcode('shortcode_busca_avancada', 'busca_avancada_redes');
+function busca_avancada_redes() {
+	//post types permitidos
+	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
+	
+	// pegar o form padrão do wp (pode mudar pra um form normal feito na mão, mas aí tem que fazer na mão a URL de busca rs)
+	#$form = get_search_form( false );
+	$form = "<form role=\"search\" method=\"get\" id=\"formBuscaAvancada\" class=\"search-form\" action=\"https://torre.mcti.gov.br/\">";
+	$form .= "<div class=\"header-search\"><div class=\"br-input has-icon\">";
+	$form .= "<label for=\"search-form-3\">Pesquisa Avançada:</label>";
+	$form .= "<input class=\"has-icon\" id=\"search-form-3\" type=\"search\" placeholder=\"O que você procura?\" value=\"\" name=\"s\" data-swplive=\"true\">";
+	$form .= "<button class=\"br-button circle small\" form=\"formBuscaAvancada\" type=\"submit\" aria-label=\"Pesquisar\" \"><i class=\"fas fa-search\" aria-hidden=\"true\"></i></button>";
+	#$form .= "<button class=\"br-button circle search-close\" type=\"button\" aria-label=\"Fechar Busca\" data-dismiss=\"search\"><i class=\"fas fa-times\" aria-hidden=\"true\"></i></button>";
+	$form .= "</div></div></form>";
+	#$form .= "<input id=\"buscaAvacadaSubmit\" type=\"submit\" class=\"search-submit\" value=\"Pesquisar\">";
+	
+	// ---------------------------------------------------
+	// código copiado do shortcode searchform do relevanssi
+	$additional_fields = array();
+	if ( is_array( $post_types ) ) {
+		$post_type_objects   = get_post_types( array(), 'objects' );
+		$additional_fields[] = '<div class="post_types"><strong>Tipo de Rede</strong>: ';
+		foreach ( $post_types as $post_type ) {
+			$checked = '';
+			if ( '*' === substr( $post_type, 0, 1 ) ) {
+				$post_type = substr( $post_type, 1 );
+				$checked   = ' checked="checked" ';
+			}
+			if ( isset( $post_type_objects[ $post_type ] ) ) {
+				$additional_fields[] = '<div class="ml-5"><span class="post_type post_type_' . $post_type . '">'
+				. '<input type="checkbox" name="post_types[]" value="' . $post_type . '"' . $checked . '/> '
+				. getNameRede($post_type_objects[ $post_type ]->name) . '</span></div>';
+			}
+		}
+		$additional_fields[] = '</div>';
+	}
+	$form = str_replace( '</form>', implode( "\n", $additional_fields ) . '</form>', $form );
+	// ---------------------------------------------------
+
+	// testes da rebeca
+	//var_dump($post_types);
+	// echo '<br>';
+	//var_dump($post_type_objects);
+	//echo '<br>';
+	//var_dump($additional_fields);
+	//echo '<br>';
+	//return $additional_fields;
+	return $form;
+}
+
+
+add_shortcode('shortcode_busca_avancada2', 'busca_avancada_redes2');
+function busca_avancada_redes2() {
+	//post types permitidos
+	$myUrl = esc_url(admin_url('admin-ajax.php'));
+	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
+	
+	// pegar o form padrão do wp (pode mudar pra um form normal feito na mão, mas aí tem que fazer na mão a URL de busca rs)
+	#$form = get_search_form( false );
+	$form = "<form method=\"post\" id=\"formBuscaAvancada\" class=\"search-form\" action=\"".esc_url(admin_url('admin-post.php'))."\" enctype=\"multipart/form-data\">";
+	$form .= "<div class=\"header-search\"><div class=\"br-input has-icon\">";
+	$form .= "<label for=\"search-form-3\">Pesquisa Avançada:</label>";
+	$form .= "<input class=\"has-icon\" id=\"search-form-3\" type=\"search\" placeholder=\"O que você procura?\" value=\"\" name=\"termoPesquisa\" data-swplive=\"true\">";
+	$form .= "<button class=\"br-button circle small\" form=\"formBuscaAvancada\" type=\"submit\" aria-label=\"Pesquisar\" \"><i class=\"fas fa-search\" aria-hidden=\"true\"></i></button>";
+	#$form .= "<button class=\"br-button circle search-close\" type=\"button\" aria-label=\"Fechar Busca\" data-dismiss=\"search\"><i class=\"fas fa-times\" aria-hidden=\"true\"></i></button>";
+	$form .= "</div></div></form>";
+	#$form .= "<input id=\"buscaAvacadaSubmit\" type=\"submit\" class=\"search-submit\" value=\"Pesquisar\">";
+	
+	// ---------------------------------------------------
+	// código copiado do shortcode searchform do relevanssi
+	$additional_fields = array();
+	if ( is_array( $post_types ) ) {
+		$post_type_objects   = get_post_types( array(), 'objects' );
+		$additional_fields[] = '<div class="post_types"><strong>Selecione a Rede</strong>: ';
+		
+		$additional_fields[] = '<div class="ml-5"><span class="post_type post_type_' . $post_type . '">'
+				. '<input type="radio" id="todasRedes" name="post_types" value="todasRedes"' . $checked . ' onclick=" carregaCategorias(this.value,\''.$myUrl.'\')"/>'
+				. '<label class="ml-1" for="todasRedes">Todas as Redes</label></span></div>';
+		
+		foreach ( $post_types as $post_type ) {
+			$checked = '';
+			if ( '*' === substr( $post_type, 0, 1 ) ) {
+				$post_type = substr( $post_type, 1 );
+				$checked   = ' checked="checked" ';
+			}
+			if ( isset( $post_type_objects[ $post_type ] ) ) {
+				$additional_fields[] = '<div class="ml-5"><span class="post_type post_type_' . $post_type . '">'
+				. '<input type="radio" id="'.$post_type.'" name="post_types" value="' . $post_type . '"' . $checked . ' onclick=" carregaCategorias(this.value,\''.$myUrl.'\')"/>'
+				. '<label class="ml-1" for="'.$post_type.'">'.getNameRede($post_type_objects[ $post_type ]->name).'</label></span></div>';
+			}
+		}
+		$additional_fields[] = '</div>';
+	}
+	$additional_fields[] = '<input type="hidden" name="action" value="buscaAvancadaAction">';
+	$additional_fields[] = '<div id="categoriasDaRede"></div>';
+	$additional_fields[] = '<div id="publicoAlvo">'
+		.'<div class="post_types"><strong>Selecione o Público Alvo:</strong>:<div class="ml-5">'
+		.'<input type="checkbox" id="startup" name="startup" value="startup">'
+		.'<label class="ml-1" for="startup">Startup</label><br>'
+		.'<input type="checkbox" id="mpe" name="mpe" value="mpe">'
+		.'<label class="ml-1" for="mpe">MPE</label><br>'
+		.'<input type="checkbox" id="mEmpresa" name="mEmpresa" value="mEmpresa">'
+		.'<label class="ml-1" for="mEmpresa">Média Empresa</label><br>'
+		.'<input type="checkbox" id="gEmpresa" name="gEmpresa" value="gEmpresa">'
+		.'<label class="ml-1" for="gEmpresa">Empresa de grande porte</label><br>'
+		.'<input type="checkbox" id="governo" name="governo" value="governo">'
+		.'<label class="ml-1" for="governo">Governo</label><br>'
+		.'<input type="checkbox" id="icts" name="icts" value="icts">'
+		.'<label class="ml-1" for="icts">ICTs</label><br>'
+		.'<input type="checkbox" id="investidor" name="investidor" value="investidor">'
+		.'<label class="ml-1" for="investidor">Investidor</label><br>'
+		.'<input type="checkbox" id="pesquisador" name="pesquisador" value="pesquisador">'
+		.'<label class="ml-1" for="pesquisador">Pesquisador</label><br>'
+		.'<input type="checkbox" id="tSetor" name="tSetor" value="tSetor">'
+		.'<label class="ml-1" for="tSetor">Terceiro Setor</label><br>'
+		.'<input type="checkbox" id="pf" name="pf" value="pf">'
+		.'<label class="ml-1" for="pf">Pessoa física</label><br>'
+		.'</div></div></div>';
+	
+	$form = str_replace( '</form>', implode( "\n", $additional_fields ) . '</form>', $form );
+	
+	
+
+	
+	
+	// ---------------------------------------------------
+
+	// testes da rebeca
+	//var_dump($post_types);
+	// echo '<br>';
+	//var_dump($post_type_objects);
+	//echo '<br>';
+	//var_dump($additional_fields);
+	//echo '<br>';
+	//return $additional_fields;
+	return $form;
+}
+
+function getNameRede($slugRede){
+	switch($slugRede){
+		case "rede-de-formacao":
+			return "Rede de Formação Tecnológica";
+		case "rede-de-inovacao":
+			return "Rede de Inovação";
+		case "rede-de-pesquisa":
+			return "Rede de Pesquisa Aplicada";
+		case "rede-de-produto":
+			return "Rede de Tecnologias Aplicadas";
+		case "rede-de-suporte":
+			return "Rede de Suporte";
+	}
+}
+
+function getCategoryNameRede($slugRede){
+	switch($slugRede){
+		case "rede-de-formacao":
+			return "formacao_categoria";
+		case "rede-de-inovacao":
+			return "inovacao_categoria";
+		case "rede-de-pesquisa":
+			return "pesquisa_categoria";
+		case "rede-de-produto":
+			return "produto_categoria";
+		case "rede-de-suporte":
+			return "suporte_categoria_nova";
+	}
+}
+
+function ajaxCarregaCategorias() {
+
+	$idRede = ( isset( $_POST['id'] ) ) ? $_POST['id'] : '';
+
+	if( empty( $idRede ) )
+		return;
+	if( $idRede == 'todasRedes' ){
+		echo " ";
+		die();
+	}
+	
+
+	$rede = getCategoryNameRede($_POST["id"]);
+	
+	$args = array(
+		'taxonomy' => $rede,
+		'orderby' => 'name',
+		'order'   => 'ASC'
+	);
+   $cats = get_categories($args);
+   #var_dump($cats);
+   echo '<div class="post_types"><strong>Selecione a Categoria:</strong>:<div class="ml-5">';
+   echo '<input type="radio" id="todasCat" name="radioCat" value="todasCat" checked>';
+   echo '<label class="ml-1" for="todasCat">Todas as categorias</label><br>';
+   foreach($cats as $cat) {
+	   echo '<input type="radio" id="'.$cat->slug.'" name="radioCat" value="'.$cat->slug.'">';
+  	   echo '<label class="ml-1" for="'.$cat->slug.'">'.$cat->name.'</label><br>';
+	   #echo '<a href="'.get_category_link( $cat->term_id ).'">'.$cat->name.'</a><br>';
+   }
+   echo '</div></div>';
+   die();
+}
+add_action('wp_ajax_carrega_categorias','ajaxCarregaCategorias');
+
+
+function buscaAvancadaAction() {
+	if(isset($_POST['termoPesquisa'])) $termoPesquisa = ($_POST['termoPesquisa']); else $termoPesquisa = "";
+	if(isset($_POST['post_types'])) $rede = ($_POST['post_types']); else $rede = "";
+	if($rede == 'todasRedes' or $rede == '') {
+		$url = 'https://torre.mcti.gov.br/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-produto&post_types[]=rede-de-suporte';
+		header('Location:'.$url);
+		return;
+	}
+	if(isset($_POST['radioCat'])) $categoria = ($_POST['radioCat']); else $categoria = "";
+	if($categoria == 'todasCat' or $categoria == '') {
+		$url = 'https://torre.mcti.gov.br/?s='.$termoPesquisa.'&post_types[]='.$rede;
+		header('Location:'.$url);
+		return;	
+	}	
+	$alvo = "";
+	if(isset($_POST['startup'])) $alvo .= $_POST['startup'] . ";";
+	if(isset($_POST['mpe'])) $alvo .= $_POST['mpe'] . ";";
+	if(isset($_POST['mEmpresa'])) $alvo .= $_POST['mEmpresa'] . ";";
+	if(isset($_POST['gEmpresa'])) $alvo .= $_POST['gEmpresa'] . ";";
+	if(isset($_POST['governo'])) $alvo .= $_POST['governo'] . ";";
+	if(isset($_POST['icts'])) $alvo .= $_POST['icts'] . ";";
+	if(isset($_POST['investidor'])) $alvo .= $_POST['investidor'] . ";";
+	if(isset($_POST['pesquisador'])) $alvo .= $_POST['pesquisador'] . ";";
+	if(isset($_POST['tSetor'])) $alvo .= $_POST['tSetor'] . ";";
+	if(isset($_POST['pf'])) $alvo .= $_POST['pf'] . ";";
+	header('Location:'."https://torre.mcti.gov.br/".getCategoryNameRede($rede)."/".$categoria."/?s=".$termoPesquisa);
+}
+add_action( 'admin_post_nopriv_buscaAvancadaAction', 'buscaAvancadaAction' );
+add_action( 'admin_post_buscaAvancadaAction', 'buscaAvancadaAction' );
+
+
+

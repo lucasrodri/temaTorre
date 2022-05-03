@@ -9,6 +9,37 @@ function myFunctionBusca() {
     window.location.href = "/?s=" + termo;
 }
 
+function carregaCategorias(val, minhaUrl) {
+    
+    jQuery(function ($) {
+        var loaderContainer, loader;
+        $.ajax({
+            type: "POST",
+            url: minhaUrl,
+            data: {
+                action: 'carrega_categorias',
+                id: val
+            },
+            beforeSend: function () {
+                loaderContainer = $('<span/>', {
+                    'class': 'loader-image-container'
+                }).insertBefore($('#categoriasDaRede'));
+
+                loader = $('<img/>', {
+                    src: 'https://torre.mcti.gov.br/wp-content/themes/temaTorre/assets/images/loading.gif',
+                    'class': 'loader-image'
+                }).appendTo(loaderContainer);
+            },
+            success: function (html) {
+                $('#categoriasDaRede').html(html);
+                loaderContainer.remove();
+            }
+        });
+    });
+}
+
+
+
 jQuery(document).ready(function($) {
     (function() {
         var Contrast = {

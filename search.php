@@ -25,7 +25,7 @@ if ( have_posts() ) {
 			?>
 		</h1>
 	</header><!-- .page-header -->
-
+		
 	<div class="search-result-count default-max-width">
 		<?php
 		printf(
@@ -43,6 +43,9 @@ if ( have_posts() ) {
 		?>
 	</div><!-- .search-result-count -->
 
+	<div class="row">	
+
+	<div class="col-md-9 order-1">
 	<div class="row">
 	<?php
 	// Start the Loop.
@@ -57,8 +60,18 @@ if ( have_posts() ) {
 		//get_template_part( 'template-parts/content/content-excerpt', get_post_format() );
 		get_template_part( 'template-parts/redes/redes-archive' );
 	} // End the loop.
-
-	?> </div> <?php
+	
+	?> 
+		
+		
+		</div> </div> 
+		
+		<div class="col-md-3 order-2">
+      		<?php echo do_shortcode("[shortcode_busca_avancada]"); ?>
+    	</div>
+		</div> 
+		
+		<?php
 	// Previous/next page navigation.
 	twenty_twenty_one_the_posts_navigation();
 
