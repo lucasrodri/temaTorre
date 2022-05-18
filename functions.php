@@ -1177,6 +1177,8 @@ function busca_avancada_redes2() {
 		$post_type_objects   = get_post_types( array(), 'objects' );
 		$additional_fields[] = '<div class="post_types"><strong>Selecione a Rede</strong>: ';
 		
+		// pq tem esse post_type aqui ???
+
 		$additional_fields[] = '<div class="ml-5"><span class="post_type post_type_' . $post_type . '">'
 				. '<input type="radio" id="todasRedes" name="post_types" value="todasRedes"' . $checked . ' onclick=" carregaCategorias(this.value,\''.$myUrl.'\')"/>'
 				. '<label class="ml-1" for="todasRedes">Todas as Redes</label></span></div>';
@@ -1222,21 +1224,7 @@ function busca_avancada_redes2() {
 		.'</div></div></div>';
 	
 	$form = str_replace( '</form>', implode( "\n", $additional_fields ) . '</form>', $form );
-	
-	
 
-	
-	
-	// ---------------------------------------------------
-
-	// testes da rebeca
-	//var_dump($post_types);
-	// echo '<br>';
-	//var_dump($post_type_objects);
-	//echo '<br>';
-	//var_dump($additional_fields);
-	//echo '<br>';
-	//return $additional_fields;
 	return $form;
 }
 
@@ -1281,7 +1269,6 @@ function ajaxCarregaCategorias() {
 		die();
 	}
 	
-
 	$rede = getCategoryNameRede($_POST["id"]);
 	
 	$args = array(
@@ -1291,7 +1278,7 @@ function ajaxCarregaCategorias() {
 	);
    $cats = get_categories($args);
    #var_dump($cats);
-   echo '<div class="post_types"><strong>Selecione a Categoria:</strong>:<div class="ml-5">';
+   echo '<div class="post_types"><strong>Selecione a Categoria</strong>:<div class="ml-5">';
    echo '<input type="radio" id="todasCat" name="radioCat" value="todasCat" checked>';
    echo '<label class="ml-1" for="todasCat">Todas as categorias</label><br>';
    foreach($cats as $cat) {
@@ -1309,16 +1296,16 @@ function buscaAvancadaAction() {
 	if(isset($_POST['termoPesquisa'])) $termoPesquisa = ($_POST['termoPesquisa']); else $termoPesquisa = "";
 	if(isset($_POST['post_types'])) $rede = ($_POST['post_types']); else $rede = "";
 	if($rede == 'todasRedes' or $rede == '') {
-		$url = 'https://torre.mcti.gov.br/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-produto&post_types[]=rede-de-suporte';
+		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-produto&post_types[]=rede-de-suporte';
 		header('Location:'.$url);
 		return;
 	}
 	if(isset($_POST['radioCat'])) $categoria = ($_POST['radioCat']); else $categoria = "";
 	if($categoria == 'todasCat' or $categoria == '') {
-		$url = 'https://torre.mcti.gov.br/?s='.$termoPesquisa.'&post_types[]='.$rede;
+		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]='.$rede;
 		header('Location:'.$url);
 		return;	
-	}	
+	}
 	$alvo = "";
 	if(isset($_POST['startup'])) $alvo .= $_POST['startup'] . ";";
 	if(isset($_POST['mpe'])) $alvo .= $_POST['mpe'] . ";";
@@ -1330,10 +1317,49 @@ function buscaAvancadaAction() {
 	if(isset($_POST['pesquisador'])) $alvo .= $_POST['pesquisador'] . ";";
 	if(isset($_POST['tSetor'])) $alvo .= $_POST['tSetor'] . ";";
 	if(isset($_POST['pf'])) $alvo .= $_POST['pf'] . ";";
-	header('Location:'."https://torre.mcti.gov.br/".getCategoryNameRede($rede)."/".$categoria."/?s=".$termoPesquisa);
+	header('Location:'.get_site_url().'/'.getCategoryNameRede($rede)."/".$categoria."/?s=".$termoPesquisa);
 }
 add_action( 'admin_post_nopriv_buscaAvancadaAction', 'buscaAvancadaAction' );
 add_action( 'admin_post_buscaAvancadaAction', 'buscaAvancadaAction' );
 
+// ----------------------------------------------------------------------------------------------------
+// Parte de inclusão de custom fields (Ex: público alvo, abrangência) 
+// tutorial de https://www.smashingmagazine.com/2016/03/advanced-wordpress-search-with-wp_query/
 
+// Função para registrar novos variáveis na URL
+// URL passa a aceitar: /?publico=XXX&abrangencia=YYY
+function sm_register_query_vars( $vars ) {
+    $vars[] = 'publico';
+    $vars[] = 'abrangencia';
+    return $vars;
+} 
+add_filter( 'query_vars', 'sm_register_query_vars' );
 
+//Função para realizar a busca nos custom fields, caso eles apareçam na URL de busca
+function sm_pre_get_posts( $query ) {
+    // check if the user is requesting an admin page 
+    // or current query is not the main query
+    if ( is_admin() || ! $query->is_main_query() ){
+        return;
+    }
+
+    $meta_query = array();
+
+    // add meta_query elements
+    if( !empty( get_query_var( 'publico' ) ) ){
+        $meta_query[] = array( 'key' => 'publico-alvo', 'value' => get_query_var( 'publico' ), 'compare' => 'LIKE' );
+    }
+
+    if( !empty( get_query_var( 'abrangencia' ) ) ){
+        $meta_query[] = array( 'key' => 'abrangencia', 'value' => get_query_var( 'abrangencia' ), 'compare' => 'LIKE' );
+    }
+
+    if( count( $meta_query ) > 1 ){
+        $meta_query['relation'] = 'AND';
+    }
+
+    if( count( $meta_query ) > 0 ){
+        $query->set( 'meta_query', $meta_query );
+    }
+}
+add_action( 'pre_get_posts', 'sm_pre_get_posts', 1 );
