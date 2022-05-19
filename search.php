@@ -25,11 +25,9 @@ if ( have_posts() ) {
 			?>
 		</h1>
 		<?php 
-		if( !empty( get_query_var( 'post_type' ) ) ){
-			$redes = explode(',', get_query_var( 'post_type' ));
+		if( !empty( get_query_var( 'post_types' ) ) ){
 			$texto = '';
-			
-			foreach($redes as $rede){
+			foreach(get_query_var( 'post_types' ) as $rede){
 				$texto .= getNameRede($rede) . ', ';
 			}
 
