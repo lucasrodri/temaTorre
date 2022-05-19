@@ -187,6 +187,10 @@
                             <span class="content">FAQ</span></a>
                           </div>
                           
+                          <div><a class="menu-item" href="/busca">
+                            <span class="content">Busca Avançada</span></a>
+                          </div>
+
                           <div><a class="menu-item" href="/#contato">
                             <span class="content">Contato</span></a>
                           </div>

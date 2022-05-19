@@ -24,6 +24,27 @@ if ( have_posts() ) {
 			);
 			?>
 		</h1>
+		<?php 
+		if( !empty( get_query_var( 'post_type' ) ) ){
+			$redes = explode(',', get_query_var( 'post_type' ));
+			$texto = '';
+			
+			foreach($redes as $rede){
+				$texto .= getNameRede($rede) . ', ';
+			}
+
+			echo '<p><strong>Pesquisa feita na(s) rede(s):</strong> '.$texto.'</p>';
+		}
+
+		if( !empty( get_query_var( 'publico' ) ) ){
+			$texto = '';
+			foreach(get_query_var( 'publico' ) as $publico){
+				$texto .= $publico . ', ';
+			}
+
+			echo '<p><strong>Pesquisa feita no(s) público(s):</strong> '.$texto.'</p>';
+		}
+		?>
 	</header><!-- .page-header -->
 		
 	<div class="search-result-count default-max-width">

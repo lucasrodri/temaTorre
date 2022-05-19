@@ -1102,8 +1102,11 @@ add_filter( 'caldera_forms_field_attributes', function( $attrs, $field, $form ){
 
 }, 20, 3 );
 
-add_shortcode('shortcode_busca_avancada', 'busca_avancada_redes');
-function busca_avancada_redes() {
+// Widget de busca avançada (mostra na lateral da página de busca)
+add_shortcode('shortcode_busca_avancada_old', 'busca_avancada_redes_old');
+
+//Primeira versão da busca avançada
+function busca_avancada_redes_old() {
 	//post types permitidos
 	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
 	
@@ -1139,22 +1142,13 @@ function busca_avancada_redes() {
 		$additional_fields[] = '</div>';
 	}
 	$form = str_replace( '</form>', implode( "\n", $additional_fields ) . '</form>', $form );
-	// ---------------------------------------------------
-
-	// testes da rebeca
-	//var_dump($post_types);
-	// echo '<br>';
-	//var_dump($post_type_objects);
-	//echo '<br>';
-	//var_dump($additional_fields);
-	//echo '<br>';
-	//return $additional_fields;
 	return $form;
 }
 
+// Shortcode principal da busca
+add_shortcode('shortcode_busca_avancada', 'busca_avancada_redes');
 
-add_shortcode('shortcode_busca_avancada2', 'busca_avancada_redes2');
-function busca_avancada_redes2() {
+function busca_avancada_redes() {
 	//post types permitidos
 	$myUrl = esc_url(admin_url('admin-ajax.php'));
 	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
@@ -1175,12 +1169,10 @@ function busca_avancada_redes2() {
 	$additional_fields = array();
 	if ( is_array( $post_types ) ) {
 		$post_type_objects   = get_post_types( array(), 'objects' );
-		$additional_fields[] = '<div class="post_types"><strong>Selecione a Rede</strong>: ';
-		
-		// pq tem esse post_type aqui ???
+		$additional_fields[] = '<div class="post_types"><strong>Selecione a Rede:</strong> ';
 
-		$additional_fields[] = '<div class="ml-5"><span class="post_type post_type_' . $post_type . '">'
-				. '<input type="radio" id="todasRedes" name="post_types" value="todasRedes"' . $checked . ' onclick=" carregaCategorias(this.value,\''.$myUrl.'\')"/>'
+		$additional_fields[] = '<div class="ml-5"><span class="post_type">'
+				. '<input type="radio" id="todasRedes" name="post_types" value="todasRedes" checked="checked" onclick=" carregaCategorias(this.value,\''.$myUrl.'\')"/>'
 				. '<label class="ml-1" for="todasRedes">Todas as Redes</label></span></div>';
 		
 		foreach ( $post_types as $post_type ) {
@@ -1200,26 +1192,26 @@ function busca_avancada_redes2() {
 	$additional_fields[] = '<input type="hidden" name="action" value="buscaAvancadaAction">';
 	$additional_fields[] = '<div id="categoriasDaRede"></div>';
 	$additional_fields[] = '<div id="publicoAlvo">'
-		.'<div class="post_types"><strong>Selecione o Público Alvo:</strong>:<div class="ml-5">'
-		.'<input type="checkbox" id="startup" name="startup" value="startup">'
+		.'<div class="post_types"><strong>Selecione o Público Alvo:</strong><div class="ml-5">'
+		.'<input type="checkbox" id="startup" name="startup" value="Startup">'
 		.'<label class="ml-1" for="startup">Startup</label><br>'
-		.'<input type="checkbox" id="mpe" name="mpe" value="mpe">'
+		.'<input type="checkbox" id="mpe" name="mpe" value="MPE">'
 		.'<label class="ml-1" for="mpe">MPE</label><br>'
-		.'<input type="checkbox" id="mEmpresa" name="mEmpresa" value="mEmpresa">'
+		.'<input type="checkbox" id="mEmpresa" name="mEmpresa" value="Média+Empresa">'
 		.'<label class="ml-1" for="mEmpresa">Média Empresa</label><br>'
-		.'<input type="checkbox" id="gEmpresa" name="gEmpresa" value="gEmpresa">'
+		.'<input type="checkbox" id="gEmpresa" name="gEmpresa" value="Empresa+de+grande+porte">'
 		.'<label class="ml-1" for="gEmpresa">Empresa de grande porte</label><br>'
-		.'<input type="checkbox" id="governo" name="governo" value="governo">'
+		.'<input type="checkbox" id="governo" name="governo" value="Governo">'
 		.'<label class="ml-1" for="governo">Governo</label><br>'
-		.'<input type="checkbox" id="icts" name="icts" value="icts">'
+		.'<input type="checkbox" id="icts" name="icts" value="ICTs">'
 		.'<label class="ml-1" for="icts">ICTs</label><br>'
-		.'<input type="checkbox" id="investidor" name="investidor" value="investidor">'
+		.'<input type="checkbox" id="investidor" name="investidor" value="Investidor">'
 		.'<label class="ml-1" for="investidor">Investidor</label><br>'
-		.'<input type="checkbox" id="pesquisador" name="pesquisador" value="pesquisador">'
+		.'<input type="checkbox" id="pesquisador" name="pesquisador" value="Pesquisador">'
 		.'<label class="ml-1" for="pesquisador">Pesquisador</label><br>'
-		.'<input type="checkbox" id="tSetor" name="tSetor" value="tSetor">'
+		.'<input type="checkbox" id="tSetor" name="tSetor" value="Terceiro+Setor">'
 		.'<label class="ml-1" for="tSetor">Terceiro Setor</label><br>'
-		.'<input type="checkbox" id="pf" name="pf" value="pf">'
+		.'<input type="checkbox" id="pf" name="pf" value="Pessoa+física">'
 		.'<label class="ml-1" for="pf">Pessoa física</label><br>'
 		.'</div></div></div>';
 	
@@ -1293,31 +1285,52 @@ add_action('wp_ajax_carrega_categorias','ajaxCarregaCategorias');
 
 
 function buscaAvancadaAction() {
+	// Tratamento de Público Alvo
+	$alvos = array();
+	if(isset($_POST['startup'])) $alvos[] = $_POST['startup'];
+	if(isset($_POST['mpe'])) $alvos[] = $_POST['mpe'];
+	if(isset($_POST['mEmpresa'])) $alvos[] = $_POST['mEmpresa'];
+	if(isset($_POST['gEmpresa'])) $alvos[] = $_POST['gEmpresa'];
+	if(isset($_POST['governo'])) $alvos[] = $_POST['governo'];
+	if(isset($_POST['icts'])) $alvos[] = $_POST['icts'];
+	if(isset($_POST['investidor'])) $alvos[] = $_POST['investidor'];
+	if(isset($_POST['pesquisador'])) $alvos[] = $_POST['pesquisador'];
+	if(isset($_POST['tSetor'])) $alvos[] = $_POST['tSetor'];
+	if(isset($_POST['pf'])) $alvos[] = $_POST['pf'];
+
+	$urlPublico = '';
+	$publico = '&publico[]=';
+
+	if( count( $alvos ) > 1 ){
+		foreach($alvos as $alvo ){
+			$urlPublico .= $publico . $alvo;
+		}
+	} else if ( count( $alvos ) == 1 ) {
+		$urlPublico = '&publico='. $alvos[0];
+	}
+
+	// Insere um termo de pesquisa. ex: "cnpq"
 	if(isset($_POST['termoPesquisa'])) $termoPesquisa = ($_POST['termoPesquisa']); else $termoPesquisa = "";
+	
+	// escolhe uma rede específica. ex: rede de suporte
 	if(isset($_POST['post_types'])) $rede = ($_POST['post_types']); else $rede = "";
+	
+	// caso clique em "todas as redes"
 	if($rede == 'todasRedes' or $rede == '') {
 		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-produto&post_types[]=rede-de-suporte';
-		header('Location:'.$url);
+		header('Location:'.$url.$urlPublico);
 		return;
 	}
+	
 	if(isset($_POST['radioCat'])) $categoria = ($_POST['radioCat']); else $categoria = "";
+	
 	if($categoria == 'todasCat' or $categoria == '') {
 		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]='.$rede;
-		header('Location:'.$url);
+		header('Location:'.$url.$urlPublico);
 		return;	
 	}
-	$alvo = "";
-	if(isset($_POST['startup'])) $alvo .= $_POST['startup'] . ";";
-	if(isset($_POST['mpe'])) $alvo .= $_POST['mpe'] . ";";
-	if(isset($_POST['mEmpresa'])) $alvo .= $_POST['mEmpresa'] . ";";
-	if(isset($_POST['gEmpresa'])) $alvo .= $_POST['gEmpresa'] . ";";
-	if(isset($_POST['governo'])) $alvo .= $_POST['governo'] . ";";
-	if(isset($_POST['icts'])) $alvo .= $_POST['icts'] . ";";
-	if(isset($_POST['investidor'])) $alvo .= $_POST['investidor'] . ";";
-	if(isset($_POST['pesquisador'])) $alvo .= $_POST['pesquisador'] . ";";
-	if(isset($_POST['tSetor'])) $alvo .= $_POST['tSetor'] . ";";
-	if(isset($_POST['pf'])) $alvo .= $_POST['pf'] . ";";
-	header('Location:'.get_site_url().'/'.getCategoryNameRede($rede)."/".$categoria."/?s=".$termoPesquisa);
+
+	header('Location:'.get_site_url().'/'.getCategoryNameRede($rede)."/".$categoria."/?s=".$termoPesquisa.$urlPublico);
 }
 add_action( 'admin_post_nopriv_buscaAvancadaAction', 'buscaAvancadaAction' );
 add_action( 'admin_post_buscaAvancadaAction', 'buscaAvancadaAction' );
