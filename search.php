@@ -40,6 +40,10 @@ if ( have_posts() ) {
 				$texto .= $publico . ', ';
 			}
 
+			if ($texto == '') {
+				$texto = get_query_var( 'publico' );
+			}
+
 			echo '<p><strong>Pesquisa feita no(s) público(s):</strong> '.$texto.'</p>';
 		}
 		?>
