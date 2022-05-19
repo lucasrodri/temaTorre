@@ -1270,9 +1270,9 @@ function ajaxCarregaCategorias() {
 	);
    $cats = get_categories($args);
    #var_dump($cats);
-   echo '<div class="post_types"><strong>Selecione a Categoria</strong>:<div class="ml-5">';
+   echo '<div class="post_types"><strong>Selecione a Classificação</strong>:<div class="ml-5">';
    echo '<input type="radio" id="todasCat" name="radioCat" value="todasCat" checked>';
-   echo '<label class="ml-1" for="todasCat">Todas as categorias</label><br>';
+   echo '<label class="ml-1" for="todasCat">Todas as classificações</label><br>';
    foreach($cats as $cat) {
 	   echo '<input type="radio" id="'.$cat->slug.'" name="radioCat" value="'.$cat->slug.'">';
   	   echo '<label class="ml-1" for="'.$cat->slug.'">'.$cat->name.'</label><br>';
