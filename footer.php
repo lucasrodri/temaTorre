@@ -12,13 +12,13 @@
  */
 
 ?>
-			</main><!-- #main -->
+			<!--</main> #main -->
 		</div><!-- #primary -->
 	</div><!-- #content -->
 
 	<?php //get_template_part( 'template-parts/footer/footer-widgets' ); ?>
 
-	<footer class="br-footer">
+	<footer class="br-footer" id="footer">
       <div class="container-lg">
         <div class="logo text-left"><img src="<?php echo(esc_url( get_template_directory_uri() ) . '/assets/images/govbr-negativa.png')?>" alt="Imagem" /></div>
         <div class="br-list horizontal" data-toggle="data-toggle" data-unique="data-unique">

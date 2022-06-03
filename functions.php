@@ -412,11 +412,12 @@ function twenty_twenty_one_scripts() {
 
 	//Colocando css e js dos tema RCC
 	$ver = time();
-	wp_register_style( 'dsgov-class', get_template_directory_uri() . '/assets/css/dsgov.css', false, $ver );
+	wp_register_style( 'dsgov-class', get_template_directory_uri() . '/assets/dsgov/dist/dsgov.min.css', false, $ver );
+	//wp_register_style( 'dsgov-class', get_template_directory_uri() . '/assets/css/dsgov.css', false, $ver );
 	wp_enqueue_style ( 'dsgov-class' );
 
-	wp_register_style( 'dsgovserprodesign-class', "https://cdn.dsgovserprodesign.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css", false, $ver );
-	wp_enqueue_style ( 'dsgovserprodesign-class' );
+	//wp_register_style( 'dsgovserprodesign-class', "https://cdn.dsgovserprodesign.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css", false, $ver );
+	//wp_enqueue_style ( 'dsgovserprodesign-class' );
 
 	wp_register_style( 'googleapis-class', "https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&amp;display=swap", false, $ver );
 	wp_enqueue_style ( 'googleapis-class' );
@@ -430,7 +431,9 @@ function twenty_twenty_one_scripts() {
 	wp_register_style( 'rccstyle-class', get_template_directory_uri() . '/assets/css/rccstyle.css', false, $ver );
 	wp_enqueue_style ( 'rccstyle-class' );
 
-	wp_enqueue_script( 'dsgov-js', get_template_directory_uri() . '/assets/js/dsgov.js' , array('jquery'), $ver, true);
+	//wp_enqueue_script( 'dsgov-js', get_template_directory_uri() . '/assets/js/dsgov.js' , array('jquery'), $ver, true);
+	wp_enqueue_script( 'dsgov-js', get_template_directory_uri() . '/assets/dsgov/dist/dsgov-init.js' , array('jquery'), $ver, true);
+
 	wp_enqueue_script( 'geral-js', get_template_directory_uri() . '/assets/js/geral.js' , array('jquery'), $ver);
 	wp_enqueue_script( 'geral-footer-js', get_template_directory_uri() . '/assets/js/geral-footer.js' , array('jquery'), $ver, true);
 	//Fim
