@@ -353,3 +353,18 @@
 .nav-links .page-numbers {
   display: contents;
 }
+
+/* Para ajustes no alto contraste da acessibilidade */
+
+.br-item-accessiblity {
+  background-color: transparent !important;
+  font-size: 15px;
+}
+
+.menu-body-border{
+  border-bottom: 1px solid var(--menu-divider);
+}
+
+.align-header-menu{
+  align-items: center !important;
+}

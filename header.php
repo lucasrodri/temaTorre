@@ -49,10 +49,10 @@
                 <div class="header">
                   <div class="title">Acesso Rápido</div>
                 </div>
-                <a class="br-item" href="https://www.gov.br/pt-br/orgaos-do-governo">Órgãos do Governo</a>
-                <a class="br-item" href="http://www.acessoainformacao.gov.br/">Acesso à Informação</a>
-                <a class="br-item" href="http://www4.planalto.gov.br/legislacao">Legislação</a>
-                <a class="br-item" href="https://www.gov.br/governodigital/pt-br/acessibilidade-digital">Acessibilidade</a>
+                <a class="br-item br-item-accessiblity" href="https://www.gov.br/pt-br/orgaos-do-governo">Órgãos do Governo</a>
+                <a class="br-item br-item-accessiblity" href="http://www.acessoainformacao.gov.br/">Acesso à Informação</a>
+                <a class="br-item br-item-accessiblity" href="http://www4.planalto.gov.br/legislacao">Legislação</a>
+                <a class="br-item br-item-accessiblity" href="https://www.gov.br/governodigital/pt-br/acessibilidade-digital">Acessibilidade</a>
               </div>
             </div>
             <span class="vertical mx-half mx-sm-1"></span>
@@ -143,7 +143,7 @@
           </div>
         </div>
         <div class="header-bottom">
-          <div class="header-menu">
+          <div class="header-menu align-header-menu">
             <div class="header-menu-trigger" id="header-navigation">
               <button class="br-button small circle" type="button" aria-label="Menu" data-toggle="menu" data-target="#main-navigation" id="navigation"><i class="fas fa-bars" aria-hidden="true"></i>
               </button>
@@ -186,7 +186,7 @@
                     </button>
                   </div>
                 </div>
-                <nav class="menu-body">
+                <nav class="menu-body menu-body-border">
                   <div><a class="menu-item" href="/">
                       <span class="content">Início</span></a>
                   </div>
