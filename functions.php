@@ -1376,3 +1376,5 @@ function sm_pre_get_posts( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'sm_pre_get_posts', 1 );
+
+include "functions-cadastro.php";
