@@ -437,6 +437,8 @@ function twenty_twenty_one_scripts() {
 	if ( !(stripos(strtolower($current_url), 'wp-admin') !== false) && !(stripos(strtolower($current_url), 'elementor-preview') !== false) ){
 		wp_enqueue_script( 'dsgov-js', get_template_directory_uri() . '/assets/dsgov/dist/dsgov-init.js' , array('jquery'), $ver, true);
 	} 
+
+	wp_enqueue_script( 'imput-mask-js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js' , array('jquery'), $ver, true);
 	
 	wp_enqueue_script( 'geral-js', get_template_directory_uri() . '/assets/js/geral.js' , array('jquery'), $ver);
 	wp_enqueue_script( 'geral-footer-js', get_template_directory_uri() . '/assets/js/geral-footer.js' , array('jquery'), $ver, true);
