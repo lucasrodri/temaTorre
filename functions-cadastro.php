@@ -16,10 +16,10 @@ function cadastro_form_render()
 ?>
     <form class="card" action="" method="post">
         <div class="row">
-            <div id="cadastro-wizard" class="col-md-12 mb-5" style="height: 500px;">
+            <div id="cadastro-wizard" class="col-md-12 mb-5">
                 <div class="br-wizard" collapsed="collapsed" step="1">
                     <div class="wizard-progress">
-                        <button id="cadastro-wizard-b1" class="wizard-progress-btn" type="button" title="Termo de Declaração"><span class="info">Termo de Declaração</span></button>
+                        <button id="cadastro-wizard-b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
                         <button id="cadastro-wizard-b2" class="wizard-progress-btn" type="button" title="Instituição" active="active"><span class="info">Instituição</span></button>
                         <button id="cadastro-wizard-b3" class="wizard-progress-btn" type="button" title="Redes" active="active"><span class="info">Redes</span></button>
                         <button id="cadastro-wizard-b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" active="active"><span class="info">Logo e Guia de Uso de Marca</span></button>
@@ -33,14 +33,14 @@ function cadastro_form_render()
                                     Em observância à Lei nº. 13.709/18 – Lei Geral de Proteção de Dados Pessoais e demais normativas aplicáveis sobre proteção de Dados Pessoais, manifesto-me de forma informada, livre, expressa e consciente, no sentido de autorizar a tomada de decisão sobre tratamento de meus dados pessoais para as finalidades e de acordo com as condições aqui estabelecidas.
 
                                     Declaro também que as informações prestadas são de minha inteira responsabilidade, e que a falsidade nas informações fornecidas implicará nas penalidades cabíveis, no âmbito penal, cível e administrativo.
-                                    <div class="mt-3 mb-1">
-                                        <div class="br-checkbox">
-                                            <input id="check-concordo" name="check-concordo" type="checkbox" aria-label="Concordo com esses termos" required />
-                                            <label for="check-concordo">Concordo com esses termos</label>
-                                        </div>
-                                    </div>
-                                    <span id="spam-concordo" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento Obrigatório</span>
                                 </div>
+                                <div class="mt-3 mb-1">
+                                    <div class="br-checkbox">
+                                        <input id="check_concordo" name="check_concordo" type="checkbox" aria-label="Concordo com esses termos" />
+                                        <label for="check_concordo">Concordo com esses termos</label>
+                                    </div>
+                                </div>
+                                <span id="span-concordo" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento Obrigatório</span>
                             </div>
                             <div class="wizard-panel-btn">
                                 <div class="row">
@@ -130,7 +130,47 @@ function cadastro_form_render()
                         <div class="wizard-panel">
                             <div class="wizard-panel-content">
                                 <div class="h3">Redes</div>
-                                <div class="text my-text-wizard" tabindex="0">Conteúdo aqui</div>
+                                <div class="text my-text-wizard" tabindex="0">Redes às quais pretende se cadastrar e informações para publicação</div>
+
+                                <div class="mt-3 mb-1">
+                                    <div class="br-checkbox">
+                                        <input id="check_suporte" name="check_suporte" type="checkbox" aria-label="Rede de Suporte" />
+                                        <label for="check_suporte">Rede de Suporte - apoio aos atores do ecossistema de inovação e as atividades da Torre MCTI em todas as etapas do desenvolvimento de produtos e serviços inovadores</label>
+                                    </div>
+                                    <div class="br-checkbox">
+                                        <input id="check_formacao" name="check_formacao" type="checkbox" aria-label="Rede de Formação" />
+                                        <label for="check_formacao">Rede de Formação Tecnológica - capacitação em ciência, tecnologia e inovação, com intuito de expandir e melhorar a formação profissional e tecnológica</label>
+                                    </div>
+                                    <div class="br-checkbox">
+                                        <input id="check_pesquisa" name="check_pesquisa" type="checkbox" aria-label="Rede de Pesquisa" />
+                                        <label for="check_pesquisa">Rede de Pesquisa Aplicada - utilização do conhecimento científico gerado na pesquisa básica, para apoiar o desenvolvimento de inovações, produtos e serviços, por meio da concepção de aplicações e provas de conceito</label>
+                                    </div>
+                                    <div class="br-checkbox">
+                                        <input id="check_inovacao" name="check_inovacao" type="checkbox" aria-label="Rede de inovacao" />
+                                        <label for="check_inovacao">Rede de Inovação - transformação de ideias em protótipos, materializando o conhecimento científico validado em soluções concretas experimentais</label>
+                                    </div>
+                                    <div class="br-checkbox">
+                                        <input id="check_tecnologia" name="check_tecnologia" type="checkbox" aria-label="Rede de tecnologia" />
+                                        <label for="check_tecnologia">Tecnologias Aplicadas - transformação de protótipos em produtos e riquezas, com o objetivo de aperfeiçoar soluções experimentais tornando-as aptas ao mercado, à geração de riqueza e à contribuição para a qualidade de vida dos brasileiros</label>
+                                    </div>
+                                </div>
+
+                                <div id='redes_render_suporte' style="display:inline;">
+                                    <?php cadastro_redes_render('rede-de-suporte'); ?>
+                                </div>
+                                <div id='redes_render_formacao' style="display:none;">
+                                    <?php cadastro_redes_render('rede-de-formacao'); ?>
+                                </div>
+                                <div id='redes_render_pesquisa' style="display:none;">
+                                    <?php cadastro_redes_render('rede-de-pesquisa'); ?>
+                                </div>
+                                <div id='redes_render_inovacao' style="display:none;">
+                                    <?php cadastro_redes_render('rede-de-inovacao'); ?>
+                                </div>
+                                <div id='redes_render_tecnologia' style="display:none;">
+                                    <?php cadastro_redes_render('rede-de-tecnologia'); ?>
+                                </div>
+
                             </div>
                             <div class="wizard-panel-btn">
                                 <div class="row">
@@ -186,5 +226,149 @@ function cadastro_form_render()
             </div>
         </div>
     </form>
+<?php
+}
+
+
+function cadastro_redes_render($rede_nome)
+{
+
+    switch ($rede_nome) {
+        case 'rede-de-suporte':
+            $title = 'Rede de Suporte';
+            $opcoes = array(
+                "Bases de dados e informações", "Certificadora", "Gestão", "Infraestrutura de laboratórios", "Instrumentos financeiros", "Metrologia", "Políticas públicas", "Outro"
+            );
+            break;
+
+        case 'rede-de-formacao':
+            $title = 'Rede de Formação';
+            $opcoes = array(
+                "Graduação", "Pós-Graduação", "Promoção e popularização da Ciência", "Qualificação profissional", "Outro"
+            );
+            break;
+
+        case 'rede-de-pesquisa':
+            $title = 'Rede de Pesquisa Aplicada';
+            $opcoes = array(
+                "Bases de dados e informações", "Ciências Agrárias", "Ciências Biológicas", "Ciências da Saúde", "Ciências Exatas e da Terra", "Ciências Sociais Aplicadas", "Engenharias", "Outro"
+            );
+            break;
+
+        case 'rede-de-inovacao':
+            $title = 'Rede de Inovação';
+            $opcoes = array(
+                "Incubadora", "Núcleo de Inovação Tecnológica (NIT)", "Parque tecnológico", "Outro"
+            );
+            break;
+
+        case 'rede-de-tecnologia':
+            $title = 'Rede de Tecnologias Aplicadas';
+            $opcoes = array(
+                "Agricultura", "Coque, derivados de petróleo e de biocombustíveis", "Equipamentos de transporte, exceto veículos automotores", "Farmoquímicos e farmacêuticos", "Informação e Comunicação", "Química", "Outro"
+            );
+            break;
+    }
+
+    $publicos = array(
+        "Startup",
+        "MPE",
+        "Média Empresa",
+        "Empresa de grande porte",
+        "Governo",
+        "ICTs",
+        "Investidor",
+        "Pesquisador",
+        "Terceiro Setor",
+        "Pessoa física"
+    );
+
+
+    $abrangencia = array(
+        "Local/Regional", "Nacional", "Internacional"
+    );
+
+?>
+    <div class="h4"><?php echo $title; ?></div>
+
+    <div class="br-textarea mb-3">
+        <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
+        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3"></textarea>
+    </div>
+
+    <div class="br-textarea mb-3">
+        <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
+        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3"></textarea>
+    </div>
+
+
+    <div class="text my-text-wizard" tabindex="0">Classificação<span class="field_required" style="color:#ee0000;">*</span></div>
+
+    <div class="mt-3 mb-1">
+        <?php foreach ($opcoes as $key => $value) { ?>
+            <div class="br-checkbox">
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
+            </div>
+        <?php } ?>
+    </div>
+
+
+    <div class="mb-3">
+        <div class="br-input">
+            <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
+            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" required />
+        </div>
+    </div>
+
+
+    <div class="text my-text-wizard" tabindex="0">Público-Alvo<span class="field_required" style="color:#ee0000;">*</span></div>
+
+    <div class="mt-3 mb-1">
+        <?php foreach ($publicos as $key => $value) { ?>
+            <div class="br-checkbox">
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
+            </div>
+        <?php } ?>
+    </div>
+
+
+    <div class="text my-text-wizard" tabindex="0">Abrangência<span class="field_required" style="color:#ee0000;">*</span></div>
+
+    <div class="mt-3 mb-1">
+        <?php foreach ($abrangencia as $key => $value) { ?>
+            <div class="br-checkbox">
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
+            </div>
+        <?php } ?>
+    </div>
+
+
+    <div class="h5"> Representante da instituição na <?php echo $title; ?></div>
+
+
+    <div class="mb-3">
+        <div class="br-input">
+            <label for="nomeCompleto_<?php echo $rede_nome; ?>">Nome completo<span class="field_required" style="color:#ee0000;">*</span></label>
+            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" required />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="br-input">
+            <label for="emailRepresentante_<?php echo $rede_nome; ?>">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
+            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" required />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="br-input">
+            <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" required />
+        </div>
+    </div>
+
 <?php
 }
