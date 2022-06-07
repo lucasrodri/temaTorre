@@ -16,7 +16,7 @@ function cadastro_form_render()
 ?>
     <form class="card" action="" method="post">
         <div class="row">
-            <div id="cadastro-wizard" class="col-md-12 mb-5" style='min-height:500px;'>
+            <div id="cadastro-wizard" class="col-md-12 mb-5">
                 <div class="br-wizard" collapsed="collapsed" step="1">
                     <div class="wizard-progress">
                         <button id="cadastro-wizard-b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
@@ -72,23 +72,23 @@ function cadastro_form_render()
 
                                     <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
                                     <div class="br-radio">
-                                        <input id="natureza-op-1" type="radio" name="natureza-op-1" value="natureza-op-1" />
+                                        <input id="natureza-op-1" type="radio" name="natureza-op" value="natureza-op-1" />
                                         <label for="natureza-op-1">Instituição pública federal </label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-2" type="radio" name="natureza-op-2" value="natureza-op-2" />
+                                        <input id="natureza-op-2" type="radio" name="natureza-op" value="natureza-op-2" />
                                         <label for="natureza-op-2">Instituição pública estadual</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-3" type="radio" name="natureza-op-3" value="natureza-op-3" />
+                                        <input id="natureza-op-3" type="radio" name="natureza-op" value="natureza-op-3" />
                                         <label for="natureza-op-3">Instituição pública municipal</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="op-4" type="radio" name="natureza-op-4" value="natureza-op-4" />
+                                        <input id="op-4" type="radio" name="natureza-op" value="natureza-op-4" />
                                         <label for="op-4">Instituição privada com fins lucrativos</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-5" type="radio" name="natureza-op-5" value="natureza-op-5" />
+                                        <input id="natureza-op-5" type="radio" name="natureza-op" value="natureza-op-5" />
                                         <label for="natureza-op-5">Instituição privada sem fins lucrativos</label>
                                     </div>
 
