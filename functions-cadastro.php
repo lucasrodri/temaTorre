@@ -16,7 +16,7 @@ function cadastro_form_render()
 ?>
     <form class="card" action="" method="post">
         <div class="row">
-            <div id="cadastro-wizard" class="col-md-12 mb-5">
+            <div id="cadastro-wizard" class="col-md-12 mb-5" style='min-height:500px;'>
                 <div class="br-wizard" collapsed="collapsed" step="1">
                     <div class="wizard-progress">
                         <button id="cadastro-wizard-b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
@@ -301,8 +301,7 @@ function cadastro_redes_render($rede_nome)
         <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3"></textarea>
     </div>
 
-
-    <div class="text my-text-wizard" tabindex="0">Classificação<span class="field_required" style="color:#ee0000;">*</span></div>
+    <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>
 
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
@@ -321,8 +320,7 @@ function cadastro_redes_render($rede_nome)
         </div>
     </div>
 
-
-    <div class="text my-text-wizard" tabindex="0">Público-Alvo<span class="field_required" style="color:#ee0000;">*</span></div>
+    <label>Público-Alvo<span class="field_required" style="color:#ee0000;">*</span></label>
 
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
@@ -333,12 +331,11 @@ function cadastro_redes_render($rede_nome)
         <?php } ?>
     </div>
 
-
-    <div class="text my-text-wizard" tabindex="0">Abrangência<span class="field_required" style="color:#ee0000;">*</span></div>
+    <label>Abrangência<span class="field_required" style="color:#ee0000;">*</span></label>
 
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
-            <div class="br-checkbox">
+            <div class="br-checkbox d-inline">
                 <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
             </div>
