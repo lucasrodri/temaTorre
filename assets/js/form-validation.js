@@ -21,7 +21,10 @@ function determinaPainelAtivo( panels ) {
 // Element é o input, preciso pegar a div "pai" para setar o valido/invalido
 function setarInvalido( element ) {
   element.parentElement.removeAttribute( "valid" );
+  element.parentElement.classList.remove( "success" );
+
   element.parentElement.setAttribute( "invalid", "invalid" );
+  element.parentElement.className += " danger";
 
   if ( document.getElementById( element.name + "_label" ) ) {
 
@@ -37,11 +40,20 @@ function setarInvalido( element ) {
 function setarValido( element ) {
 
   // se estiver inválido, torna válido
+  // talvez ? || element.classList.contains( 'danger' ) 
   if ( element.parentElement.getAttribute( "invalid" ) ) {
+
     element.parentElement.removeAttribute( "invalid" );
+    element.parentElement.classList.remove( "danger" );
+
     element.parentElement.setAttribute( "valid", "valid" );
+    element.parentElement.className += " success";
+
   } else {
+
     element.parentElement.removeAttribute( "valid" );
+    element.parentElement.classList.remove( "success" );
+
   }
 
 }
@@ -72,7 +84,7 @@ function validaFormulario( ) {
     }
 
     /*
-    // como era feito no sinajuve para comaração
+    // como era feito no sinajuve para comparação
     y = x[ currentTab ].getElementsByClassName( "requisitos" );
     for ( i = 0; i < y.length; i++ ) {
       // If a field is required
@@ -152,53 +164,42 @@ function validaFormulario( ) {
 
         } else {
 
-          if ( y[ i ].name == "cpfDoGestor" ) {
+          if ( y[ i ].name == "cnpjDaInstituicao" ) {
 
-            console.log( "cpfDoGestor" );
+            console.log( "cnpjDaInstituicao" );
 
-            if ( !IsCPF( y[ i ].value ) ) {
-              y[ i ].className += " invalid";
-              document.getElementById( y[ i ].name + "_label" ).style = "";
+            if ( !IsCNPJ( y[ i ].value ) ) {
+              setarInvalido( y[ i ] );
               valid = false;
             }
 
           } else {
 
-            if ( y[ i ].name == "cnpjDaUnidade" ) {
+            console.log( "outros required" );
 
-              console.log( "cnpjDaUnidade" );
-
-              if ( !IsCNPJ( y[ i ].value ) ) {
-                y[ i ].className += " invalid";
-                document.getElementById( y[ i ].name + "_label" ).style = "";
-                valid = false;
-              }
-            } else {
+            // If a field is required
+            if ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) {
 
               console.log( "outros required" );
 
-              // If a field is required
-              if ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) {
+              if ( y[ i ].value == "" ) {
 
-                console.log( "outros required" );
+                setarInvalido( y[ i ] );
 
-                if ( y[ i ].value == "" ) {
-
-                  setarInvalido( y[ i ] );
-
-                  // add an "invalid" class to the field:
-                  // y[ i ].className += " invalid";
-                  // document.getElementById( y[ i ].name + "_label" ).style = "";
-                  // and set the current valid status to false
-                  valid = false;
-                }
-
+                // add an "invalid" class to the field:
+                // y[ i ].className += " invalid";
+                // document.getElementById( y[ i ].name + "_label" ).style = "";
+                // and set the current valid status to false
+                valid = false;
               }
+
             }
           }
         }
       }
     }
+
+
     for ( i = 0; i < s.length; i++ ) {
       // If a field is required
       if ( typeof s[ i ].attributes[ 'required' ] != 'undefined' ) {
@@ -211,6 +212,8 @@ function validaFormulario( ) {
         }
       }
     }
+
+
     for ( i = 0; i < t.length; i++ ) {
       // If a field is required
       if ( typeof t[ i ].attributes[ 'required' ] != 'undefined' ) {
@@ -226,6 +229,8 @@ function validaFormulario( ) {
         }
       }
     }
+
+    valid = validaFormularioRadio( x, "natureza-op", valid );
 
     // valid = validaFormularioRadio( x, "requisitos", valid );
 
@@ -252,18 +257,34 @@ function validaFormulario( ) {
 function validaFormularioRadio( x, classe, valid ) {
   var r, flag = false;
   r = x[ currentTab ].getElementsByClassName( classe );
+
+  console.log( "tamanho de r (radio) " + r.length );
+
   if ( r.length > 0 ) {
+
     flag = false;
+
     for ( i = 0; i < r.length; i++ ) {
       if ( r[ i ].checked ) {
         flag = true;
       }
     }
+
     if ( !flag ) {
-      r[ 0 ].className += " invalid";
-      document.getElementById( r[ 0 ].name + "_label" ).style = "";
+
+      //setarInvalido( r[ 0 ] );
+
+      //for ( i = 0; i < r.length; i++ ) {
+      // rodar o for ao inverso
+      for ( i = r.length - 1; i >= 0; i-- ) {
+        setarInvalido( r[ i ] );
+      }
+
+      //r[ 0 ].className += " invalid";
+      //document.getElementById( r[ 0 ].name + "_label" ).style = "";
       valid = false;
     }
+
   }
   return valid;
 }
@@ -310,6 +331,23 @@ function changeError( name ) {
   }
   //document.getElementById( name ).classList.remove( "invalid" );
   setarValido( document.getElementById( name ) );
+}
+
+
+function changeErrorRadio( name ) {
+  r = document.getElementsByClassName( name );
+
+  if ( r.length > 0 ) {
+
+    for ( i = 0; i < r.length; i++ ) {
+      setarValido( r[ i ] );
+    }
+
+  }
+
+  if ( document.getElementById( name + "_label" ) ) {
+    document.getElementById( name + "_label" ).style = "display: none;";
+  }
 }
 
 function changeSelect( name ) {

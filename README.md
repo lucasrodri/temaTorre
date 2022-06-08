@@ -25,7 +25,7 @@ Mudanças feitas:
 O que falta da validação:
 
 - Corrigir ordem da validação (URL não está sendo checada corretamente)
-- Corrigir validação para input type radio
+- ~~Corrigir validação para input type radio~~
 - Corrigir máscaras / validação de máscaras (nem testei)
 
 O que falta geral:

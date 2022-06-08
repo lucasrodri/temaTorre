@@ -68,30 +68,30 @@ function cadastro_form_render()
 
                                     <div class="br-textarea mb-3">
                                         <label for="descricaoDaInstituicao">Descrição da instituição<span class="field_required" style="color:#ee0000;">*</span></label>
-                                        <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required ></textarea>
+                                        <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required></textarea>
                                         <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
                                     </div>
 
                                     <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
                                     <div class="br-radio">
-                                        <input id="natureza-op-1" type="radio" name="natureza-op" value="natureza-op-1" />
-                                        <label for="natureza-op-1">Instituição pública federal </label>
+                                        <input id="natureza_op_1" type="radio" name="natureza-op"  class="natureza-op" value="natureza_op_1" onchange="changeErrorRadio(name)" />
+                                        <label for="natureza_op_1">Instituição pública federal </label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-2" type="radio" name="natureza-op" value="natureza-op-2" />
-                                        <label for="natureza-op-2">Instituição pública estadual</label>
+                                        <input id="natureza_op_2" type="radio" name="natureza-op"  class="natureza-op" value="natureza_op_2" onchange="changeErrorRadio(name)" />
+                                        <label for="natureza_op_2">Instituição pública estadual</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-3" type="radio" name="natureza-op" value="natureza-op-3" />
-                                        <label for="natureza-op-3">Instituição pública municipal</label>
+                                        <input id="natureza_op_3" type="radio" name="natureza-op"  class="natureza-op" value="natureza_op_3" onchange="changeErrorRadio(name)" />
+                                        <label for="natureza_op_3">Instituição pública municipal</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="op-4" type="radio" name="natureza-op" value="natureza-op-4" />
-                                        <label for="op-4">Instituição privada com fins lucrativos</label>
+                                        <input id="natureza_op_4" type="radio" name="natureza-op"  class="natureza-op" value="natureza_op_4" onchange="changeErrorRadio(name)" />
+                                        <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
                                     </div>
                                     <div class="br-radio">
-                                        <input id="natureza-op-5" type="radio" name="natureza-op" value="natureza-op-5" />
-                                        <label for="natureza-op-5">Instituição privada sem fins lucrativos</label>
+                                        <input id="natureza_op_5" type="radio" name="natureza-op"  class="natureza-op" value="natureza_op_5" onchange="changeErrorRadio(name)" />
+                                        <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
                                     </div>
 
                                     <div class="mt-3 mb-3">
