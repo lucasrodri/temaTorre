@@ -444,6 +444,7 @@ function twenty_twenty_one_scripts() {
 	wp_enqueue_script( 'geral-footer-js', get_template_directory_uri() . '/assets/js/geral-footer.js' , array('jquery'), $ver, true);
 
 	wp_enqueue_script( 'form-footer-js', get_template_directory_uri() . '/assets/js/form-footer.js' , array('jquery'), $ver, true);
+	wp_enqueue_script( 'form-validation-js', get_template_directory_uri() . '/assets/js/form-validation.js' , array('jquery', 'form-footer-js'), $ver, true);
 	//Fim
 
 	// Threaded comment reply styles.

@@ -4,69 +4,146 @@ var wizard3_size = '2500px';
 var wizard4_size = '500px';
 var wizard5_size = '500px';
 
+function arrumaTamanhoJanela( index ) {
+
+  // console.log( 'chamei arrumaTamanhoJanela ' + index );
+
+  wizard_sizes = {
+    0: '600px',
+    1: '1600px',
+    2: '2500px',
+    3: '600px',
+    4: '600px',
+  }
+
+  // console.log( 'setando tamanho da janela em ' + index );
+
+  $( '#cadastro_wizard' ).css( "height", wizard_sizes[ index ] );
+
+}
+
 jQuery( document ).ready( function ( $ ) {
 
   // começa chamando a primeira altura
-  $( '#cadastro-wizard' ).css( "height", wizard1_size );
+  //$( '#cadastro_wizard' ).css( "height", wizard1_size );
+  arrumaTamanhoJanela( 0 );
 
   /**
    * Ajuste do tamanho da aba
    */
 
-  $( '#cadastro-wizard-b1' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard1_size );
+  $( ".wizard-progress" ).find( ":button" ).each( function ( index ) {
+    // procura todos os botões dentro de wizard-progress e adiciona uma chamada a função de arrumar janela ao clicar
+    $( this ).click( function ( ) {
+      arrumaTamanhoJanela( index );
+    } );
+
   } );
 
-  $( '#cadastro-wizard-b2' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard2_size );
+  /*
+  $( '#cadastro_wizard_b1' ).click( function ( ) {
+    $( '#cadastro_wizard' ).css( "height", wizard1_size );
   } );
 
-  $( '#cadastro-wizard-b3' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard3_size );
+  $( '#cadastro_wizard_b2' ).click( function ( ) {
+    $( '#cadastro_wizard' ).css( "height", wizard2_size );
   } );
 
-  $( '#cadastro-wizard-b4' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard4_size );
+  $( '#cadastro_wizard_b3' ).click( function ( ) {
+    $( '#cadastro_wizard' ).css( "height", wizard3_size );
   } );
 
-  $( '#cadastro-wizard-b5' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard5_size );
+  $( '#cadastro_wizard_b4' ).click( function ( ) {
+    $( '#cadastro_wizard' ).css( "height", wizard4_size );
   } );
 
+  $( '#cadastro_wizard_b5' ).click( function ( ) {
+    $( '#cadastro_wizard' ).css( "height", wizard5_size );
+  } );
+  */
 
+  // $( '#checkConcordo' ).change( function ( ) {
+  //   if ( this.checked ) {
+  //     $( '#cadastro_btn_1' ).removeClass( 'wizard-btn' )
+  //     $( '#cadastro_btn_1' ).addClass( 'wizard-btn-next' )
+  //     $( '#checkConcordo' ).val( this.checked );
+  //   } else {
+  //     $( '#cadastro_btn_1' ).removeClass( 'wizard-btn-next' )
+  //     $( '#cadastro_btn_1' ).addClass( 'wizard-btn' )
+  //     $( '#checkConcordo' ).val( "" );
+  //   }
+  //   $( '#span-concordo' ).css( "display", "none" );
+  // } );
 
+  // $( '#cadastro_btn_1' ).click( function ( ) {
+  //   if ( $( '#checkConcordo' ).checked ) {
+  //     $( '#span-concordo' ).css( "display", "none" );
+  //   } else {
+  //     if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn' ) ) {
+  //       $( '#span-concordo' ).css( "display", "inline" );
+  //     }
+  //   }
+  //   if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn-next' ) ) {
+  //     $( '#cadastro_wizard' ).css( "height", wizard2_size );
+  //   }
+  // } );
 
-  $( '#check_concordo' ).change( function ( ) {
-    if ( this.checked ) {
-      $( '#cadastro-btn-1' ).removeClass( 'wizard-btn' )
-      $( '#cadastro-btn-1' ).addClass( 'wizard-btn-next' )
-      $( '#check_concordo' ).val( this.checked );
+  $( '.wizard-btn' ).click( function ( ) {
+    console.log( 'cliquei no wizard btn' );
+
+    if ( validaFormulario( ) ) {
+
+      $( this ).addClass( 'wizard-btn-next' );
+
+      // console.log( $( this ) );
+      // console.log( this.id );
+      // console.log( this.id.slice( -1 ) );
+
+      // pega número do painel ativo pelo id do botão clicado
+      arrumaTamanhoJanela( this.id.slice( -1 ) );
+
+      // ainda não pensei numa forma melhor pra isso aqui
+      // if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn-next' ) ) {
+      //   //$( '#cadastro_wizard' ).css( "height", wizard2_size );
+      //   arrumaTamanhoJanela( 1 );
+      // }
+
     } else {
-      $( '#cadastro-btn-1' ).removeClass( 'wizard-btn-next' )
-      $( '#cadastro-btn-1' ).addClass( 'wizard-btn' )
-      $( '#check_concordo' ).val( "" );
+
+      $( this ).removeClass( 'wizard-btn-next' );
+
     }
-    $( '#span-concordo' ).css( "display", "none" );
+
   } );
 
-  $( '#cadastro-btn-1' ).click( function ( ) {
-    if ( $( '#check_concordo' ).checked ) {
-      $( '#span-concordo' ).css( "display", "none" );
-    } else {
-      if ( $( '#cadastro-btn-1' ).hasClass( 'wizard-btn' ) ) {
-        $( '#span-concordo' ).css( "display", "inline" );
+
+  $( '.wizard-btn-prev' ).click( function ( ) {
+
+    // não quero chamar essa funçaõ aqui pq ela é definida só na parte de validação
+    //index = determinaPainelAtivo( document.getElementsByClassName( "wizard-panel" ) );
+
+    panels = document.getElementsByClassName( "wizard-panel" );
+
+    for ( var i = 0; i < panels.length; i++ ) {
+
+      ativo = panels[ i ].getAttribute( "active" );
+
+      if ( ativo === "" ) {
+        index = i;
       }
+
     }
-    if ( $( '#cadastro-btn-1' ).hasClass( 'wizard-btn-next' ) ) {
-      $( '#cadastro-wizard' ).css( "height", wizard2_size );
-    }
+
+    console.log( 'cliquei no previous btn ' + index );
+
+    arrumaTamanhoJanela( index - 1 );
+
   } );
 
 
-
-  $( '#cadastro-btn-volta-1' ).click( function ( ) {
-    $( '#cadastro-wizard' ).css( "height", wizard1_size );
-  } );
+  // $( '#cadastro_btn_volta_1' ).click( function ( ) {
+  //   $( '#cadastro_wizard' ).css( "height", wizard1_size );
+  // } );
 
   /**
    * Máscaras

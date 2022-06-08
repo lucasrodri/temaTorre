@@ -16,14 +16,14 @@ function cadastro_form_render()
 ?>
     <form class="card" action="" method="post">
         <div class="row">
-            <div id="cadastro-wizard" class="col-md-12 mb-5">
+            <div id="cadastro_wizard" class="col-md-12 mb-5">
                 <div class="br-wizard" collapsed="collapsed" step="1">
                     <div class="wizard-progress">
-                        <button id="cadastro-wizard-b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
-                        <button id="cadastro-wizard-b2" class="wizard-progress-btn" type="button" title="Instituição" active="active"><span class="info">Instituição</span></button>
-                        <button id="cadastro-wizard-b3" class="wizard-progress-btn" type="button" title="Redes" active="active"><span class="info">Redes</span></button>
-                        <button id="cadastro-wizard-b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" active="active"><span class="info">Logo e Guia de Uso de Marca</span></button>
-                        <button id="cadastro-wizard-b5" class="wizard-progress-btn" type="button" title="Finalização" disabled="disabled"><span class="info">Finalização</span></button>
+                        <button id="cadastro_wizard_b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
+                        <button id="cadastro_wizard_b2" class="wizard-progress-btn" type="button" title="Instituição" active="active"><span class="info">Instituição</span></button>
+                        <button id="cadastro_wizard_b3" class="wizard-progress-btn" type="button" title="Redes" active="active"><span class="info">Redes</span></button>
+                        <button id="cadastro_wizard_b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" active="active"><span class="info">Logo e Guia de Uso de Marca</span></button>
+                        <button id="cadastro_wizard_b5" class="wizard-progress-btn" type="button" title="Finalização" disabled="disabled"><span class="info">Finalização</span></button>
                     </div>
                     <div class="wizard-form">
                         <div class="wizard-panel" active="active">
@@ -36,16 +36,18 @@ function cadastro_form_render()
                                 </div>
                                 <div class="mt-3 mb-1">
                                     <div class="br-checkbox">
-                                        <input id="check_concordo" name="check_concordo" type="checkbox" aria-label="Concordo com esses termos" />
-                                        <label for="check_concordo">Concordo com esses termos</label>
+                                        <input id="checkConcordo" name="checkConcordo" type="checkbox" aria-label="Concordo com esses termos" onchange="changeError(name)" />
+                                        <label for="checkConcordo">Concordo com esses termos</label>
                                     </div>
+
+                                    <!-- <span id="checkConcordo_label" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span> -->
                                 </div>
-                                <span id="span-concordo" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento Obrigatório</span>
+
                             </div>
                             <div class="wizard-panel-btn">
                                 <div class="row">
                                     <div class="col-md-12 align-button-center">
-                                        <button id="cadastro-btn-1" class="br-button primary wizard-btn" type="button">Avançar
+                                        <button id="cadastro_btn_1" class="br-button primary wizard-btn" type="button">Avançar
                                         </button>
                                     </div>
                                 </div>
@@ -60,13 +62,13 @@ function cadastro_form_render()
                                     <div class="mb-3">
                                         <div class="br-input">
                                             <label for="nomeDaInstituicao">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" required />
+                                            <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" onchange="changeError(name)" required />
                                         </div>
                                     </div>
 
                                     <div class="br-textarea mb-3">
                                         <label for="descricaoDaInstituicao">Descrição da instituição<span class="field_required" style="color:#ee0000;">*</span></label>
-                                        <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800"></textarea>
+                                        <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required ></textarea>
                                         <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
                                     </div>
 
@@ -95,20 +97,20 @@ function cadastro_form_render()
                                     <div class="mt-3 mb-3">
                                         <div class="br-input">
                                             <label for="cnpjDaInstituicao">CNPJ<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" required />
+                                            <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" required />
                                         </div>
                                     </div>
 
                                     <div class="br-textarea mb-3">
                                         <label for="CNAEDaInstituicao">CNAE<span class="field_required" style="color:#ee0000;">*</span></label>
-                                        <textarea class="textarea-start-size" id="CNAEDaInstituicao" name="CNAEDaInstituicao" placeholder="Escreva sobre o CNAE de sua instituição" maxlength="800"></textarea>
+                                        <textarea class="textarea-start-size" id="CNAEDaInstituicao" name="CNAEDaInstituicao" placeholder="Escreva sobre o CNAE de sua instituição" maxlength="800" onchange="changeError(name)" required></textarea>
                                         <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
                                     </div>
 
                                     <div class="mt-3 mb-3">
                                         <div class="br-input">
                                             <label for="urlDaInstituicao">Página da internet<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" required />
+                                            <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" required />
                                         </div>
                                     </div>
 
@@ -117,11 +119,11 @@ function cadastro_form_render()
                             <div class="wizard-panel-btn">
                                 <div class="row">
                                     <div class="col-md-6 align-button-right">
-                                        <button id="cadastro-btn-volta-1" class="br-button secondary wizard-btn-prev" type="button">Voltar
+                                        <button id="cadastro_btn_volta_1" class="br-button secondary wizard-btn-prev" type="button">Voltar
                                         </button>
                                     </div>
                                     <div class="col-md-6 align-button-left">
-                                        <button id="cadastro-btn-2" class="br-button primary wizard-btn-next" type="button">Avançar
+                                        <button id="cadastro_btn_2" class="br-button primary wizard-btn" type="button">Avançar
                                         </button>
                                     </div>
                                 </div>
@@ -179,7 +181,7 @@ function cadastro_form_render()
                                         </button>
                                     </div>
                                     <div class="col-md-6 align-button-left">
-                                        <button class="br-button primary wizard-btn-next" type="button">Avançar
+                                        <button id="cadastro_btn_3" class="br-button primary wizard-btn" type="button">Avançar
                                         </button>
                                     </div>
                                 </div>
@@ -197,7 +199,7 @@ function cadastro_form_render()
                                         </button>
                                     </div>
                                     <div class="col-md-6 align-button-left">
-                                        <button class="br-button primary wizard-btn-next" type="button">Avançar
+                                        <button id="cadastro_btn_4" class="br-button primary wizard-btn" type="button">Avançar
                                         </button>
                                     </div>
                                 </div>
