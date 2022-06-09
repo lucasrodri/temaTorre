@@ -83,21 +83,6 @@ function validaFormulario( ) {
       valid = false;
     }
 
-    /*
-    // como era feito no sinajuve para comparação
-    y = x[ currentTab ].getElementsByClassName( "requisitos" );
-    for ( i = 0; i < y.length; i++ ) {
-      // If a field is required
-      if ( y[ i ].checked == false ) {
-        // add an "invalid" class to the field:
-        y[ i ].className += " invalid";
-        //console.log(y[i].name + "_label");
-        document.getElementById( y[ i ].name + "_label" ).style = "";
-        // and set the current valid status to false
-        valid = false;
-      }
-    }
-    */
   } else {
 
     console.log( "estou no else " );
@@ -116,7 +101,7 @@ function validaFormulario( ) {
 
     for ( i = 0; i < y.length; i++ ) {
 
-      console.log( y[ i ].name );
+      console.log( "--------validando " + y[ i ].name );
 
       if ( y[ i ].type == "email" ) {
 
@@ -130,6 +115,7 @@ function validaFormulario( ) {
 
       } else if ( y[ i ].type == "file" ) {
 
+        return valid = true;
         console.log( "file" );
 
         if ( ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) || ( y[ i ].value != "" ) ) {
@@ -181,6 +167,9 @@ function validaFormulario( ) {
             if ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) {
 
               console.log( "outros required" );
+
+              //testar required
+              //if (y[ i ].getAttribute( "required" ) !== '')
 
               if ( y[ i ].value == "" ) {
 

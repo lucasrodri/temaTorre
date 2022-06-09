@@ -4,7 +4,7 @@
 TODO
 - [ ] Form de usuário
     - [X] Input type radio só pode escolher uma (não deixa desmarcar)
-    - [ ] Falta um outro input type radio (aberto quando é instituição privada)
+    - [X] Falta um outro input type radio (aberto quando é instituição privada)
     - [ ] Validação de todos os campos
     - [ ] Mostrar/esconder redes quando escolhidas (limpar rede escondida?) 
     - [ ] Mostrar/esconder campo de outros
@@ -29,5 +29,5 @@ O que falta da validação:
 - Corrigir máscaras / validação de máscaras (nem testei)
 
 O que falta geral:
-- Campo de input radio que falta na aba 2 (embaixo do Natureza jurídica da instituição)
+- ~~Campo de input radio que falta na aba 2 (embaixo do Natureza jurídica da instituição)~~
 - Continuar o render form das redes (falta a lógica da escolha do checkbox de redes)

@@ -10,10 +10,10 @@ function arrumaTamanhoJanela( index ) {
 
   wizard_sizes = {
     0: '600px',
-    1: '1600px',
+    1: '1700px',
     2: '2500px',
-    3: '600px',
-    4: '600px',
+    3: '800px',
+    4: '1000px',
   }
 
   // console.log( 'setando tamanho da janela em ' + index );
@@ -25,7 +25,6 @@ function arrumaTamanhoJanela( index ) {
 jQuery( document ).ready( function ( $ ) {
 
   // começa chamando a primeira altura
-  //$( '#cadastro_wizard' ).css( "height", wizard1_size );
   arrumaTamanhoJanela( 0 );
 
   /**
@@ -39,28 +38,6 @@ jQuery( document ).ready( function ( $ ) {
     } );
 
   } );
-
-  /*
-  $( '#cadastro_wizard_b1' ).click( function ( ) {
-    $( '#cadastro_wizard' ).css( "height", wizard1_size );
-  } );
-
-  $( '#cadastro_wizard_b2' ).click( function ( ) {
-    $( '#cadastro_wizard' ).css( "height", wizard2_size );
-  } );
-
-  $( '#cadastro_wizard_b3' ).click( function ( ) {
-    $( '#cadastro_wizard' ).css( "height", wizard3_size );
-  } );
-
-  $( '#cadastro_wizard_b4' ).click( function ( ) {
-    $( '#cadastro_wizard' ).css( "height", wizard4_size );
-  } );
-
-  $( '#cadastro_wizard_b5' ).click( function ( ) {
-    $( '#cadastro_wizard' ).css( "height", wizard5_size );
-  } );
-  */
 
   // $( '#checkConcordo' ).change( function ( ) {
   //   if ( this.checked ) {
@@ -100,13 +77,30 @@ jQuery( document ).ready( function ( $ ) {
       // console.log( this.id.slice( -1 ) );
 
       // pega número do painel ativo pelo id do botão clicado
-      arrumaTamanhoJanela( this.id.slice( -1 ) );
+      //arrumaTamanhoJanela( this.id.slice( -1 ) );
 
       // ainda não pensei numa forma melhor pra isso aqui
       // if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn-next' ) ) {
       //   //$( '#cadastro_wizard' ).css( "height", wizard2_size );
       //   arrumaTamanhoJanela( 1 );
       // }
+
+
+      panels = document.getElementsByClassName( "wizard-panel" );
+
+      for ( var i = 0; i < panels.length; i++ ) {
+
+        ativo = panels[ i ].getAttribute( "active" );
+
+        if ( ativo === "" ) {
+          index = i;
+        }
+
+      }
+
+      console.log( 'cliquei no next btn ' + index );
+
+      arrumaTamanhoJanela( index + 1 );
 
     } else {
 
