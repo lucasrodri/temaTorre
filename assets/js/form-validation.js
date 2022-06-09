@@ -31,8 +31,10 @@ function setarInvalido( element ) {
     document.getElementById( element.name + "_label" ).style = "";
 
   } else {
-
-    $( element.parentElement ).append( '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+    
+    element.parentElement.insertAdjacentHTML("afterend",
+          '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>');
+    //$( element.parentElement ).append( '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
 
   }
 }

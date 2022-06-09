@@ -17,8 +17,8 @@ function arrumaTamanhoJanela( index ) {
   }
 
   // console.log( 'setando tamanho da janela em ' + index );
-
-  $( '#cadastro_wizard' ).css( "height", wizard_sizes[ index ] );
+  document.getElementById('cadastro_wizard').style.height = wizard_sizes[ index ];
+  //$( '#cadastro_wizard' ).css( "height", wizard_sizes[ index ] );
 
 }
 
