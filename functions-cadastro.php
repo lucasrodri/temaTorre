@@ -516,9 +516,9 @@ function cadastro_action_form() {
 		$doc1Unidade = $_FILES['logo_instituicao'];
 	}
     //doc2
-    if(isset($_POST['guia_instituicao'])) $doc1Path = $_POST['guia_instituicao']; else $doc1Path = "";
+    if(isset($_POST['guia_instituicao'])) $doc2Path = $_POST['guia_instituicao']; else $doc2Path = "";
 	if(isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0){
-		$doc1Unidade = $_FILES['guia_instituicao'];
+		$doc2Unidade = $_FILES['guia_instituicao'];
 	}
     //Nome e email do candidato
     if(isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']); else $nomeDoCandidato = "";
@@ -527,10 +527,35 @@ function cadastro_action_form() {
     //submit
     if(isset($_POST["enviar"])){
         if(!is_null($doc1Unidade)) {
-            $doc1UnidadeUrl = upload_documento($doc1Unidade, $solicitante, "1");
+            $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
         }
-        //funcao para dá entrada no Caldera
-        insert_entrada_form("CF5e73af8a0fa98",""); 
+        if(!is_null($doc2Unidade)) {
+            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "1");
+        }
+        //funcao para dá entrada no Caldera (Form geral)
+        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1Path, $doc2Path, $nomeDoCandidato, $emailDoCandidato);
+        //funcao para dá entrada no Caldera (Form especifico)
+        $a  = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
+        foreach (explode(";", $redes) as $key => $value) {
+            switch ($value) {
+                case "check_suporte":
+                    insert_entrada_form_especifico("CF6297eae06f088", $value, $dados_redes);
+                    break;
+                case "check_formacao":
+                    insert_entrada_form_especifico("CF6298c3e77962a", $value,$dados_redes);
+                    break;
+                case "check_pesquisa":
+                    insert_entrada_form_especifico("CF6298c6a36c130", $value,$dados_redes);
+                    break;
+                case "check_inovacao":
+                    insert_entrada_form_especifico("CF6298c80222811", $value,$dados_redes);
+                    break;
+                case "check_tecnologia":
+                    insert_entrada_form_especifico("CF6298c879c2353", $value,$dados_redes);
+                    break;
+            }
+            
+        }
     }
 
 }
