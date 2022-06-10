@@ -472,7 +472,6 @@ function cadastro_action_form() {
 	if(isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
     
     //Redes Específicas
-    foreach ($abrangencia as $key => $value) {
     $dados_redes = array("rede-de-suporte" => array(),
                          "rede-de-formacao" => array(),
                          "rede-de-pesquisa" => array(),
@@ -480,9 +479,9 @@ function cadastro_action_form() {
                          "rede-de-tecnologia" => array(),
     );
     foreach( $dados_redes as $key => $value ){
-        $opcoes = get_options($rede_nome)[1];
-        $publico = get_options($rede_nome)[2];
-        $abrangencia = get_options($rede_nome)[3];
+        $opcoes = get_options($key)[1];
+        $publico = get_options($key)[2];
+        $abrangencia = get_options($key)[3];
 
         if(isset($_POST['urlServico-'.$key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-'.$key]); else $dados_redes[$key]["urlServico"] = "";
         if(isset($_POST['produtoServicos-'.$key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-'.$key]); else $dados_redes[$key]["produtoServicos"] = "";
