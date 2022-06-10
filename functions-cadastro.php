@@ -299,62 +299,10 @@ function cadastro_form_render()
 
 function cadastro_redes_render($rede_nome)
 {
-
-    switch ($rede_nome) {
-        case 'rede-de-suporte':
-            $title = 'Rede de Suporte';
-            $opcoes = array(
-                "Bases de dados e informações", "Certificadora", "Gestão", "Infraestrutura de laboratórios", "Instrumentos financeiros", "Metrologia", "Políticas públicas", "Outro"
-            );
-            break;
-
-        case 'rede-de-formacao':
-            $title = 'Rede de Formação';
-            $opcoes = array(
-                "Graduação", "Pós-Graduação", "Promoção e popularização da Ciência", "Qualificação profissional", "Outro"
-            );
-            break;
-
-        case 'rede-de-pesquisa':
-            $title = 'Rede de Pesquisa Aplicada';
-            $opcoes = array(
-                "Bases de dados e informações", "Ciências Agrárias", "Ciências Biológicas", "Ciências da Saúde", "Ciências Exatas e da Terra", "Ciências Sociais Aplicadas", "Engenharias", "Outro"
-            );
-            break;
-
-        case 'rede-de-inovacao':
-            $title = 'Rede de Inovação';
-            $opcoes = array(
-                "Incubadora", "Núcleo de Inovação Tecnológica (NIT)", "Parque tecnológico", "Outro"
-            );
-            break;
-
-        case 'rede-de-tecnologia':
-            $title = 'Rede de Tecnologias Aplicadas';
-            $opcoes = array(
-                "Agricultura", "Coque, derivados de petróleo e de biocombustíveis", "Equipamentos de transporte, exceto veículos automotores", "Farmoquímicos e farmacêuticos", "Informação e Comunicação", "Química", "Outro"
-            );
-            break;
-    }
-
-    $publicos = array(
-        "Startup",
-        "MPE",
-        "Média Empresa",
-        "Empresa de grande porte",
-        "Governo",
-        "ICTs",
-        "Investidor",
-        "Pesquisador",
-        "Terceiro Setor",
-        "Pessoa física"
-    );
-
-
-    $abrangencia = array(
-        "Local/Regional", "Nacional", "Internacional"
-    );
-
+    $title = get_options($rede_nome)[0];
+    $opcoes = get_options($rede_nome)[1];
+    $publicos = get_options($rede_nome)[2];
+    $abrangencia = get_options($rede_nome)[3];
 ?>
     <div class="h4"><?php echo $title; ?></div>
 
@@ -438,4 +386,185 @@ function cadastro_redes_render($rede_nome)
     </div>
 
 <?php
+}
+
+function get_options($rede_nome){
+    switch ($rede_nome) {
+        case 'rede-de-suporte':
+            $title = 'Rede de Suporte';
+            $opcoes = array(
+                "Bases de dados e informações", "Certificadora", "Gestão", "Infraestrutura de laboratórios", "Instrumentos financeiros", "Metrologia", "Políticas públicas", "Outro"
+            );
+            break;
+
+        case 'rede-de-formacao':
+            $title = 'Rede de Formação';
+            $opcoes = array(
+                "Graduação", "Pós-Graduação", "Promoção e popularização da Ciência", "Qualificação profissional", "Outro"
+            );
+            break;
+
+        case 'rede-de-pesquisa':
+            $title = 'Rede de Pesquisa Aplicada';
+            $opcoes = array(
+                "Bases de dados e informações", "Ciências Agrárias", "Ciências Biológicas", "Ciências da Saúde", "Ciências Exatas e da Terra", "Ciências Sociais Aplicadas", "Engenharias", "Outro"
+            );
+            break;
+
+        case 'rede-de-inovacao':
+            $title = 'Rede de Inovação';
+            $opcoes = array(
+                "Incubadora", "Núcleo de Inovação Tecnológica (NIT)", "Parque tecnológico", "Outro"
+            );
+            break;
+
+        case 'rede-de-tecnologia':
+            $title = 'Rede de Tecnologias Aplicadas';
+            $opcoes = array(
+                "Agricultura", "Coque, derivados de petróleo e de biocombustíveis", "Equipamentos de transporte, exceto veículos automotores", "Farmoquímicos e farmacêuticos", "Informação e Comunicação", "Química", "Outro"
+            );
+            break;
+    }
+    $publicos = array(
+        "Startup",
+        "MPE",
+        "Média Empresa",
+        "Empresa de grande porte",
+        "Governo",
+        "ICTs",
+        "Investidor",
+        "Pesquisador",
+        "Terceiro Setor",
+        "Pessoa física"
+    );
+
+
+    $abrangencia = array(
+        "Local/Regional", "Nacional", "Internacional"
+    );
+    return array( $title, $opcoes, $publicos, $abrangencia );
+}
+
+function cadastro_action_form() {
+	/*
+	* Função action para uso do formulário de cadastro.
+	* Após processado, o usuário solicitante deverá ser criado, um email deverá ser enviado ao mesmo contendo uma senha.
+    * O usuário ficará como "Role" -> "candidado"
+	* Os dados são gravados em vários forms caldera, (geral e N Redes)
+    *
+	* Função chamada pelo formulário "cadastro_form_usuario"
+	*/
+    if(isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']); else $nomeDaInstituicao = "";
+    if(isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']); else $descricaoDaInstituicao = "";
+    if(isset($_POST['natureza-op'])) $natureza_op = ($_POST['natureza-op']); else $natureza_op = "";
+    if(isset($_POST['porte-op'])) $porte_op = ($_POST['porte-op']); else $porte_op = "";
+    
+    if(isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']); else $cnpjDaInstituicao = "";
+    if(isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']); else $CNAEDaInstituicao = "";
+    if(isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']); else $urlDaInstituicao = "";
+    ####
+    //Redes checkbox
+    $redes = "";
+	if(isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
+	if(isset($_POST['check_formacao'])) $redes .= $_POST['check_formacao'] . ";";
+	if(isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
+    if(isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
+	if(isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
+    
+    //Redes Específicas
+    foreach ($abrangencia as $key => $value) {
+    $dados_redes = array("rede-de-suporte" => array(),
+                         "rede-de-formacao" => array(),
+                         "rede-de-pesquisa" => array(),
+                         "rede-de-inovacao" => array(),
+                         "rede-de-tecnologia" => array(),
+    );
+    foreach( $dados_redes as $key => $value ){
+        $opcoes = get_options($rede_nome)[1];
+        $publico = get_options($rede_nome)[2];
+        $abrangencia = get_options($rede_nome)[3];
+
+        if(isset($_POST['urlServico-'.$key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-'.$key]); else $dados_redes[$key]["urlServico"] = "";
+        if(isset($_POST['produtoServicos-'.$key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-'.$key]); else $dados_redes[$key]["produtoServicos"] = "";
+        //Pegando os checks das classificacoes
+        $classificacoes = "";
+        foreach ($opcoes as $i => $v) {
+            if(isset($_POST['check_classificacao_'.$i.'_'.$key])) $classificacoes .= $_POST['check_classificacao_'.$i.'_'.$key] . ";";
+        }
+        $dados_redes[$key]['classificacoes'] = $classificacoes;
+        //
+        if(isset($_POST['outroClassificacao_'.$key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_'.$key]); else $dados_redes[$key]["outroClassificacao"] = "";
+        //Pegando os checks do publico alvo
+        $publicos = "";
+        foreach ($publico as $i => $v) {
+            if(isset($_POST['check_publico_'.$i.'_'.$key])) $publicos .= $_POST['check_publico_'.$i.'_'.$key] . ";";
+        }
+        $dados_redes[$key]['publicos'] = $publicos;
+        //Pegando os checks da abrangencia
+        $abrangencias = "";
+        foreach ($abrangencia as $i => $v) {
+            if(isset($_POST['check_abrangencia_'.$i.'_'.$key])) $abrangencias .= $_POST['check_abrangencia_'.$i.'_'.$key] . ";";
+        }
+        $dados_redes[$key]['abrangencias'] = $abrangencias;
+        if(isset($_POST['nomeCompleto_'.$key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_'.$key]); else $dados_redes[$key]["nomeCompleto"] = "";
+        if(isset($_POST['emailRepresentante_'.$key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_'.$key]); else $dados_redes[$key]["emailRepresentante"] = "";
+        if(isset($_POST['telefoneRepresentante_'.$key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_'.$key]); else $dados_redes[$key]["telefoneRepresentante"] = "";
+    }
+    //Arquivos
+    //doc1
+    if(isset($_POST['logo_instituicao'])) $doc1Path = $_POST['logo_instituicao']; else $doc1Path = "";
+	if(isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0){
+		$doc1Unidade = $_FILES['logo_instituicao'];
+	}
+    //doc2
+    if(isset($_POST['guia_instituicao'])) $doc1Path = $_POST['guia_instituicao']; else $doc1Path = "";
+	if(isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0){
+		$doc1Unidade = $_FILES['guia_instituicao'];
+	}
+    //Nome e email do candidato
+    if(isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']); else $nomeDoCandidato = "";
+    if(isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']); else $emailDoCandidato = "";
+    
+    //submit
+    if(isset($_POST["enviar"])){
+        if(!is_null($doc1Unidade)) {
+            $doc1UnidadeUrl = upload_documento($doc1Unidade, $solicitante, "1");
+        }
+        //funcao para dá entrada no Caldera
+        insert_entrada_form("CF5e73af8a0fa98",""); 
+    }
+
+}
+
+function upload_documento($documento, $usuario, $n){
+	/*
+	* Função para upload de arquivo
+	* Recebe uma variável $_FILES['value']
+	* Retorna a url do arquivo enviado
+	*/
+
+	$upload = wp_upload_bits( $documento['name'], null, file_get_contents( $documento['tmp_name'] ) );
+
+	$wp_filetype = wp_check_filetype( basename( $upload['file'] ), null );
+
+	$wp_upload_dir = wp_upload_dir();
+
+	$message = "Documento ".$n." do usuário ".$usuario.".";
+
+	$attachment = array(
+		'guid' => $wp_upload_dir['baseurl'] . _wp_relative_upload_path( $upload['file'] ),
+		'post_mime_type' => $wp_filetype['type'],
+		'post_title' => preg_replace('/\.[^.]+$/', '', basename( $upload['file'] )),
+		'post_content' => $message,
+		'post_status' => 'inherit'
+	);
+
+	$attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+
+	require_once(ABSPATH . 'wp-admin/includes/file.php');
+
+	$attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
+	wp_update_attachment_metadata( $attach_id, $attach_data );
+
+	return wp_get_attachment_url( $attach_id );
 }
