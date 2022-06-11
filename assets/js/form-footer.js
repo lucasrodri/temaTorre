@@ -10,16 +10,29 @@ function arrumaTamanhoJanela( index ) {
 
   wizard_sizes = {
     0: '600px',
-    1: '1700px',
+    1: '2000px',
     2: '2500px',
     3: '800px',
     4: '1000px',
   }
 
   // console.log( 'setando tamanho da janela em ' + index );
-  document.getElementById('cadastro_wizard').style.height = wizard_sizes[ index ];
+  document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ];
   //$( '#cadastro_wizard' ).css( "height", wizard_sizes[ index ] );
 
+}
+
+function retornaPainelAtivo( ) {
+  panels = document.getElementsByClassName( "wizard-panel" );
+
+  for ( var i = 0; i < panels.length; i++ ) {
+
+    ativo = panels[ i ].getAttribute( "active" );
+
+    if ( ativo === "" ) {
+      return i;
+    }
+  }
 }
 
 jQuery( document ).ready( function ( $ ) {
@@ -39,31 +52,6 @@ jQuery( document ).ready( function ( $ ) {
 
   } );
 
-  // $( '#checkConcordo' ).change( function ( ) {
-  //   if ( this.checked ) {
-  //     $( '#cadastro_btn_1' ).removeClass( 'wizard-btn' )
-  //     $( '#cadastro_btn_1' ).addClass( 'wizard-btn-next' )
-  //     $( '#checkConcordo' ).val( this.checked );
-  //   } else {
-  //     $( '#cadastro_btn_1' ).removeClass( 'wizard-btn-next' )
-  //     $( '#cadastro_btn_1' ).addClass( 'wizard-btn' )
-  //     $( '#checkConcordo' ).val( "" );
-  //   }
-  //   $( '#span-concordo' ).css( "display", "none" );
-  // } );
-
-  // $( '#cadastro_btn_1' ).click( function ( ) {
-  //   if ( $( '#checkConcordo' ).checked ) {
-  //     $( '#span-concordo' ).css( "display", "none" );
-  //   } else {
-  //     if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn' ) ) {
-  //       $( '#span-concordo' ).css( "display", "inline" );
-  //     }
-  //   }
-  //   if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn-next' ) ) {
-  //     $( '#cadastro_wizard' ).css( "height", wizard2_size );
-  //   }
-  // } );
 
   $( '.wizard-btn' ).click( function ( ) {
     console.log( 'cliquei no wizard btn' );
@@ -72,34 +60,8 @@ jQuery( document ).ready( function ( $ ) {
 
       $( this ).addClass( 'wizard-btn-next' );
 
-      // console.log( $( this ) );
-      // console.log( this.id );
-      // console.log( this.id.slice( -1 ) );
-
-      // pega número do painel ativo pelo id do botão clicado
-      //arrumaTamanhoJanela( this.id.slice( -1 ) );
-
-      // ainda não pensei numa forma melhor pra isso aqui
-      // if ( $( '#cadastro_btn_1' ).hasClass( 'wizard-btn-next' ) ) {
-      //   //$( '#cadastro_wizard' ).css( "height", wizard2_size );
-      //   arrumaTamanhoJanela( 1 );
-      // }
-
-
-      panels = document.getElementsByClassName( "wizard-panel" );
-
-      for ( var i = 0; i < panels.length; i++ ) {
-
-        ativo = panels[ i ].getAttribute( "active" );
-
-        if ( ativo === "" ) {
-          index = i;
-        }
-
-      }
-
-      console.log( 'cliquei no next btn ' + index );
-
+      index = retornaPainelAtivo( );
+      //console.log( 'cliquei no next btn ' + index );
       arrumaTamanhoJanela( index + 1 );
 
     } else {
@@ -113,31 +75,11 @@ jQuery( document ).ready( function ( $ ) {
 
   $( '.wizard-btn-prev' ).click( function ( ) {
 
-    // não quero chamar essa funçaõ aqui pq ela é definida só na parte de validação
-    //index = determinaPainelAtivo( document.getElementsByClassName( "wizard-panel" ) );
-
-    panels = document.getElementsByClassName( "wizard-panel" );
-
-    for ( var i = 0; i < panels.length; i++ ) {
-
-      ativo = panels[ i ].getAttribute( "active" );
-
-      if ( ativo === "" ) {
-        index = i;
-      }
-
-    }
-
-    console.log( 'cliquei no previous btn ' + index );
-
+    index = retornaPainelAtivo( );
+    //console.log( 'cliquei no previous btn ' + index );
     arrumaTamanhoJanela( index - 1 );
 
   } );
-
-
-  // $( '#cadastro_btn_volta_1' ).click( function ( ) {
-  //   $( '#cadastro_wizard' ).css( "height", wizard1_size );
-  // } );
 
   /**
    * Máscaras
@@ -150,6 +92,9 @@ jQuery( document ).ready( function ( $ ) {
   $( "#cnpjDaInstituicao" ).mask( "99.999.999/9999-99" );
   //$("#cepDaUnidade").mask("00000-000");
 
+  $( "input[type='tel']" ).each( function ( index ) {
+    $( this ).mask( "(00) 0000-00009" );
+  } );
 
 } );
 

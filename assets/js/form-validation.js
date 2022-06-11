@@ -3,14 +3,10 @@ function determinaPainelAtivo( panels ) {
   //panels = document.getElementsByClassName( "wizard-panel" );
 
   for ( var i = 0; i < panels.length; i++ ) {
-    //console.log( panels[ i ] );
-    //console.log( i );
-    //console.log( panels[ i ].getAttribute( "active" ) );
 
     ativo = panels[ i ].getAttribute( "active" );
 
     if ( ativo === "" ) {
-      //console.log( i + ' esse é o painel ativo' );
       return i;
     }
 
@@ -31,35 +27,59 @@ function setarInvalido( element ) {
     document.getElementById( element.name + "_label" ).style = "";
 
   } else {
-    
-    element.parentElement.insertAdjacentHTML("afterend",
-          '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>');
-    //$( element.parentElement ).append( '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+
+    element.parentElement.insertAdjacentHTML( "beforeend",
+      '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
 
   }
 }
 
 function setarValido( element ) {
+  element.parentElement.removeAttribute( "invalid" );
+  element.parentElement.classList.remove( "danger" );
 
-  // se estiver inválido, torna válido
-  // talvez ? || element.classList.contains( 'danger' ) 
-  if ( element.parentElement.getAttribute( "invalid" ) ) {
-
-    element.parentElement.removeAttribute( "invalid" );
-    element.parentElement.classList.remove( "danger" );
+  if ( !element.classList.contains( 'warning' ) ) {
 
     element.parentElement.setAttribute( "valid", "valid" );
     element.parentElement.className += " success";
 
+  }
+
+  if ( document.getElementById( element.name + "_label" ) ) {
+    document.getElementById( element.name + "_label" ).style = "display: none;";
+  }
+}
+
+function mostrarAvisoValidacao( element, nome = '' ) {
+  element.parentElement.removeAttribute( "valid" );
+  element.parentElement.classList.remove( "success" );
+
+  element.parentElement.className += " warning";
+
+  if ( document.getElementById( element.name + "_warning" ) ) {
+
+    document.getElementById( element.name + "_warning" ).style = "";
+
   } else {
 
-    element.parentElement.removeAttribute( "valid" );
-    element.parentElement.classList.remove( "success" );
+    element.parentElement.insertAdjacentHTML( "beforeend",
+      '<span id="' + element.name + '_warning" class="feedback warning" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Insira um ' + nome + ' válido</span>' );
 
   }
+}
+
+function ocultarAvisoValidacao( element ) {
+  if ( document.getElementById( element.name + "_warning" ) ) {
+    document.getElementById( element.name + "_warning" ).style = "display: none;";
+  }
+
+  element.parentElement.classList.remove( "warning" );
+  element.parentElement.setAttribute( "valid", "valid" );
+  element.parentElement.className += " success"
 
 }
 
+/*
 function validaFormulario( ) {
   // This function deals with validation of the form fields
   var x, y, i, s, r, t,
@@ -244,8 +264,253 @@ function validaFormulario( ) {
   }
   return valid; // return the valid status
 }
+*/
 
-function validaFormularioRadio( x, classe, valid ) {
+function validaFormulario( ) {
+
+  var x, y, t, currentTab, valid = true;
+
+  x = document.getElementsByClassName( "wizard-panel" );
+
+  currentTab = determinaPainelAtivo( x );
+
+  y = x[ currentTab ].getElementsByTagName( "input" );
+  //s = x[ currentTab ].getElementsByTagName( "select" );
+  t = x[ currentTab ].getElementsByTagName( "textarea" );
+
+  //console.log( "tamanho de y (input) " + y.length );
+  //console.log( "tamanho de s (select) " + s.length );
+  //console.log( "tamanho de t (textarea) " + t.length );
+
+  /**
+   * Checar Input (y)
+   */
+
+  var checarRadio = [ ];
+
+  for ( i = 0; i < y.length; i++ ) {
+
+    requirido = y[ i ].getAttribute( "required" );
+
+    // Checa apenas se o campo for requerido
+    if ( requirido === "" ) {
+      flagRequirido = true;
+    } else {
+      flagRequirido = false;
+    }
+
+    switch ( y[ i ].type ) {
+      case "text":
+        console.log( "text" );
+
+        //console.log( "--------validando " + y[ i ].name );
+        //console.log( "flagRequirido: " + flagRequirido );
+        //console.log( "valor: " + y[ i ].value );
+        //console.log( 'validade ' + y[ i ].checkValidity( ) );
+
+        if ( flagRequirido && ( y[ i ].value == "" ) ) {
+          setarInvalido( y[ i ] );
+          valid = false;
+        }
+
+        break;
+
+      case "email":
+        console.log( "email" );
+
+        if ( flagRequirido && ( y[ i ].value == "" ) ) {
+          setarInvalido( y[ i ] );
+          valid = false;
+        }
+
+        break;
+
+      case "file":
+        console.log( "file" );
+
+        var extensoesPermitidas = {
+          'logo_instituicao': [ 'jpg', 'png', 'jpeg' ],
+          'guia_instituicao': [ 'pdf' ],
+        }
+
+        var tamanhoPermitido = {
+          'logo_instituicao': 5242880,
+          'guia_instituicao': 26214400,
+        }
+
+        if ( flagRequirido || ( y[ i ].value != "" ) ) {
+
+          //checar extensão
+          var nomeArquivo = y[ i ].value.split( "." );
+          var extensao = nomeArquivo[ nomeArquivo.length - 1 ].toLowerCase( );
+
+          // console.log( "nomeArquivo: " + nomeArquivo );
+          // console.log( "extensao: " + extensao );
+          // console.log( "verificacao: " + extensoesPermitidas[ y[ i ].name ].includes( extensao ) );
+
+          if ( !extensoesPermitidas[ y[ i ].name ].includes( extensao ) || y[ i ].files.length == 0 ) {
+            setarInvalido( y[ i ] );
+            valid = false;
+          }
+
+          if ( y[ i ].files.length > 0 ) {
+            var tamanho = y[ i ].files[ 0 ].size;
+            //console.log( "tamanho: " + tamanho );
+
+            if ( tamanho > tamanhoPermitido[ y[ i ].name ] ) {
+              //setarInvalido( y[ i ] );
+              //valid = false;
+              mostrarAvisoValidacao( document.getElementById( y[ i ].name ), 'Arquivo' );
+            } else {
+              ocultarAvisoValidacao( document.getElementById( y[ i ].name ) );
+            }
+          }
+
+
+        }
+        break;
+
+      case "url":
+        console.log( "url" );
+
+        if ( flagRequirido && ( y[ i ].value == "" ) ) {
+          setarInvalido( y[ i ] );
+          valid = false;
+        }
+
+        break;
+
+      case "tel":
+        console.log( "tel" );
+
+        // console.log( "--------validando " + y[ i ].name );
+        // console.log( "flagRequirido: " + flagRequirido );
+        // console.log( "valor: " + y[ i ].value );
+        // console.log( 'validade ' + y[ i ].checkValidity( ) );
+
+        // esse tem uma validação diferente
+        if ( flagRequirido && ( !y[ i ].checkValidity( ) ) ) {
+          setarInvalido( y[ i ] );
+          valid = false;
+        }
+
+        break;
+
+      case "radio":
+        console.log( "radio" );
+
+        //console.log( y[ i ].classList.item( 0 ) )
+        classe = y[ i ].classList.item( 0 ); //geralmente é a única classe
+
+        if ( !checarRadio.includes( classe ) ) {
+          //console.log( "inserindo classe " + classe )
+          checarRadio.push( classe );
+        }
+
+        break;
+
+      case "checkbox":
+        console.log( "checkbox" );
+        //console.log( "--------validando " + y[ i ].name );
+
+        if ( y[ i ].checked == false ) {
+          setarInvalido( y[ i ] );
+          valid = false;
+        }
+
+        break;
+
+      default:
+        console.log( "default" );
+        console.log( y[ i ].type );
+        // code block
+        break;
+    }
+  }
+
+  // console.log( 'checarRadio' );
+  // console.log( checarRadio );
+  for ( c = 0; c < checarRadio.length; c++ ) {
+    valid = validaFormularioRadio( x, currentTab, checarRadio[ c ], valid );
+  }
+
+  /**
+   * Checar Textarea (t)
+   */
+  for ( i = 0; i < t.length; i++ ) {
+
+    requirido = t[ i ].getAttribute( "required" );
+
+    // mesma lógica do ativo
+    if ( requirido === "" ) {
+      flagRequirido = true;
+    }
+
+    if ( flagRequirido ) {
+      if ( t[ i ].value == "" ) {
+        setarInvalido( t[ i ] );
+        valid = false;
+      }
+    }
+  }
+
+  console.log( "VALID: " + valid );
+  return false;
+  //return valid;
+}
+
+function validarEspecifico( name ) {
+  element = document.getElementById( name );
+
+  if ( name == "cnpjDaInstituicao" ) {
+
+    //console.log( "validar text cnpjDaInstituicao" );
+    //console.log( IsCNPJ( element.value ) );
+
+    if ( !IsCNPJ( element.value ) ) {
+      mostrarAvisoValidacao( element, 'CNPJ' );
+      valid = false;
+    } else {
+      ocultarAvisoValidacao( element );
+      valid = true;
+    }
+
+  }
+
+  if ( name == "urlDaInstituicao" ) {
+
+    //console.log( "validar text urlDaInstituicao" );
+    //.log( IsURL( element.value ) );
+
+    if ( !IsURL( element.value ) ) {
+      mostrarAvisoValidacao( element, 'URL' );
+      valid = false;
+    } else {
+      ocultarAvisoValidacao( element );
+      valid = true;
+    }
+
+  }
+
+  if ( element.type == "email" ) {
+
+    if ( !IsEmail( element.value ) ) {
+      mostrarAvisoValidacao( element, 'E-mail' );
+      valid = false;
+    } else {
+      ocultarAvisoValidacao( element );
+      valid = true;
+    }
+
+  }
+
+  //return valid;
+
+}
+
+function validaFormularioRadio( x, currentTab, classe, valid ) {
+
+  console.log( "checando classse" + classe )
   var r, flag = false;
   r = x[ currentTab ].getElementsByClassName( classe );
 
@@ -317,10 +582,6 @@ function getValueRadio( radioElement ) {
 }
 
 function changeError( name ) {
-  if ( document.getElementById( name + "_label" ) ) {
-    document.getElementById( name + "_label" ).style = "display: none;";
-  }
-  //document.getElementById( name ).classList.remove( "invalid" );
   setarValido( document.getElementById( name ) );
 }
 
@@ -461,15 +722,15 @@ function changeNumber( name ) {
 }
 
 function IsEmail( email ) {
-  if ( email === "" ) {
-    return false;
+  if ( email == "" ) {
+    return true;
   }
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test( email );
 }
 
 function IsURL( url ) {
-  if ( url === "" ) {
+  if ( url == "" ) {
     return true;
   } else {
     if ( url.indexOf( "http://" ) == 0 || url.indexOf( "https://" ) == 0 ) {

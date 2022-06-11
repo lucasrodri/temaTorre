@@ -31,3 +31,7 @@ O que falta da validação:
 O que falta geral:
 - ~~Campo de input radio que falta na aba 2 (embaixo do Natureza jurídica da instituição)~~
 - Continuar o render form das redes (falta a lógica da escolha do checkbox de redes)
+
+
+- ao clicar para aparecer a rede: adicionar required aos itens mostrados
+ao desclicar: remover os required
