@@ -6,40 +6,42 @@ var wizard5_size = '500px';
 
 function arrumaTamanhoJanela( index ) {
 
-  // console.log( 'chamei arrumaTamanhoJanela ' + index );
+  for ( var j = 0; j < 10; j++ ) {
 
-  var wizard_sizes = {}
-  var panelsContent = document.getElementsByClassName( "wizard-panel-content" );
+    // console.log( 'chamei arrumaTamanhoJanela ' + index );
 
-  for ( var i = 0; i < panelsContent.length; i++ ) {
+    var wizard_sizes = {}
+    var panelsContent = document.getElementsByClassName( "wizard-panel-content" );
 
-    // if ( i == index ) {
-    //   console.log( i + ' : ' + panelsContent[ i ].clientHeight );
-    //   console.log( i + ' : ' + panelsContent[ i ].offsetHeight );
-    //   console.log( i + ' : ' + panelsContent[ i ].scrollHeight );
+    for ( var i = 0; i < panelsContent.length; i++ ) {
+
+      // if ( i == index ) {
+      //   console.log( i + ' : ' + panelsContent[ i ].clientHeight );
+      //   console.log( i + ' : ' + panelsContent[ i ].offsetHeight );
+      //   console.log( i + ' : ' + panelsContent[ i ].scrollHeight );
+      // }
+      var altura = panelsContent[ i ].scrollHeight;
+
+      //não sei pq tem que ser 300
+      altura += 300;
+
+      wizard_sizes[ i ] = altura;
+    }
+
+    // wizard_sizes = {
+    //   0: '600px',
+    //   1: '2000px',
+    //   2: '2500px',
+    //   3: '800px',
+    //   4: '1000px',
     // }
-    var altura = panelsContent[ i ].scrollHeight;
 
-    //não sei pq tem que ser 300
-    altura += 300;
+    //console.log( wizard_sizes );
+    //{0: 301, 1: 1384, 2: 2174, 3: 389, 4: 677}
+    //console.log( "setando altura para: " + wizard_sizes[ index ] );
 
-    wizard_sizes[ i ] = altura;
+    document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ] + 'px';
   }
-
-  // wizard_sizes = {
-  //   0: '600px',
-  //   1: '2000px',
-  //   2: '2500px',
-  //   3: '800px',
-  //   4: '1000px',
-  // }
-
-  //console.log( wizard_sizes );
-  //{0: 601, 1: 1384, 2: 2174, 3: 689, 4: 677}
-  //console.log( "setando altura para: " + wizard_sizes[ index ] );
-
-  document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ] + 'px';
-
 }
 
 function retornaPainelAtivo( ) {
@@ -160,8 +162,10 @@ jQuery( document ).ready( function ( $ ) {
     if ( checked ) {
       checkSlave.style = "display:inline;";
 
-      //não posso pegar checkbox
-      checkSlave.querySelectorAll( 'input[type=text]' ).forEach( input => input.required = "true" );
+      //Preciso pegar específicamente o input nomeCompleto para não mexer no outroClassificação
+      nomeInputText = "nomeCompleto_rede-de-" + nomeRede;
+      // Tenho que listar os inputs para não pegar checkbox
+      checkSlave.querySelectorAll( `input[type=text][name=${nomeInputText}]` ).forEach( input => input.required = "true" );
       checkSlave.querySelectorAll( 'input[type=email]' ).forEach( input => input.required = "true" );
       checkSlave.querySelectorAll( 'input[type=tel]' ).forEach( input => input.required = "true" );
       checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.required = "true" );
@@ -180,6 +184,28 @@ jQuery( document ).ready( function ( $ ) {
 } );
 
 
+function controleOutroClassificacao( id ) {
+
+  //console.log( "cliquei em " + id );
+  checkOutro = document.getElementById( id );
+
+  //check_classificacao_3_rede-de-tecnologia
+  nomeRede = id.split( '_' )[ 3 ]; //pegar nome da rede
+  inputTextOutro = document.getElementById( 'outroClassificacao_' + nomeRede );
+
+  if ( checkOutro.checked ) {
+    //console.log( "ta clicado" )
+    inputTextOutro.parentElement.style = "display: inline;";
+    inputTextOutro.required = "true";
+
+
+  } else {
+    //console.log( "nao ta " )
+    inputTextOutro.parentElement.style = "display: none;";
+    inputTextOutro.removeAttribute( "required" );
+  }
+
+}
 
 //Tentativa de calcular a soma total de todas as divs
 //jQuery( document ).ready( function ( $ ) {

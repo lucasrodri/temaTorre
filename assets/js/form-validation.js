@@ -301,7 +301,7 @@ function validaFormulario( ) {
 
     switch ( y[ i ].type ) {
       case "text":
-        console.log( "text" );
+        //console.log( "text" );
 
         //console.log( "--------validando " + y[ i ].name );
         //console.log( "flagRequirido: " + flagRequirido );
@@ -316,7 +316,7 @@ function validaFormulario( ) {
         break;
 
       case "email":
-        console.log( "email" );
+        //console.log( "email" );
 
         if ( flagRequirido && ( y[ i ].value == "" ) ) {
           setarInvalido( y[ i ] );
@@ -326,7 +326,7 @@ function validaFormulario( ) {
         break;
 
       case "file":
-        console.log( "file" );
+        //console.log( "file" );
 
         var extensoesPermitidas = {
           'logo_instituicao': [ 'jpg', 'png', 'jpeg' ],
@@ -361,6 +361,7 @@ function validaFormulario( ) {
               //setarInvalido( y[ i ] );
               //valid = false;
               mostrarAvisoValidacao( document.getElementById( y[ i ].name ), 'Arquivo' );
+              valid = false;
             } else {
               ocultarAvisoValidacao( document.getElementById( y[ i ].name ) );
             }
@@ -371,7 +372,7 @@ function validaFormulario( ) {
         break;
 
       case "url":
-        console.log( "url" );
+        //console.log( "url" );
 
         if ( flagRequirido && ( y[ i ].value == "" ) ) {
           setarInvalido( y[ i ] );
@@ -381,7 +382,7 @@ function validaFormulario( ) {
         break;
 
       case "tel":
-        console.log( "tel" );
+        //console.log( "tel" );
 
         // console.log( "--------validando " + y[ i ].name );
         // console.log( "flagRequirido: " + flagRequirido );
@@ -397,7 +398,7 @@ function validaFormulario( ) {
         break;
 
       case "radio":
-        console.log( "radio" );
+        //console.log( "radio" );
 
         /*
         //pega todas as classes
@@ -427,15 +428,18 @@ function validaFormulario( ) {
         break;
 
       case "checkbox":
-        console.log( "checkbox" );
+        //console.log( "checkbox" );
         //console.log( "--------validando " + y[ i ].name );
 
-        // if ( y[ i ].checked == false ) {
-        //   setarInvalido( y[ i ] );
-        //   valid = false;
-        // }
-
         classe = y[ i ].classList.item( 0 );
+
+        if ( classe == 'checkConcordo' ) {
+          if ( y[ i ].checked == false ) {
+            setarInvalido( y[ i ] );
+            valid = false;
+          }
+        }
+
         // If específico para check_redes
         if ( classe == 'check_redes' ) {
 
@@ -513,12 +517,12 @@ function validaFormulario( ) {
       }
     }
 
-    console.log( valid + " VALID depois da textarea: " + t[ i ].name );
+    // console.log( valid + " VALID depois da textarea: " + t[ i ].name );
   }
 
   console.log( "VALID: " + valid );
-  return false;
-  //return valid;
+  //return false;
+  return valid;
 }
 
 function validarEspecifico( name ) {
@@ -565,11 +569,11 @@ function validarEspecifico( name ) {
 
 function validaFormularioRadio( x, currentTab, classe, valid ) {
 
-  console.log( "checando classse" + classe )
+  console.log( "checando classe " + classe )
   var r, flag = false;
   r = x[ currentTab ].getElementsByClassName( classe );
 
-  console.log( "tamanho de r (radio) " + r.length );
+  console.log( "tamanho de r (radio/checkbox) " + r.length );
 
   if ( r.length > 0 ) {
 

@@ -21,9 +21,9 @@ function cadastro_form_render()
 
                                     Declaro também que as informações prestadas são de minha inteira responsabilidade, e que a falsidade nas informações fornecidas implicará nas penalidades cabíveis, no âmbito penal, cível e administrativo.
                                 </div>
-                                <div class="mt-3 mb-1">
+                                <div class="mt-3 mb-1" name="checkConcordo">
                                     <div class="br-checkbox">
-                                        <input id="checkConcordo" name="checkConcordo" type="checkbox" aria-label="Concordo com esses termos" onchange="changeError(name)" />
+                                        <input id="checkConcordo" name="checkConcordo" class="checkConcordo" type="checkbox" aria-label="Concordo com esses termos" onchange="changeErrorRadio(name)" />
                                         <label for="checkConcordo">Concordo com esses termos</label>
                                         <br>
                                     </div>
@@ -75,7 +75,7 @@ function cadastro_form_render()
                                             <label for="natureza_op_3">Instituição pública municipal</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_4" onchange="changeErrorRadio(name)" onclick="" />
+                                            <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_4" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
                                         </div>
                                         <div class="br-radio">
@@ -312,7 +312,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorRadio(name)" />
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorRadio(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> />
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -358,7 +358,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mb-3">
         <div class="br-input">
             <label for="nomeCompleto_<?php echo $rede_nome; ?>">Nome completo<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)"  />
+            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" />
         </div>
     </div>
 
@@ -372,7 +372,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mb-3">
         <div class="br-input">
             <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" onchange="changeError(name)" />
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" />
         </div>
     </div>
 
