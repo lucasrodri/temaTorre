@@ -8,17 +8,37 @@ function arrumaTamanhoJanela( index ) {
 
   // console.log( 'chamei arrumaTamanhoJanela ' + index );
 
-  wizard_sizes = {
-    0: '600px',
-    1: '2000px',
-    2: '2500px',
-    3: '800px',
-    4: '1000px',
+  var wizard_sizes = {}
+  var panelsContent = document.getElementsByClassName( "wizard-panel-content" );
+
+  for ( var i = 0; i < panelsContent.length; i++ ) {
+
+    // if ( i == index ) {
+    //   console.log( i + ' : ' + panelsContent[ i ].clientHeight );
+    //   console.log( i + ' : ' + panelsContent[ i ].offsetHeight );
+    //   console.log( i + ' : ' + panelsContent[ i ].scrollHeight );
+    // }
+    var altura = panelsContent[ i ].scrollHeight;
+
+    //não sei pq tem que ser 300
+    altura += 300;
+
+    wizard_sizes[ i ] = altura;
   }
 
-  // console.log( 'setando tamanho da janela em ' + index );
-  document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ];
-  //$( '#cadastro_wizard' ).css( "height", wizard_sizes[ index ] );
+  // wizard_sizes = {
+  //   0: '600px',
+  //   1: '2000px',
+  //   2: '2500px',
+  //   3: '800px',
+  //   4: '1000px',
+  // }
+
+  //console.log( wizard_sizes );
+  //{0: 601, 1: 1384, 2: 2174, 3: 689, 4: 677}
+  //console.log( "setando altura para: " + wizard_sizes[ index ] );
+
+  document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ] + 'px';
 
 }
 
@@ -54,20 +74,20 @@ jQuery( document ).ready( function ( $ ) {
 
 
   $( '.wizard-btn' ).click( function ( ) {
-    console.log( 'cliquei no wizard btn' );
+    //console.log( 'cliquei no wizard btn' );
+    index = retornaPainelAtivo( );
 
     if ( validaFormulario( ) ) {
 
       $( this ).addClass( 'wizard-btn-next' );
 
-      index = retornaPainelAtivo( );
       //console.log( 'cliquei no next btn ' + index );
       arrumaTamanhoJanela( index + 1 );
 
     } else {
 
       $( this ).removeClass( 'wizard-btn-next' );
-
+      arrumaTamanhoJanela( index );
     }
 
   } );
@@ -94,6 +114,67 @@ jQuery( document ).ready( function ( $ ) {
 
   $( "input[type='tel']" ).each( function ( index ) {
     $( this ).mask( "(00) 0000-00009" );
+  } );
+
+
+  /**
+   * Controle do Input Radio no Passo 2
+   */
+  // https://stackoverflow.com/questions/68585868/radio-buttons-with-input-other-option
+  const radioMaster = document.querySelector( ".radio-master" );
+  const radioSlave = document.querySelector( ".radio-slave" );
+
+  radioMaster.addEventListener( "input", e => {
+    const { type, name, id } = e.target;
+
+    //console.log( 'clqiuei em ' + id );
+    // if ( type === "radio" ) container.querySelectorAll( `input[type=text][name=${name}]` )
+    //   .forEach( textField => textField.value = "" );
+    // else if ( type === "text" ) container.querySelectorAll( `input[type=radio][name=${name}]` )
+    //   .forEach( rad => rad.checked = false );
+
+    if ( id == "natureza_op_4" || id == "natureza_op_5" ) {
+      //console.log( 'MOSTRA' );
+      radioSlave.style = "display:inline;";
+    } else {
+      //console.log( 'nao mostra' );
+      radioSlave.style = "display:none;";
+    }
+
+    arrumaTamanhoJanela( 1 );
+
+  } );
+
+  /**
+   * Controle do Input Checkbox no Passo 3
+   */
+  const checkMaster = document.querySelector( ".check-master" );
+
+  checkMaster.addEventListener( "input", e => {
+    const { id, checked } = e.target;
+
+    nomeRede = id.split( '_' )[ 1 ]; //pegar segundo nome
+    checkSlave = document.getElementById( 'redes_render_' + nomeRede );
+    //console.log( 'vou mostrar/esconder ' + nomeRede );
+
+    if ( checked ) {
+      checkSlave.style = "display:inline;";
+
+      //não posso pegar checkbox
+      checkSlave.querySelectorAll( 'input[type=text]' ).forEach( input => input.required = "true" );
+      checkSlave.querySelectorAll( 'input[type=email]' ).forEach( input => input.required = "true" );
+      checkSlave.querySelectorAll( 'input[type=tel]' ).forEach( input => input.required = "true" );
+      checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.required = "true" );
+
+    } else {
+      checkSlave.style = "display:none;";
+
+      checkSlave.querySelectorAll( 'input' ).forEach( input => input.removeAttribute( "required" ) );
+      checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.removeAttribute( "required" ) );
+    }
+
+    arrumaTamanhoJanela( 2 );
+
   } );
 
 } );

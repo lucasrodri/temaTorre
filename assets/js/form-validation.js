@@ -287,16 +287,16 @@ function validaFormulario( ) {
    */
 
   var checarRadio = [ ];
+  var checarCheckbox = [ ];
 
   for ( i = 0; i < y.length; i++ ) {
 
     requirido = y[ i ].getAttribute( "required" );
+    flagRequirido = false;
 
     // Checa apenas se o campo for requerido
     if ( requirido === "" ) {
       flagRequirido = true;
-    } else {
-      flagRequirido = false;
     }
 
     switch ( y[ i ].type ) {
@@ -399,12 +399,29 @@ function validaFormulario( ) {
       case "radio":
         console.log( "radio" );
 
+        /*
+        //pega todas as classes
         //console.log( y[ i ].classList.item( 0 ) )
         classe = y[ i ].classList.item( 0 ); //geralmente é a única classe
 
         if ( !checarRadio.includes( classe ) ) {
           //console.log( "inserindo classe " + classe )
           checarRadio.push( classe );
+        }
+        */
+
+        classe = y[ i ].classList.item( 0 );
+        // If específico para natureza_op
+        if ( classe == 'natureza_op' ) {
+          if ( !checarRadio.includes( classe ) ) {
+            checarRadio.push( classe );
+          }
+        }
+
+        // Se o natureza_op for igual 4 ou 5 (instituição privada), inclui o outro radio para validação
+        if ( y[ i ].checked == true && ( y[ i ].id == "natureza_op_4" || y[ i ].id == "natureza_op_5" ) ) {
+          console.log( 'entrei na validação dos op4 e op5' );
+          checarRadio.push( 'porte_op' );
         }
 
         break;
@@ -413,9 +430,39 @@ function validaFormulario( ) {
         console.log( "checkbox" );
         //console.log( "--------validando " + y[ i ].name );
 
-        if ( y[ i ].checked == false ) {
-          setarInvalido( y[ i ] );
-          valid = false;
+        // if ( y[ i ].checked == false ) {
+        //   setarInvalido( y[ i ] );
+        //   valid = false;
+        // }
+
+        classe = y[ i ].classList.item( 0 );
+        // If específico para check_redes
+        if ( classe == 'check_redes' ) {
+
+          if ( !checarCheckbox.includes( classe ) ) {
+            checarCheckbox.push( classe );
+          }
+
+          // Se algum dos check de check_redes estiver marcado, os outros dele estarão abertos
+          if ( y[ i ].checked == true ) {
+
+            //console.log( 'entrei na validação do ' + y[ i ].id );
+            nomeRede = y[ i ].id.split( '_' )[ 1 ]; //pegar segundo nome
+
+            checkClassificacao = 'check_classificacao_rede-de-' + nomeRede;
+            checkPublico = 'check_publico_rede-de-' + nomeRede;
+            checkAbrangencia = 'check_abrangencia_rede-de-' + nomeRede;
+
+            // console.log( checkClassificacao );
+            // console.log( checkPublico );
+            // console.log( checkAbrangencia );
+
+            if ( !checarCheckbox.includes( checkClassificacao ) ) {
+              checarCheckbox.push( checkClassificacao );
+              checarCheckbox.push( checkPublico );
+              checarCheckbox.push( checkAbrangencia );
+            }
+          }
         }
 
         break;
@@ -425,14 +472,26 @@ function validaFormulario( ) {
         console.log( y[ i ].type );
         // code block
         break;
+
     }
+
+    // if ( y[ i ].type != 'checkbox' ) {
+    //   console.log( valid + " VALID depois da input: " + y[ i ].name );
+    // }
   }
 
-  // console.log( 'checarRadio' );
-  // console.log( checarRadio );
+  //console.log( 'checarCheckbox' );
+  //console.log( checarCheckbox );
   for ( c = 0; c < checarRadio.length; c++ ) {
     valid = validaFormularioRadio( x, currentTab, checarRadio[ c ], valid );
   }
+
+  for ( c = 0; c < checarCheckbox.length; c++ ) {
+    valid = validaFormularioRadio( x, currentTab, checarCheckbox[ c ], valid );
+  }
+
+  //console.log( "VALID depois da validaFormularioRadio: " + valid );
+
 
   /**
    * Checar Textarea (t)
@@ -440,6 +499,7 @@ function validaFormulario( ) {
   for ( i = 0; i < t.length; i++ ) {
 
     requirido = t[ i ].getAttribute( "required" );
+    flagRequirido = false;
 
     // mesma lógica do ativo
     if ( requirido === "" ) {
@@ -452,6 +512,8 @@ function validaFormulario( ) {
         valid = false;
       }
     }
+
+    console.log( valid + " VALID depois da textarea: " + t[ i ].name );
   }
 
   console.log( "VALID: " + valid );
@@ -469,10 +531,8 @@ function validarEspecifico( name ) {
 
     if ( !IsCNPJ( element.value ) ) {
       mostrarAvisoValidacao( element, 'CNPJ' );
-      valid = false;
     } else {
       ocultarAvisoValidacao( element );
-      valid = true;
     }
 
   }
@@ -484,10 +544,8 @@ function validarEspecifico( name ) {
 
     if ( !IsURL( element.value ) ) {
       mostrarAvisoValidacao( element, 'URL' );
-      valid = false;
     } else {
       ocultarAvisoValidacao( element );
-      valid = true;
     }
 
   }
@@ -496,15 +554,12 @@ function validarEspecifico( name ) {
 
     if ( !IsEmail( element.value ) ) {
       mostrarAvisoValidacao( element, 'E-mail' );
-      valid = false;
     } else {
       ocultarAvisoValidacao( element );
-      valid = true;
     }
 
   }
 
-  //return valid;
 
 }
 
