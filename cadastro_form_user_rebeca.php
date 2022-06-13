@@ -152,23 +152,23 @@ function cadastro_form_render()
 
                                 <div class="mt-3 mb-1 check-master">
                                     <div class="br-checkbox">
-                                        <input id="check_suporte" name="check_redes" class="check_redes" type="checkbox" aria-label="Rede de Suporte" onchange="changeErrorRadio(name)" />
+                                        <input id="check_suporte" name="check_suporte" class="check_redes" type="checkbox" aria-label="Rede de Suporte" onchange="changeErrorCheck(name)" />
                                         <label for="check_suporte">Rede de Suporte - apoio aos atores do ecossistema de inovação e as atividades da Torre MCTI em todas as etapas do desenvolvimento de produtos e serviços inovadores</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_formacao" name="check_redes" class="check_redes" type="checkbox" aria-label="Rede de Formação" onchange="changeErrorRadio(name)" />
+                                        <input id="check_formacao" name="check_formacao" class="check_redes" type="checkbox" aria-label="Rede de Formação" onchange="changeErrorCheck(name)" />
                                         <label for="check_formacao">Rede de Formação Tecnológica - capacitação em ciência, tecnologia e inovação, com intuito de expandir e melhorar a formação profissional e tecnológica</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_pesquisa" name="check_redes" class="check_redes" type="checkbox" aria-label="Rede de Pesquisa" onchange="changeErrorRadio(name)" />
+                                        <input id="check_pesquisa" name="check_pesquisa" class="check_redes" type="checkbox" aria-label="Rede de Pesquisa" onchange="changeErrorCheck(name)" />
                                         <label for="check_pesquisa">Rede de Pesquisa Aplicada - utilização do conhecimento científico gerado na pesquisa básica, para apoiar o desenvolvimento de inovações, produtos e serviços, por meio da concepção de aplicações e provas de conceito</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_inovacao" name="check_redes" class="check_redes" type="checkbox" aria-label="Rede de inovacao" onchange="changeErrorRadio(name)" />
+                                        <input id="check_inovacao" name="check_inovacao" class="check_redes" type="checkbox" aria-label="Rede de inovacao" onchange="changeErrorCheck(name)" />
                                         <label for="check_inovacao">Rede de Inovação - transformação de ideias em protótipos, materializando o conhecimento científico validado em soluções concretas experimentais</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_tecnologia" name="check_redes" class="check_redes" type="checkbox" aria-label="Rede de tecnologia" onchange="changeErrorRadio(name)" />
+                                        <input id="check_tecnologia" name="check_tecnologia" class="check_redes" type="checkbox" aria-label="Rede de tecnologia" onchange="changeErrorCheck(name)" />
                                         <label for="check_tecnologia">Tecnologias Aplicadas - transformação de protótipos em produtos e riquezas, com o objetivo de aperfeiçoar soluções experimentais tornando-as aptas ao mercado, à geração de riqueza e à contribuição para a qualidade de vida dos brasileiros</label>
                                     </div>
                                 </div>
@@ -312,7 +312,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorRadio(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> />
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?>/>
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -332,7 +332,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorRadio(name)" />
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)"/>
                 <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($publicos) - 1) echo '<br>'; ?>
             </div>
@@ -344,7 +344,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
             <div class="br-checkbox d-inline">
-                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorRadio(name)" />
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>"  class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" />
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($abrangencia) - 1) echo '<br>'; ?>
             </div>

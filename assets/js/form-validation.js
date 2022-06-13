@@ -22,15 +22,29 @@ function setarInvalido( element ) {
   element.parentElement.setAttribute( "invalid", "invalid" );
   element.parentElement.className += " danger";
 
-  if ( document.getElementById( element.name + "_label" ) ) {
+  if ( element.type == 'checkbox' ) {
+    classe = element.classList.item( 0 ); //pegar a classe -> ex: check_redes
 
-    document.getElementById( element.name + "_label" ).style = "";
+    if ( document.getElementById( classe + "_label" ) ) {
+      // 1a diferença: cria o label com o nome da classe, em vez do name do elemento
+      document.getElementById( classe + "_label" ).style = "";
+    } else {
+      // 2a diferença: cria o label no pai do elemento pai kkk
+      element.parentElement.parentElement.insertAdjacentHTML( "beforeend",
+        '<span id="' + classe + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+    }
 
   } else {
+    if ( document.getElementById( element.name + "_label" ) ) {
 
-    element.parentElement.insertAdjacentHTML( "beforeend",
-      '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+      document.getElementById( element.name + "_label" ).style = "";
 
+    } else {
+
+      element.parentElement.insertAdjacentHTML( "beforeend",
+        '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+
+    }
   }
 }
 
@@ -47,6 +61,13 @@ function setarValido( element ) {
 
   if ( document.getElementById( element.name + "_label" ) ) {
     document.getElementById( element.name + "_label" ).style = "display: none;";
+  }
+
+  if ( element.type == 'checkbox' ) {
+    classe = element.classList.item( 0 ); //pegar a classe -> ex: check_redes
+    if ( document.getElementById( classe + "_label" ) ) {
+      document.getElementById( classe + "_label" ).style = "display: none;";
+    }
   }
 }
 
@@ -491,7 +512,7 @@ function validaFormulario( ) {
   }
 
   for ( c = 0; c < checarCheckbox.length; c++ ) {
-    valid = validaFormularioRadio( x, currentTab, checarCheckbox[ c ], valid );
+    valid = validaFormularioCheckbox( x, currentTab, checarCheckbox[ c ], valid );
   }
 
   //console.log( "VALID depois da validaFormularioRadio: " + valid );
@@ -573,7 +594,7 @@ function validaFormularioRadio( x, currentTab, classe, valid ) {
   var r, flag = false;
   r = x[ currentTab ].getElementsByClassName( classe );
 
-  console.log( "tamanho de r (radio/checkbox) " + r.length );
+  console.log( "tamanho de r (radio) " + r.length );
 
   if ( r.length > 0 ) {
 
@@ -597,6 +618,38 @@ function validaFormularioRadio( x, currentTab, classe, valid ) {
 
       //r[ 0 ].className += " invalid";
       //document.getElementById( r[ 0 ].name + "_label" ).style = "";
+      valid = false;
+    }
+
+  }
+  return valid;
+}
+
+
+function validaFormularioCheckbox( x, currentTab, classe, valid ) {
+
+  //console.log( "checando classe " + classe )
+  var r, flag = false;
+  r = x[ currentTab ].getElementsByClassName( classe );
+
+  //console.log( "tamanho de r (checkbox) " + r.length );
+
+  if ( r.length > 0 ) {
+
+    flag = false;
+
+    for ( i = 0; i < r.length; i++ ) {
+      if ( r[ i ].checked ) {
+        flag = true;
+      }
+    }
+
+    if ( !flag ) {
+
+      for ( i = 0; i < r.length; i++ ) {
+        setarInvalido( r[ i ] );
+      }
+
       valid = false;
     }
 
@@ -656,8 +709,27 @@ function changeErrorRadio( name ) {
 
   }
 
-  if ( document.getElementById( name + "_label" ) ) {
-    document.getElementById( name + "_label" ).style = "display: none;";
+  // if ( document.getElementById( name + "_label" ) ) {
+  //   document.getElementById( name + "_label" ).style = "display: none;";
+  // }
+}
+
+function changeErrorCheck( name ) {
+
+  //uso um element para pegar a classe
+  element = document.getElementById( name );
+  classe = element.classList.item( 0 ); //pegar a classe -> check_redes
+  console.log( classe );
+
+  //agora sim, uso a classe pra fazer o que precis
+  r = document.getElementsByClassName( classe );
+
+  if ( r.length > 0 ) {
+
+    for ( i = 0; i < r.length; i++ ) {
+      setarValido( r[ i ] );
+    }
+
   }
 }
 
