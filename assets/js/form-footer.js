@@ -181,6 +181,17 @@ jQuery( document ).ready( function ( $ ) {
 
   } );
 
+  /**
+   * Controle do Input File no passo 4
+   */
+  const fileMaster = document.querySelector( ".upload-input" );
+
+  fileMaster.addEventListener( "change", e => {
+
+    arrumaTamanhoJanela( 3 );
+
+  }, false );
+
 } );
 
 
