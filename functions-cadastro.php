@@ -543,7 +543,10 @@ function cadastro_action_form() {
         
         //funcao para dá entrada no Caldera (Form geral)
         insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
+        
+        //REMOVER ESSE RETURN QUANDO TERMINAR AS FUNCOES ABAIXO
         return;
+
         //funcao para dá entrada no Caldera (Form especifico)
         foreach (explode(";", $redes) as $key => $value) {
             switch ($value) {
@@ -607,14 +610,10 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
-	* Se baseia na existência de dois Forms no sistema:
-	*	- Unidades ainda não processadas
-	*	- Unidades que já foram aprovadas ou marcadas como pendente (form CF5d8d0ca679949)
+    * Usado para o form Geral
 	*/
 
 	$form = Caldera_Forms_Forms::get_form($idFormulario);
-    var_dump($form);
-    echo "<br>";
 	//Basic entry information
 	$entryDetials = new Caldera_Forms_Entry_Entry();
 	$entryDetials->form_id = $form['ID'];
@@ -638,15 +637,58 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7868662', $emailDoCandidato));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9748069', $status));
-
-    echo "Antes do save<br>";
 	//Save entry in database.
 	$entryId = $entry->save();
 	//Make entry active
 	$entry->update_status( 'active' );
-    echo "Depois do save<br>";
 	return $entryId;
+}
 
+function insert_entrada_form_especifico($idFormulario, $value, $dados_redes, $usuario_id = 0){
+    /*
+	* Função para inserir uma nova entrada em um Caldera Forms
+    * Usado para os forms específicos de cada rede 
+	*/
+
+	$form = Caldera_Forms_Forms::get_form($idFormulario);
+	//Basic entry information
+	$entryDetials = new Caldera_Forms_Entry_Entry();
+	$entryDetials->form_id = $form['ID'];
+	$entryDetials->user_id = $usuario_id;
+	$entryDetials->datestamp = current_time('mysql');
+	$entryDetials->status = 'pending';
+	//Create entry object
+	$entry = new Caldera_Forms_Entry($form,false,$entryDetials);
+
+	//Add field to entry
+    //Cada Form tem seus fields
+    switch ($value) {
+        case "check_suporte":
+            //TODO
+            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
+            break;
+        case "check_formacao":
+            //TODO
+            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
+            break;
+        case "check_pesquisa":
+            //TODO
+            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
+            break;
+        case "check_inovacao":
+            //TODO
+            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
+            break;
+        case "check_tecnologia":
+            //TODO
+            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
+            break;
+    }    
+    //Save entry in database.
+	$entryId = $entry->save();
+	//Make entry active
+	$entry->update_status( 'active' );
+	return $entryId;
 }
 
 function get_fieldEntryValue_customizada($form, $field_id, $value) {
