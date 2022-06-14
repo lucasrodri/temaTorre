@@ -380,11 +380,13 @@
   margin-right: 44%;
 }
 
-.align-button-right button{
+.align-button-right button, 
+.align-button-right input{
   float: right !important;
 }
 
-.align-button-left button{
+.align-button-left button, 
+.align-button-right input{
   float: left !important;
   margin-left: 0px !important;
 }

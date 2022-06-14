@@ -14,16 +14,16 @@ function cadastro_form_usuario()
 function cadastro_form_render()
 {
 ?>
-    <form class="card" action="" method="post">
+    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
         <div class="row">
             <div id="cadastro_wizard" class="col-md-12 mb-5">
                 <div class="br-wizard" collapsed="collapsed" step="1">
                     <div class="wizard-progress">
                         <button id="cadastro_wizard_b1" class="wizard-progress-btn" type="button" title="Termo de Declaração" active="active"><span class="info">Termo de Declaração</span></button>
-                        <button id="cadastro_wizard_b2" class="wizard-progress-btn" type="button" title="Instituição" active="active"><span class="info">Instituição</span></button>
-                        <button id="cadastro_wizard_b3" class="wizard-progress-btn" type="button" title="Redes" active="active"><span class="info">Redes</span></button>
-                        <button id="cadastro_wizard_b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" active="active"><span class="info">Logo e Guia de Uso de Marca</span></button>
-                        <button id="cadastro_wizard_b5" class="wizard-progress-btn" type="button" title="Finalização" disabled="disabled"><span class="info">Finalização</span></button>
+                        <button id="cadastro_wizard_b2" class="wizard-progress-btn" type="button" title="Instituição" disabled="disabled"><span class="info">Instituição</span></button>
+                        <button id="cadastro_wizard_b3" class="wizard-progress-btn" type="button" title="Redes" disabled="disabled"><span class="info">Redes</span></button>
+                        <button id="cadastro_wizard_b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" disabled="disabled"><span class="info">Logo e Guia de Uso de Marca</span></button>
+                        <button id="cadastro_wizard_b5" class="wizard-progress-btn" type="button" title="Finalização" active="active"><span class="info">Finalização</span></button>
                     </div>
                     <div class="wizard-form">
                         <div class="wizard-panel" active="active">
@@ -34,16 +34,16 @@ function cadastro_form_render()
 
                                     Declaro também que as informações prestadas são de minha inteira responsabilidade, e que a falsidade nas informações fornecidas implicará nas penalidades cabíveis, no âmbito penal, cível e administrativo.
                                 </div>
-                                <div class="mt-3 mb-1">
+                                <div class="mt-3 mb-1" name="checkConcordo">
                                     <div class="br-checkbox">
-                                        <input id="checkConcordo" name="checkConcordo" type="checkbox" aria-label="Concordo com esses termos" onchange="changeError(name)" />
+                                        <input id="checkConcordo" name="checkConcordo" class="checkConcordo" type="checkbox" aria-label="Concordo com esses termos" onchange="changeErrorRadio(name)" />
                                         <label for="checkConcordo">Concordo com esses termos</label>
                                         <br>
                                     </div>
 
                                     <!-- <span id="checkConcordo_label" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span> -->
                                 </div>
-
+                            
                             </div>
                             <div class="wizard-panel-btn">
                                 <div class="row">
@@ -73,56 +73,60 @@ function cadastro_form_render()
                                         <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
                                     </div>
 
-                                    <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
-                                    <div class="br-radio">
-                                        <input id="natureza_op_1" type="radio" name="natureza-op" class="natureza-op" value="natureza_op_1" onchange="changeErrorRadio(name)" />
-                                        <label for="natureza_op_1">Instituição pública federal</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="natureza_op_2" type="radio" name="natureza-op" class="natureza-op" value="natureza_op_2" onchange="changeErrorRadio(name)" />
-                                        <label for="natureza_op_2">Instituição pública estadual</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="natureza_op_3" type="radio" name="natureza-op" class="natureza-op" value="natureza_op_3" onchange="changeErrorRadio(name)" />
-                                        <label for="natureza_op_3">Instituição pública municipal</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="natureza_op_4" type="radio" name="natureza-op" class="natureza-op" value="natureza_op_4" onchange="changeErrorRadio(name)" />
-                                        <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="natureza_op_5" type="radio" name="natureza-op" class="natureza-op" value="natureza_op_5" onchange="changeErrorRadio(name)" />
-                                        <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
-                                        <br>
+                                    <div class="mb-3 radio-master">
+                                        <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
+                                        <div class="br-radio">
+                                            <input id="natureza_op_1" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_1" onchange="changeErrorRadio(name)" />
+                                            <label for="natureza_op_1">Instituição pública federal</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="natureza_op_2" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_2" onchange="changeErrorRadio(name)" />
+                                            <label for="natureza_op_2">Instituição pública estadual</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_3" onchange="changeErrorRadio(name)" />
+                                            <label for="natureza_op_3">Instituição pública municipal</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_4" onchange="changeErrorRadio(name)" />
+                                            <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_5" onchange="changeErrorRadio(name)" />
+                                            <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
+                                            <br>
+                                        </div>
                                     </div>
 
-                                    <p class="label mb-3">Porte da instituição privada<span class="field_required" style="color:#ee0000;">*</span></p>
-                                    <div class="br-radio">
-                                        <input id="porte_op_1" type="radio" name="porte-op" class="porte-op" value="porte_op_1" onchange="changeErrorRadio(name)" />
-                                        <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões;</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="porte_op_2" type="radio" name="porte-op" class="porte-op" value="porte_op_2" onchange="changeErrorRadio(name)" />
-                                        <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões;</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="porte_op_3" type="radio" name="porte-op" class="porte-op" value="porte_op_3" onchange="changeErrorRadio(name)" />
-                                        <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões;</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="porte_op_4" type="radio" name="porte-op" class="porte-op" value="porte_op_4" onchange="changeErrorRadio(name)" />
-                                        <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões;</label>
-                                    </div>
-                                    <div class="br-radio">
-                                        <input id="porte_op_5" type="radio" name="porte-op" class="porte-op" value="porte_op_5" onchange="changeErrorRadio(name)" />
-                                        <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões.</label>
-                                        <br>
+                                    <div class="mb-3 radio-slave" style="display:none;";>
+                                        <p class="label mb-3">Porte da instituição privada<span class="field_required" style="color:#ee0000;">*</span></p>
+                                        <div class="br-radio">
+                                            <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="porte_op_1" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões;</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="porte_op_2" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões;</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="porte_op_3" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões;</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="porte_op_4" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões;</label>
+                                        </div>
+                                        <div class="br-radio">
+                                            <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="porte_op_5" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões.</label>
+                                            <br>
+                                        </div>
                                     </div>
 
                                     <div class="mt-3 mb-3">
                                         <div class="br-input">
                                             <label for="cnpjDaInstituicao">CNPJ<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" required />
+                                            <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
                                         </div>
                                     </div>
 
@@ -135,7 +139,7 @@ function cadastro_form_render()
                                     <div class="mt-3 mb-3">
                                         <div class="br-input">
                                             <label for="urlDaInstituicao">Página da internet<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" required />
+                                            <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
                                         </div>
                                     </div>
 
@@ -159,42 +163,42 @@ function cadastro_form_render()
                                 <div class="h3">Redes</div>
                                 <div class="text my-text-wizard" tabindex="0">Redes às quais pretende se cadastrar e informações para publicação</div>
 
-                                <div class="mt-3 mb-1">
+                                <div class="mt-3 mb-1 check-master">
                                     <div class="br-checkbox">
-                                        <input id="check_suporte" name="check_suporte" type="checkbox" aria-label="Rede de Suporte" />
+                                        <input id="check_suporte" value="check_suporte" name="check_suporte" class="check_redes" type="checkbox" aria-label="Rede de Suporte" onchange="changeErrorCheck(name)" />
                                         <label for="check_suporte">Rede de Suporte - apoio aos atores do ecossistema de inovação e as atividades da Torre MCTI em todas as etapas do desenvolvimento de produtos e serviços inovadores</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_formacao" name="check_formacao" type="checkbox" aria-label="Rede de Formação" />
+                                        <input id="check_formacao" value="check_formacao" name="check_formacao" class="check_redes" type="checkbox" aria-label="Rede de Formação" onchange="changeErrorCheck(name)" />
                                         <label for="check_formacao">Rede de Formação Tecnológica - capacitação em ciência, tecnologia e inovação, com intuito de expandir e melhorar a formação profissional e tecnológica</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_pesquisa" name="check_pesquisa" type="checkbox" aria-label="Rede de Pesquisa" />
+                                        <input id="check_pesquisa" value="check_pesquisa" name="check_pesquisa" class="check_redes" type="checkbox" aria-label="Rede de Pesquisa" onchange="changeErrorCheck(name)" />
                                         <label for="check_pesquisa">Rede de Pesquisa Aplicada - utilização do conhecimento científico gerado na pesquisa básica, para apoiar o desenvolvimento de inovações, produtos e serviços, por meio da concepção de aplicações e provas de conceito</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_inovacao" name="check_inovacao" type="checkbox" aria-label="Rede de inovacao" />
+                                        <input id="check_inovacao" value="check_inovacao" name="check_inovacao" class="check_redes" type="checkbox" aria-label="Rede de inovacao" onchange="changeErrorCheck(name)" />
                                         <label for="check_inovacao">Rede de Inovação - transformação de ideias em protótipos, materializando o conhecimento científico validado em soluções concretas experimentais</label>
                                     </div>
                                     <div class="br-checkbox">
-                                        <input id="check_tecnologia" name="check_tecnologia" type="checkbox" aria-label="Rede de tecnologia" />
+                                        <input id="check_tecnologia" value="check_tecnologia" name="check_tecnologia" class="check_redes" type="checkbox" aria-label="Rede de tecnologia" onchange="changeErrorCheck(name)" />
                                         <label for="check_tecnologia">Tecnologias Aplicadas - transformação de protótipos em produtos e riquezas, com o objetivo de aperfeiçoar soluções experimentais tornando-as aptas ao mercado, à geração de riqueza e à contribuição para a qualidade de vida dos brasileiros</label>
                                     </div>
                                 </div>
 
-                                <div id='redes_render_suporte' style="display:inline;">
+                                <div id='redes_render_suporte' style="display:none;">
                                     <?php cadastro_redes_render('rede-de-suporte'); ?>
                                 </div>
-                                <div id='redes_render_formacao' style="display:inline;">
+                                <div id='redes_render_formacao' style="display:none;">
                                     <?php cadastro_redes_render('rede-de-formacao'); ?>
                                 </div>
-                                <div id='redes_render_pesquisa' style="display:inline;">
+                                <div id='redes_render_pesquisa' style="display:none;">
                                     <?php cadastro_redes_render('rede-de-pesquisa'); ?>
                                 </div>
-                                <div id='redes_render_inovacao' style="display:inline;">
+                                <div id='redes_render_inovacao' style="display:none;">
                                     <?php cadastro_redes_render('rede-de-inovacao'); ?>
                                 </div>
-                                <div id='redes_render_tecnologia' style="display:inline;">
+                                <div id='redes_render_tecnologia' style="display:none;">
                                     <?php cadastro_redes_render('rede-de-tecnologia'); ?>
                                 </div>
 
@@ -219,7 +223,7 @@ function cadastro_form_render()
                                 <div class="mt-3 mb-1">
                                     <div class="br-upload">
                                         <label class="upload-label" for="logo_instituicao"><span>Logo<span class="field_required" style="color:#ee0000;">*</span></span></label>
-                                        <input class="upload-input" id="logo_instituicao" name="logo_instituicao" type="file" accept=".jpg,.png,.jpeg" />
+                                        <input class="upload-input" id="logo_instituicao" name="logo_instituicao" type="file" accept=".jpg,.png,.jpeg" onchange="changeError(name)" required />
                                         <div class="upload-list"></div>
                                     </div>
                                     <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p>
@@ -228,7 +232,7 @@ function cadastro_form_render()
                                 <div class="mt-3 mb-1">
                                     <div class="br-upload">
                                         <label class="upload-label" for="guia_instituicao"><span>Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></span></label>
-                                        <input class="upload-input" id="guia_instituicao" name="guia_instituicao" type="file" accept=".pdf" />
+                                        <input class="upload-input" id="guia_instituicao" name="guia_instituicao" type="file" accept=".pdf" onchange="changeError(name)" required />
                                         <div class="upload-list"></div>
                                     </div>
                                     <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p>
@@ -271,7 +275,7 @@ function cadastro_form_render()
                                 <div class="mb-3">
                                     <div class="br-input">
                                         <label for="emailDoCandidato">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-                                        <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" required />
+                                        <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
                                     </div>
                                 </div>
                             </div>
@@ -282,8 +286,7 @@ function cadastro_form_render()
                                         </button>
                                     </div>
                                     <div class="col-md-6 align-button-left">
-                                        <button class="br-button primary wizard-btn" type="button">Concluir
-                                        </button>
+                                        <input type="submit" class="br-button primary" value="Concluir" name="enviar">
                                     </div>
                                 </div>
                             </div>
@@ -292,6 +295,7 @@ function cadastro_form_render()
                 </div>
             </div>
         </div>
+        <input type="hidden" name="action" value="cadastro_candidato">
     </form>
 <?php
 }
@@ -308,12 +312,12 @@ function cadastro_redes_render($rede_nome)
 
     <div class="br-textarea mb-3">
         <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3"></textarea>
+        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" ></textarea>
     </div>
 
     <div class="br-textarea mb-3">
         <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3"></textarea>
+        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" ></textarea>
     </div>
 
     <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -321,7 +325,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?>/>
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -330,9 +334,9 @@ function cadastro_redes_render($rede_nome)
 
 
     <div class="mb-3">
-        <div class="br-input">
+        <div class="br-input" style="display:none;">
             <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" required />
+            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" />
         </div>
     </div>
 
@@ -341,7 +345,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)"/>
                 <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($publicos) - 1) echo '<br>'; ?>
             </div>
@@ -353,7 +357,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
             <div class="br-checkbox d-inline">
-                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" type="checkbox" aria-label="<?php echo $value; ?>" />
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>"  class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" />
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($abrangencia) - 1) echo '<br>'; ?>
             </div>
@@ -367,21 +371,21 @@ function cadastro_redes_render($rede_nome)
     <div class="mb-3">
         <div class="br-input">
             <label for="nomeCompleto_<?php echo $rede_nome; ?>">Nome completo<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" required />
+            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" />
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="emailRepresentante_<?php echo $rede_nome; ?>">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" required />
+            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" />
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" required />
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)"/>
         </div>
     </div>
 
@@ -456,8 +460,8 @@ function cadastro_action_form() {
 	*/
     if(isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']); else $nomeDaInstituicao = "";
     if(isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']); else $descricaoDaInstituicao = "";
-    if(isset($_POST['natureza-op'])) $natureza_op = ($_POST['natureza-op']); else $natureza_op = "";
-    if(isset($_POST['porte-op'])) $porte_op = ($_POST['porte-op']); else $porte_op = "";
+    if(isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']); else $natureza_op = "";
+    if(isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']); else $porte_op = "";
     
     if(isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']); else $cnpjDaInstituicao = "";
     if(isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']); else $CNAEDaInstituicao = "";
@@ -470,7 +474,7 @@ function cadastro_action_form() {
 	if(isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
     if(isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
 	if(isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
-    
+
     //Redes Específicas
     $dados_redes = array("rede-de-suporte" => array(),
                          "rede-de-formacao" => array(),
@@ -511,12 +515,10 @@ function cadastro_action_form() {
     }
     //Arquivos
     //doc1
-    if(isset($_POST['logo_instituicao'])) $doc1Path = $_POST['logo_instituicao']; else $doc1Path = "";
 	if(isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0){
 		$doc1Unidade = $_FILES['logo_instituicao'];
 	}
     //doc2
-    if(isset($_POST['guia_instituicao'])) $doc2Path = $_POST['guia_instituicao']; else $doc2Path = "";
 	if(isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0){
 		$doc2Unidade = $_FILES['guia_instituicao'];
 	}
@@ -524,6 +526,17 @@ function cadastro_action_form() {
     if(isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']); else $nomeDoCandidato = "";
     if(isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']); else $emailDoCandidato = "";
     
+
+    var_dump($doc1Unidade);
+    echo "<br>";
+    var_dump($doc2Unidade);
+    echo "<br>";
+
+    echo $nomeDoCandidato."<br>";
+    echo $emailDoCandidato."<br>";
+    
+    return;
+
     //submit
     if(isset($_POST["enviar"])){
         if(!is_null($doc1Unidade)) {
@@ -533,7 +546,7 @@ function cadastro_action_form() {
             $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "1");
         }
         //funcao para dá entrada no Caldera (Form geral)
-        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1Path, $doc2Path, $nomeDoCandidato, $emailDoCandidato);
+        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato);
         //funcao para dá entrada no Caldera (Form especifico)
         $a  = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
         foreach (explode(";", $redes) as $key => $value) {
@@ -559,6 +572,8 @@ function cadastro_action_form() {
     }
 
 }
+add_action( 'admin_post_nopriv_cadastro_candidato', 'cadastro_action_form' );
+add_action( 'admin_post_cadastro_candidato', 'cadastro_action_form' );
 
 function upload_documento($documento, $usuario, $n){
 	/*

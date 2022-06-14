@@ -85,12 +85,14 @@ jQuery( document ).ready( function ( $ ) {
 
       //console.log( 'cliquei no next btn ' + index );
       arrumaTamanhoJanela( index + 1 );
+      window.scrollTo(0,0);
 
     } else {
 
       $( this ).removeClass( 'wizard-btn-next' );
       arrumaTamanhoJanela( index );
     }
+
 
   } );
 
@@ -100,6 +102,7 @@ jQuery( document ).ready( function ( $ ) {
     index = retornaPainelAtivo( );
     //console.log( 'cliquei no previous btn ' + index );
     arrumaTamanhoJanela( index - 1 );
+    window.scrollTo(0,0);
 
   } );
 
