@@ -526,45 +526,41 @@ function cadastro_action_form() {
     if(isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']); else $nomeDoCandidato = "";
     if(isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']); else $emailDoCandidato = "";
     
-
-    var_dump($doc1Unidade);
-    echo "<br>";
-    var_dump($doc2Unidade);
-    echo "<br>";
-
-    echo $nomeDoCandidato."<br>";
-    echo $emailDoCandidato."<br>";
-    
-    return;
-
     //submit
     if(isset($_POST["enviar"])){
         if(!is_null($doc1Unidade)) {
             $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
         }
         if(!is_null($doc2Unidade)) {
-            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "1");
+            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
         }
+        //Criar o usuário
+        $password = wp_generate_password();
+        $username = explode("@",$emailDoCandidato)[0];
+        $first_name = explode(" ",$nomeDoCandidato)[0];
+        $last_name = implode(" ", array_slice(explode(" ",$nomeDoCandidato),1));
+        $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
+        
         //funcao para dá entrada no Caldera (Form geral)
-        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato);
+        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
+        return;
         //funcao para dá entrada no Caldera (Form especifico)
-        $a  = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
         foreach (explode(";", $redes) as $key => $value) {
             switch ($value) {
                 case "check_suporte":
-                    insert_entrada_form_especifico("CF6297eae06f088", $value, $dados_redes);
+                    insert_entrada_form_especifico("CF6297eae06f088", $value, $dados_redes, $usuario_id);
                     break;
                 case "check_formacao":
-                    insert_entrada_form_especifico("CF6298c3e77962a", $value,$dados_redes);
+                    insert_entrada_form_especifico("CF6298c3e77962a", $value,$dados_redes, $usuario_id);
                     break;
                 case "check_pesquisa":
-                    insert_entrada_form_especifico("CF6298c6a36c130", $value,$dados_redes);
+                    insert_entrada_form_especifico("CF6298c6a36c130", $value,$dados_redes, $usuario_id);
                     break;
                 case "check_inovacao":
-                    insert_entrada_form_especifico("CF6298c80222811", $value,$dados_redes);
+                    insert_entrada_form_especifico("CF6298c80222811", $value,$dados_redes, $usuario_id);
                     break;
                 case "check_tecnologia":
-                    insert_entrada_form_especifico("CF6298c879c2353", $value,$dados_redes);
+                    insert_entrada_form_especifico("CF6298c879c2353", $value,$dados_redes, $usuario_id);
                     break;
             }
             
@@ -574,6 +570,101 @@ function cadastro_action_form() {
 }
 add_action( 'admin_post_nopriv_cadastro_candidato', 'cadastro_action_form' );
 add_action( 'admin_post_cadastro_candidato', 'cadastro_action_form' );
+
+function generateRandomString($length = 15) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+function create_new_user($username, $password, $email_address, $first_name, $last_name, $role){
+    if ( ! username_exists( $username ) ) {
+        $userData = array(
+            'user_login' => $username,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'user_pass' => $password,
+            'user_email' => $email_address,
+            'user_url' => '',
+            'role' => $role
+        );
+        return wp_insert_user( $userData );
+        /*        
+        $user_id = wp_create_user( $username, $password, $email_address );
+		$user = new WP_User( $user_id );
+		$user->set_role( $role );
+        return $user_id;
+        */
+	}
+    return 0;
+}
+
+function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $status = "pendente") {
+    
+    /*
+	* Função para inserir uma nova entrada em um Caldera Forms
+	* Se baseia na existência de dois Forms no sistema:
+	*	- Unidades ainda não processadas
+	*	- Unidades que já foram aprovadas ou marcadas como pendente (form CF5d8d0ca679949)
+	*/
+
+	$form = Caldera_Forms_Forms::get_form($idFormulario);
+    var_dump($form);
+    echo "<br>";
+	//Basic entry information
+	$entryDetials = new Caldera_Forms_Entry_Entry();
+	$entryDetials->form_id = $form['ID'];
+	$entryDetials->user_id = $usuario_id;
+	$entryDetials->datestamp = current_time('mysql');
+	$entryDetials->status = 'pending';
+	//Create entry object
+	$entry = new Caldera_Forms_Entry($form,false,$entryDetials);
+
+	//Add field to entry
+	$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6461522', $descricaoDaInstituicao)); 
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5902421', $natureza_op));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7125239', $porte_op));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3000518', $cnpjDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2471360', $CNAEDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1962476', $urlDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4465776', $redes));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5438248', $doc1UnidadeUrl));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9588438', $doc2UnidadeUrl));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7868662', $emailDoCandidato));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9748069', $status));
+
+    echo "Antes do save<br>";
+	//Save entry in database.
+	$entryId = $entry->save();
+	//Make entry active
+	$entry->update_status( 'active' );
+    echo "Depois do save<br>";
+	return $entryId;
+
+}
+
+function get_fieldEntryValue_customizada($form, $field_id, $value) {
+	/*
+	* Função para pegar o valor de um determinado campo de um Caldera Form
+	*/
+
+	//Get field to save value for
+	$field = Caldera_Forms_Field_Util::get_field($field_id, $form);
+	//Create field value object
+	$fieldEntryValue = new Caldera_Forms_Entry_Field();
+	//Associate it with this field
+	$fieldEntryValue->field_id = $field['ID'];
+	$fieldEntryValue->slug = $field['slug'];
+	//Set the value to save.
+	$fieldEntryValue->value = $value;
+	return $fieldEntryValue;
+}
 
 function upload_documento($documento, $usuario, $n){
 	/*
