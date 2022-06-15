@@ -656,7 +656,7 @@ function create_new_user($username, $password, $email_address, $first_name, $las
     return $user_id;
 }
 
-function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $status = "pendente")
+function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $statusGeral = "pendente",  $status = "pendente", $parecer = "", $historico = "")
 {
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
@@ -686,7 +686,11 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9588438', $doc2UnidadeUrl));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7868662', $emailDoCandidato));
-    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9748069', $status));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9748069', $statusGeral));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4899711', $status));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4416984', $historico));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8529353', $parecer));
 
     //Save entry in database.
     $entryId = $entry->save();
