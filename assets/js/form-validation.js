@@ -482,7 +482,7 @@ function validaFormulario( ) {
 
         // Se o natureza_op for igual 4 ou 5 (instituição privada), inclui o outro radio para validação
         if ( y[ i ].checked == true && ( y[ i ].id == "natureza_op_4" || y[ i ].id == "natureza_op_5" ) ) {
-          console.log( 'entrei na validação dos op4 e op5' );
+          //console.log( 'entrei na validação dos op4 e op5' );
           checarRadio.push( 'porte_op' );
         }
 
@@ -581,7 +581,7 @@ function validaFormulario( ) {
     // console.log( valid + " VALID depois da textarea: " + t[ i ].name );
   }
 
-  console.log( "VALID: " + valid );
+  //console.log( "VALID: " + valid );
   //return false;
   return valid;
 }
@@ -639,11 +639,11 @@ function validarEspecifico( name ) {
 
 function validaFormularioRadio( x, currentTab, classe, valid ) {
 
-  console.log( "checando classe " + classe )
+  //console.log( "checando classe " + classe )
   var r, flag = false;
   r = x[ currentTab ].getElementsByClassName( classe );
 
-  console.log( "tamanho de r (radio) " + r.length );
+  //console.log( "tamanho de r (radio) " + r.length );
 
   if ( r.length > 0 ) {
 
@@ -768,7 +768,7 @@ function changeErrorCheck( name ) {
   //uso um element para pegar a classe
   element = document.getElementById( name );
   classe = element.classList.item( 0 ); //pegar a classe -> check_redes
-  console.log( classe );
+  //console.log( classe );
 
   //agora sim, uso a classe pra fazer o que precis
   r = document.getElementsByClassName( classe );

@@ -85,7 +85,7 @@ jQuery( document ).ready( function ( $ ) {
 
       //console.log( 'cliquei no next btn ' + index );
       arrumaTamanhoJanela( index + 1 );
-      window.scrollTo(0,0);
+      window.scrollTo( 0, 0 );
 
     } else {
 
@@ -102,7 +102,7 @@ jQuery( document ).ready( function ( $ ) {
     index = retornaPainelAtivo( );
     //console.log( 'cliquei no previous btn ' + index );
     arrumaTamanhoJanela( index - 1 );
-    window.scrollTo(0,0);
+    window.scrollTo( 0, 0 );
 
   } );
 
@@ -187,13 +187,14 @@ jQuery( document ).ready( function ( $ ) {
   /**
    * Controle do Input File no passo 4
    */
-  const fileMaster = document.querySelector( ".upload-input" );
-
+  const fileMaster = document.querySelector( ".upload-inputs" );
+  //console.log( fileMaster );
   fileMaster.addEventListener( "change", e => {
-
+    //const { id } = e.target;
+    //console.log( 'mudança em ' + id );
     arrumaTamanhoJanela( 3 );
 
-  }, false );
+  } );
 
 } );
 

@@ -35,3 +35,20 @@ O que falta geral:
 
 - ao clicar para aparecer a rede: adicionar required aos itens mostrados
 ao desclicar: remover os required
+
+### Atualizações 14/06/2022
+Mudanças feitas:
+- Passei um formart document aí mudou altas coisas de formatação
+- Mudei o value retornado do natureza_op, agora em vez de mostrar "natureza_op_1" ele fala "Instituição bla bla bla" (vai ficar mais fácil quando a gente for mostrar isso na tela)
+- Fiz a mesma coisa pro porte_op
+- o arrumaTamanhoJanela não tava legal pra página dos inputs, eu vi que tinha feito ligeiramente errado o código, aí arrumei (precisou de uma nova classe no html)
+- Criei uma função para criar o role caso ele naõ exista (quando criei um usuário aqui pela primeira vez, ele veio com Função = "Nenhuma", quando a gente queria que fosse "Candidato", por isso essa nova função.
+- Na função de criar usuário, se ele já existir, eu retorno o id dele
+
+O que falta/Questionamentos
+- [ ] salvar outro apenas se selecionado o "Outro"
+- [ ] salvar porte_op apenas se selecionado o "natureza_op4/5"
+- [ ] acrescentar loading no submit
+- [ ] acrescentar aviso de algum erro na página (página muito grande, não fica claro que tem algo errado)
+- [ ] o que acontece se o nome do candidato não tem espaços?
+- [ ] o que acontece se o nome no email (usado para username) já existir?

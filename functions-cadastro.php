@@ -43,7 +43,7 @@ function cadastro_form_render()
 
                                     <!-- <span id="checkConcordo_label" class="feedback danger" role="alert" style="display: none;"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span> -->
                                 </div>
-                            
+
                             </div>
                             <div class="wizard-panel-btn">
                                 <div class="row">
@@ -76,49 +76,49 @@ function cadastro_form_render()
                                     <div class="mb-3 radio-master">
                                         <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
                                         <div class="br-radio">
-                                            <input id="natureza_op_1" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_1" onchange="changeErrorRadio(name)" />
+                                            <input id="natureza_op_1" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública federal" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_1">Instituição pública federal</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="natureza_op_2" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_2" onchange="changeErrorRadio(name)" />
+                                            <input id="natureza_op_2" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública estadual" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_2">Instituição pública estadual</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_3" onchange="changeErrorRadio(name)" />
+                                            <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública municipal" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_3">Instituição pública municipal</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_4" onchange="changeErrorRadio(name)" />
+                                            <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada com fins lucrativos" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="natureza_op_5" onchange="changeErrorRadio(name)" />
+                                            <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada sem fins lucrativos" onchange="changeErrorRadio(name)" />
                                             <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
                                             <br>
                                         </div>
                                     </div>
 
-                                    <div class="mb-3 radio-slave" style="display:none;";>
+                                    <div class="mb-3 radio-slave" style="display:none;" ;>
                                         <p class="label mb-3">Porte da instituição privada<span class="field_required" style="color:#ee0000;">*</span></p>
                                         <div class="br-radio">
-                                            <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="porte_op_1" onchange="changeErrorRadio(name)" />
-                                            <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões;</label>
+                                            <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="porte_op_2" onchange="changeErrorRadio(name)" />
-                                            <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões;</label>
+                                            <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="porte_op_3" onchange="changeErrorRadio(name)" />
-                                            <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões;</label>
+                                            <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="porte_op_4" onchange="changeErrorRadio(name)" />
-                                            <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões;</label>
+                                            <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="orte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões</label>
                                         </div>
                                         <div class="br-radio">
-                                            <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="porte_op_5" onchange="changeErrorRadio(name)" />
-                                            <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões.</label>
+                                            <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" />
+                                            <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões</label>
                                             <br>
                                         </div>
                                     </div>
@@ -220,16 +220,14 @@ function cadastro_form_render()
                             <div class="wizard-panel-content">
                                 <div class="h3">Logo e Guia de Uso de Marca</div>
                                 <!-- <div class="text my-text-wizard" tabindex="0">Conteúdo aqui</div> -->
-                                <div class="mt-3 mb-1">
+                                <div class="mt-3 mb-1 upload-inputs">
                                     <div class="br-upload">
                                         <label class="upload-label" for="logo_instituicao"><span>Logo<span class="field_required" style="color:#ee0000;">*</span></span></label>
                                         <input class="upload-input" id="logo_instituicao" name="logo_instituicao" type="file" accept=".jpg,.png,.jpeg" onchange="changeError(name)" required />
                                         <div class="upload-list"></div>
                                     </div>
                                     <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p>
-                                </div>
 
-                                <div class="mt-3 mb-1">
                                     <div class="br-upload">
                                         <label class="upload-label" for="guia_instituicao"><span>Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></span></label>
                                         <input class="upload-input" id="guia_instituicao" name="guia_instituicao" type="file" accept=".pdf" onchange="changeError(name)" required />
@@ -287,6 +285,7 @@ function cadastro_form_render()
                                     </div>
                                     <div class="col-md-6 align-button-left">
                                         <input type="submit" class="br-button primary" value="Concluir" name="enviar">
+                                        <!-- <div id='loading_submit' class="loading medium" style='display:none;'></div> -->
                                     </div>
                                 </div>
                             </div>
@@ -312,12 +311,12 @@ function cadastro_redes_render($rede_nome)
 
     <div class="br-textarea mb-3">
         <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" ></textarea>
+        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)"></textarea>
     </div>
 
     <div class="br-textarea mb-3">
         <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" ></textarea>
+        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)"></textarea>
     </div>
 
     <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -325,7 +324,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?>/>
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> />
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -345,7 +344,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)"/>
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" />
                 <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($publicos) - 1) echo '<br>'; ?>
             </div>
@@ -357,7 +356,7 @@ function cadastro_redes_render($rede_nome)
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
             <div class="br-checkbox d-inline">
-                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>"  class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" />
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" />
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($abrangencia) - 1) echo '<br>'; ?>
             </div>
@@ -385,14 +384,15 @@ function cadastro_redes_render($rede_nome)
     <div class="mb-3">
         <div class="br-input">
             <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)"/>
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)" />
         </div>
     </div>
 
 <?php
 }
 
-function get_options($rede_nome){
+function get_options($rede_nome)
+{
     switch ($rede_nome) {
         case 'rede-de-suporte':
             $title = 'Rede de Suporte';
@@ -402,7 +402,7 @@ function get_options($rede_nome){
             break;
 
         case 'rede-de-formacao':
-            $title = 'Rede de Formação';
+            $title = 'Rede de Formação Tecnológica';
             $opcoes = array(
                 "Graduação", "Pós-Graduação", "Promoção e popularização da Ciência", "Qualificação profissional", "Outro"
             );
@@ -429,6 +429,7 @@ function get_options($rede_nome){
             );
             break;
     }
+
     $publicos = array(
         "Startup",
         "MPE",
@@ -442,15 +443,34 @@ function get_options($rede_nome){
         "Pessoa física"
     );
 
-
     $abrangencia = array(
         "Local/Regional", "Nacional", "Internacional"
     );
-    return array( $title, $opcoes, $publicos, $abrangencia );
+
+    return array($title, $opcoes, $publicos, $abrangencia);
 }
 
-function cadastro_action_form() {
-	/*
+//Definitions
+define('FORM_ID_GERAL', 'CF6297bfb727214');
+define('FORM_ID_SUPORTE', 'CF6297eae06f088');
+define('FORM_ID_FORMACAO', 'CF6298c3e77962a');
+define('FORM_ID_PESQUISA', 'CF6298c6a36c130');
+define('FORM_ID_INOVACAO', 'CF6298c80222811');
+define('FORM_ID_TECNOLOGIA', 'CF6298c879c2353');
+
+// Função para criar os roles necessário para o cadastro
+function custom_roles_cadastro()
+{
+    if (get_option('custom_roles_version') < 1) {
+        add_role('candidato', 'Candidato', array('read' => true, 'level_0' => true));
+        update_option('custom_roles_version', 1);
+    }
+}
+add_action('init', 'custom_roles_cadastro');
+
+function cadastro_action_form()
+{
+    /*
 	* Função action para uso do formulário de cadastro.
 	* Após processado, o usuário solicitante deverá ser criado, um email deverá ser enviado ao mesmo contendo uma senha.
     * O usuário ficará como "Role" -> "candidado"
@@ -458,123 +478,151 @@ function cadastro_action_form() {
     *
 	* Função chamada pelo formulário "cadastro_form_usuario"
 	*/
-    if(isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']); else $nomeDaInstituicao = "";
-    if(isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']); else $descricaoDaInstituicao = "";
-    if(isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']); else $natureza_op = "";
-    if(isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']); else $porte_op = "";
-    
-    if(isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']); else $cnpjDaInstituicao = "";
-    if(isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']); else $CNAEDaInstituicao = "";
-    if(isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']); else $urlDaInstituicao = "";
-    ####
+
+    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
+    else $nomeDaInstituicao = "";
+    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
+    else $descricaoDaInstituicao = "";
+    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
+    else $natureza_op = "";
+    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
+    else $porte_op = "";
+
+    if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
+    else $cnpjDaInstituicao = "";
+    if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
+    else $CNAEDaInstituicao = "";
+    if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
+    else $urlDaInstituicao = "";
+
     //Redes checkbox
     $redes = "";
-	if(isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
-	if(isset($_POST['check_formacao'])) $redes .= $_POST['check_formacao'] . ";";
-	if(isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
-    if(isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
-	if(isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
+    if (isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
+    if (isset($_POST['check_formacao'])) $redes .= $_POST['check_formacao'] . ";";
+    if (isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
+    if (isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
+    if (isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
 
     //Redes Específicas
-    $dados_redes = array("rede-de-suporte" => array(),
-                         "rede-de-formacao" => array(),
-                         "rede-de-pesquisa" => array(),
-                         "rede-de-inovacao" => array(),
-                         "rede-de-tecnologia" => array(),
+    $dados_redes = array(
+        "rede-de-suporte" => array(),
+        "rede-de-formacao" => array(),
+        "rede-de-pesquisa" => array(),
+        "rede-de-inovacao" => array(),
+        "rede-de-tecnologia" => array(),
     );
-    foreach( $dados_redes as $key => $value ){
+
+    foreach ($dados_redes as $key => $value) {
         $opcoes = get_options($key)[1];
         $publico = get_options($key)[2];
         $abrangencia = get_options($key)[3];
 
-        if(isset($_POST['urlServico-'.$key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-'.$key]); else $dados_redes[$key]["urlServico"] = "";
-        if(isset($_POST['produtoServicos-'.$key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-'.$key]); else $dados_redes[$key]["produtoServicos"] = "";
+        if (isset($_POST['urlServico-' . $key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-' . $key]);
+        else $dados_redes[$key]["urlServico"] = "";
+        if (isset($_POST['produtoServicos-' . $key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-' . $key]);
+        else $dados_redes[$key]["produtoServicos"] = "";
+
         //Pegando os checks das classificacoes
         $classificacoes = "";
         foreach ($opcoes as $i => $v) {
-            if(isset($_POST['check_classificacao_'.$i.'_'.$key])) $classificacoes .= $_POST['check_classificacao_'.$i.'_'.$key] . ";";
+            if (isset($_POST['check_classificacao_' . $i . '_' . $key])) $classificacoes .= $_POST['check_classificacao_' . $i . '_' . $key] . ";";
         }
         $dados_redes[$key]['classificacoes'] = $classificacoes;
-        //
-        if(isset($_POST['outroClassificacao_'.$key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_'.$key]); else $dados_redes[$key]["outroClassificacao"] = "";
+
+        if (isset($_POST['outroClassificacao_' . $key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_' . $key]);
+        else $dados_redes[$key]["outroClassificacao"] = "";
+
         //Pegando os checks do publico alvo
         $publicos = "";
         foreach ($publico as $i => $v) {
-            if(isset($_POST['check_publico_'.$i.'_'.$key])) $publicos .= $_POST['check_publico_'.$i.'_'.$key] . ";";
+            if (isset($_POST['check_publico_' . $i . '_' . $key])) $publicos .= $_POST['check_publico_' . $i . '_' . $key] . ";";
         }
         $dados_redes[$key]['publicos'] = $publicos;
+
         //Pegando os checks da abrangencia
         $abrangencias = "";
         foreach ($abrangencia as $i => $v) {
-            if(isset($_POST['check_abrangencia_'.$i.'_'.$key])) $abrangencias .= $_POST['check_abrangencia_'.$i.'_'.$key] . ";";
+            if (isset($_POST['check_abrangencia_' . $i . '_' . $key])) $abrangencias .= $_POST['check_abrangencia_' . $i . '_' . $key] . ";";
         }
         $dados_redes[$key]['abrangencias'] = $abrangencias;
-        if(isset($_POST['nomeCompleto_'.$key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_'.$key]); else $dados_redes[$key]["nomeCompleto"] = "";
-        if(isset($_POST['emailRepresentante_'.$key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_'.$key]); else $dados_redes[$key]["emailRepresentante"] = "";
-        if(isset($_POST['telefoneRepresentante_'.$key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_'.$key]); else $dados_redes[$key]["telefoneRepresentante"] = "";
+
+        //dados do representante
+        if (isset($_POST['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_' . $key]);
+        else $dados_redes[$key]["nomeCompleto"] = "";
+        if (isset($_POST['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_' . $key]);
+        else $dados_redes[$key]["emailRepresentante"] = "";
+        if (isset($_POST['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_' . $key]);
+        else $dados_redes[$key]["telefoneRepresentante"] = "";
     }
+
     //Arquivos
     //doc1
-	if(isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0){
-		$doc1Unidade = $_FILES['logo_instituicao'];
-	}
+    if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
+        $doc1Unidade = $_FILES['logo_instituicao'];
+    }
     //doc2
-	if(isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0){
-		$doc2Unidade = $_FILES['guia_instituicao'];
-	}
+    if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
+        $doc2Unidade = $_FILES['guia_instituicao'];
+    }
+
     //Nome e email do candidato
-    if(isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']); else $nomeDoCandidato = "";
-    if(isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']); else $emailDoCandidato = "";
-    
-    //submit
-    if(isset($_POST["enviar"])){
-        if(!is_null($doc1Unidade)) {
+    if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
+    else $nomeDoCandidato = "";
+    if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
+    else $emailDoCandidato = "";
+
+    //----------------------------submit
+    if (isset($_POST["enviar"])) {
+        // Tratamento dos arquivos
+        if (!is_null($doc1Unidade)) {
             $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
         }
-        if(!is_null($doc2Unidade)) {
+        if (!is_null($doc2Unidade)) {
             $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
         }
-        //Criar o usuário
+
+        // Criar o usuário
         $password = wp_generate_password();
-        $username = explode("@",$emailDoCandidato)[0];
-        $first_name = explode(" ",$nomeDoCandidato)[0];
-        $last_name = implode(" ", array_slice(explode(" ",$nomeDoCandidato),1));
+        $username = explode("@", $emailDoCandidato)[0];
+        $first_name = explode(" ", $nomeDoCandidato)[0];
+        $last_name = implode(" ", array_slice(explode(" ", $nomeDoCandidato), 1));
+
         $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
-        
-        //funcao para dá entrada no Caldera (Form geral)
-        insert_entrada_form("CF6297bfb727214",$nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
-        
+
+        //funcao para criar a entrada no Caldera (Form geral)
+        insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
+
         //REMOVER ESSE RETURN QUANDO TERMINAR AS FUNCOES ABAIXO
-        return;
+        //return;
 
         //funcao para dá entrada no Caldera (Form especifico)
+        // esse explode gera uma iteração a mais por conta do último ";"
         foreach (explode(";", $redes) as $key => $value) {
             switch ($value) {
                 case "check_suporte":
-                    insert_entrada_form_especifico("CF6297eae06f088", $value, $dados_redes, $usuario_id);
+                    insert_entrada_form_especifico("CF6297eae06f088", $dados_redes["rede-de-suporte"], $usuario_id);
                     break;
                 case "check_formacao":
-                    insert_entrada_form_especifico("CF6298c3e77962a", $value,$dados_redes, $usuario_id);
+                    insert_entrada_form_especifico("CF6298c3e77962a", $dados_redes["rede-de-formacao"], $usuario_id);
                     break;
                 case "check_pesquisa":
-                    insert_entrada_form_especifico("CF6298c6a36c130", $value,$dados_redes, $usuario_id);
+                    insert_entrada_form_especifico("CF6298c6a36c130", $dados_redes["rede-de-pesquisa"], $usuario_id);
                     break;
                 case "check_inovacao":
-                    insert_entrada_form_especifico("CF6298c80222811", $value,$dados_redes, $usuario_id);
+                    insert_entrada_form_especifico("CF6298c80222811", $dados_redes["rede-de-inovacao"], $usuario_id);
                     break;
                 case "check_tecnologia":
-                    insert_entrada_form_especifico("CF6298c879c2353", $value,$dados_redes, $usuario_id);
+                    insert_entrada_form_especifico("CF6298c879c2353", $dados_redes["rede-de-tecnologia"], $usuario_id);
                     break;
             }
-            
         }
-    }
-
+    } //end do if de enviar
 }
-add_action( 'admin_post_nopriv_cadastro_candidato', 'cadastro_action_form' );
-add_action( 'admin_post_cadastro_candidato', 'cadastro_action_form' );
+add_action('admin_post_nopriv_cadastro_candidato', 'cadastro_action_form');
+add_action('admin_post_cadastro_candidato', 'cadastro_action_form');
 
-function generateRandomString($length = 15) {
+function generateRandomString($length = 15)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -584,8 +632,10 @@ function generateRandomString($length = 15) {
     return $randomString;
 }
 
-function create_new_user($username, $password, $email_address, $first_name, $last_name, $role){
-    if ( ! username_exists( $username ) ) {
+function create_new_user($username, $password, $email_address, $first_name, $last_name, $role)
+{
+    $user_id = username_exists($username);
+    if (!$user_id) {
         $userData = array(
             'user_login' => $username,
             'first_name' => $first_name,
@@ -595,37 +645,37 @@ function create_new_user($username, $password, $email_address, $first_name, $las
             'user_url' => '',
             'role' => $role
         );
-        return wp_insert_user( $userData );
+        return wp_insert_user($userData);
         /*        
         $user_id = wp_create_user( $username, $password, $email_address );
 		$user = new WP_User( $user_id );
 		$user->set_role( $role );
         return $user_id;
         */
-	}
-    return 0;
+    }
+    return $user_id;
 }
 
-function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $status = "pendente") {
-    
+function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $status = "pendente")
+{
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
     * Usado para o form Geral
 	*/
 
-	$form = Caldera_Forms_Forms::get_form($idFormulario);
-	//Basic entry information
-	$entryDetials = new Caldera_Forms_Entry_Entry();
-	$entryDetials->form_id = $form['ID'];
-	$entryDetials->user_id = $usuario_id;
-	$entryDetials->datestamp = current_time('mysql');
-	$entryDetials->status = 'pending';
-	//Create entry object
-	$entry = new Caldera_Forms_Entry($form,false,$entryDetials);
+    $form = Caldera_Forms_Forms::get_form($idFormulario);
+    //Basic entry information
+    $entryDetials = new Caldera_Forms_Entry_Entry();
+    $entryDetials->form_id = $form['ID'];
+    $entryDetials->user_id = $usuario_id;
+    $entryDetials->datestamp = current_time('mysql');
+    $entryDetials->status = 'pending';
+    //Create entry object
+    $entry = new Caldera_Forms_Entry($form, false, $entryDetials);
 
-	//Add field to entry
-	$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
-    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6461522', $descricaoDaInstituicao)); 
+    //Add field to entry
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6461522', $descricaoDaInstituicao));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5902421', $natureza_op));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7125239', $porte_op));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3000518', $cnpjDaInstituicao));
@@ -637,106 +687,103 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7868662', $emailDoCandidato));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9748069', $status));
-	//Save entry in database.
-	$entryId = $entry->save();
-	//Make entry active
-	$entry->update_status( 'active' );
-	return $entryId;
+
+    //Save entry in database.
+    $entryId = $entry->save();
+    //Make entry active
+    $entry->update_status('active');
+    return $entryId;
 }
 
-function insert_entrada_form_especifico($idFormulario, $value, $dados_redes, $usuario_id = 0){
+function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id, $status = "pendente", $versao = 0)
+{
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
     * Usado para os forms específicos de cada rede 
 	*/
 
-	$form = Caldera_Forms_Forms::get_form($idFormulario);
-	//Basic entry information
-	$entryDetials = new Caldera_Forms_Entry_Entry();
-	$entryDetials->form_id = $form['ID'];
-	$entryDetials->user_id = $usuario_id;
-	$entryDetials->datestamp = current_time('mysql');
-	$entryDetials->status = 'pending';
-	//Create entry object
-	$entry = new Caldera_Forms_Entry($form,false,$entryDetials);
+    $form = Caldera_Forms_Forms::get_form($idFormulario);
+    //Basic entry information
+    $entryDetials = new Caldera_Forms_Entry_Entry();
+    $entryDetials->form_id = $form['ID'];
+    $entryDetials->user_id = $usuario_id;
+    $entryDetials->datestamp = current_time('mysql');
+    $entryDetials->status = 'pending';
+    //Create entry object
+    $entry = new Caldera_Forms_Entry($form, false, $entryDetials);
 
-	//Add field to entry
-    //Cada Form tem seus fields
-    switch ($value) {
-        case "check_suporte":
-            //TODO
-            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
-            break;
-        case "check_formacao":
-            //TODO
-            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao)); 
-            break;
-        case "check_pesquisa":
-            //TODO
-            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
-            break;
-        case "check_inovacao":
-            //TODO
-            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
-            break;
-        case "check_tecnologia":
-            //TODO
-            //$entry->add_field(get_fieldEntryValue_customizada($form, 'fld_266564', $nomeDaInstituicao));
-            break;
-    }    
+    //Add field to entry
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_605717', $dados_redes["urlServico"]));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4486725', $dados_redes["produtoServicos"]));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8777940', $dados_redes["classificacoes"]));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6678080', $dados_redes["outroClassificacao"]));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4665383', $dados_redes["publicos"]));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2391778', $dados_redes["abrangencias"]));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6140408', $dados_redes["nomeCompleto"]));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7130000', $dados_redes["emailRepresentante"]));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5051662', $dados_redes["telefoneRepresentante"]));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3707629', $status));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2402818', $versao));
+
     //Save entry in database.
-	$entryId = $entry->save();
-	//Make entry active
-	$entry->update_status( 'active' );
-	return $entryId;
+    $entryId = $entry->save();
+    //Make entry active
+    $entry->update_status('active');
+    return $entryId;
 }
 
-function get_fieldEntryValue_customizada($form, $field_id, $value) {
-	/*
+function get_fieldEntryValue_customizada($form, $field_id, $value)
+{
+    /*
 	* Função para pegar o valor de um determinado campo de um Caldera Form
 	*/
 
-	//Get field to save value for
-	$field = Caldera_Forms_Field_Util::get_field($field_id, $form);
-	//Create field value object
-	$fieldEntryValue = new Caldera_Forms_Entry_Field();
-	//Associate it with this field
-	$fieldEntryValue->field_id = $field['ID'];
-	$fieldEntryValue->slug = $field['slug'];
-	//Set the value to save.
-	$fieldEntryValue->value = $value;
-	return $fieldEntryValue;
+    //Get field to save value for
+    $field = Caldera_Forms_Field_Util::get_field($field_id, $form);
+    //Create field value object
+    $fieldEntryValue = new Caldera_Forms_Entry_Field();
+    //Associate it with this field
+    $fieldEntryValue->field_id = $field['ID'];
+    $fieldEntryValue->slug = $field['slug'];
+    //Set the value to save.
+    $fieldEntryValue->value = $value;
+    return $fieldEntryValue;
 }
 
-function upload_documento($documento, $usuario, $n){
-	/*
+function upload_documento($documento, $usuario, $n)
+{
+    /*
 	* Função para upload de arquivo
 	* Recebe uma variável $_FILES['value']
 	* Retorna a url do arquivo enviado
 	*/
 
-	$upload = wp_upload_bits( $documento['name'], null, file_get_contents( $documento['tmp_name'] ) );
+    $upload = wp_upload_bits($documento['name'], null, file_get_contents($documento['tmp_name']));
 
-	$wp_filetype = wp_check_filetype( basename( $upload['file'] ), null );
+    $wp_filetype = wp_check_filetype(basename($upload['file']), null);
 
-	$wp_upload_dir = wp_upload_dir();
+    $wp_upload_dir = wp_upload_dir();
 
-	$message = "Documento ".$n." do usuário ".$usuario.".";
+    $message = "Documento " . $n . " do usuário " . $usuario . ".";
 
-	$attachment = array(
-		'guid' => $wp_upload_dir['baseurl'] . _wp_relative_upload_path( $upload['file'] ),
-		'post_mime_type' => $wp_filetype['type'],
-		'post_title' => preg_replace('/\.[^.]+$/', '', basename( $upload['file'] )),
-		'post_content' => $message,
-		'post_status' => 'inherit'
-	);
+    $attachment = array(
+        'guid' => $wp_upload_dir['baseurl'] . _wp_relative_upload_path($upload['file']),
+        'post_mime_type' => $wp_filetype['type'],
+        'post_title' => preg_replace('/\.[^.]+$/', '', basename($upload['file'])),
+        'post_content' => $message,
+        'post_status' => 'inherit'
+    );
 
-	$attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+    $attach_id = wp_insert_attachment($attachment, $upload['file']);
 
-	require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
 
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
-	wp_update_attachment_metadata( $attach_id, $attach_data );
+    $attach_data = wp_generate_attachment_metadata($attach_id, $upload['file']);
+    wp_update_attachment_metadata($attach_id, $attach_data);
 
-	return wp_get_attachment_url( $attach_id );
+    return wp_get_attachment_url($attach_id);
 }
