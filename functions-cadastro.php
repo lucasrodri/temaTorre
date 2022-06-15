@@ -488,6 +488,10 @@ function cadastro_action_form()
     if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
     else $porte_op = "";
 
+    if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
+        $porte_op = "";
+    }
+
     if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
     else $cnpjDaInstituicao = "";
     if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
@@ -531,6 +535,11 @@ function cadastro_action_form()
 
         if (isset($_POST['outroClassificacao_' . $key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_' . $key]);
         else $dados_redes[$key]["outroClassificacao"] = "";
+
+
+        if (!str_contains($classificacoes, 'Outro;')) {
+            $dados_redes[$key]["outroClassificacao"] = '';
+        }
 
         //Pegando os checks do publico alvo
         $publicos = "";

@@ -46,9 +46,9 @@ Mudanças feitas:
 - Na função de criar usuário, se ele já existir, eu retorno o id dele
 
 O que falta/Questionamentos
-- [ ] salvar outro apenas se selecionado o "Outro"
-- [ ] salvar porte_op apenas se selecionado o "natureza_op4/5"
+- [X] salvar outro apenas se selecionado o "Outro"
+- [X] salvar porte_op apenas se selecionado o "natureza_op4/5"
 - [ ] acrescentar loading no submit
 - [ ] acrescentar aviso de algum erro na página (página muito grande, não fica claro que tem algo errado)
-- [ ] o que acontece se o nome do candidato não tem espaços?
-- [ ] o que acontece se o nome no email (usado para username) já existir?
+- [X] o que acontece se o nome do candidato não tem espaços?
+- [X] o que acontece se o nome no email (usado para username) já existir?
