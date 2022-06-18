@@ -59,8 +59,11 @@ function retornaPainelAtivo( ) {
 
 jQuery( document ).ready( function ( $ ) {
 
-  // começa chamando a primeira altura
-  arrumaTamanhoJanela( 0 );
+  //colocando um if para não dá erros em outras páginas
+  if (document.getElementById('cadastro_wizard')){
+    // começa chamando a primeira altura
+    arrumaTamanhoJanela( 0 );
+  }
 
   /**
    * Ajuste do tamanho da aba
@@ -121,80 +124,82 @@ jQuery( document ).ready( function ( $ ) {
     $( this ).mask( "(00) 0000-00009" );
   } );
 
+  //colocando um if para não dá erros em outras páginas
+  if (document.getElementById('cadastro_wizard')){
+    /**
+     * Controle do Input Radio no Passo 2
+     */
+    // https://stackoverflow.com/questions/68585868/radio-buttons-with-input-other-option
+    const radioMaster = document.querySelector( ".radio-master" );
+    const radioSlave = document.querySelector( ".radio-slave" );
 
-  /**
-   * Controle do Input Radio no Passo 2
-   */
-  // https://stackoverflow.com/questions/68585868/radio-buttons-with-input-other-option
-  const radioMaster = document.querySelector( ".radio-master" );
-  const radioSlave = document.querySelector( ".radio-slave" );
+    radioMaster.addEventListener( "input", e => {
+      const { type, name, id } = e.target;
 
-  radioMaster.addEventListener( "input", e => {
-    const { type, name, id } = e.target;
+      //console.log( 'clqiuei em ' + id );
+      // if ( type === "radio" ) container.querySelectorAll( `input[type=text][name=${name}]` )
+      //   .forEach( textField => textField.value = "" );
+      // else if ( type === "text" ) container.querySelectorAll( `input[type=radio][name=${name}]` )
+      //   .forEach( rad => rad.checked = false );
 
-    //console.log( 'clqiuei em ' + id );
-    // if ( type === "radio" ) container.querySelectorAll( `input[type=text][name=${name}]` )
-    //   .forEach( textField => textField.value = "" );
-    // else if ( type === "text" ) container.querySelectorAll( `input[type=radio][name=${name}]` )
-    //   .forEach( rad => rad.checked = false );
+      if ( id == "natureza_op_4" || id == "natureza_op_5" ) {
+        //console.log( 'MOSTRA' );
+        radioSlave.style = "display:inline;";
+      } else {
+        //console.log( 'nao mostra' );
+        radioSlave.style = "display:none;";
+      }
 
-    if ( id == "natureza_op_4" || id == "natureza_op_5" ) {
-      //console.log( 'MOSTRA' );
-      radioSlave.style = "display:inline;";
-    } else {
-      //console.log( 'nao mostra' );
-      radioSlave.style = "display:none;";
-    }
+      arrumaTamanhoJanela( 1 );
 
-    arrumaTamanhoJanela( 1 );
+    } );
 
-  } );
+    /**
+     * Controle do Input Checkbox no Passo 3
+     */
+    const checkMaster = document.querySelector( ".check-master" );
 
-  /**
-   * Controle do Input Checkbox no Passo 3
-   */
-  const checkMaster = document.querySelector( ".check-master" );
+    checkMaster.addEventListener( "input", e => {
+      const { id, checked } = e.target;
 
-  checkMaster.addEventListener( "input", e => {
-    const { id, checked } = e.target;
+      nomeRede = id.split( '_' )[ 1 ]; //pegar segundo nome
+      checkSlave = document.getElementById( 'redes_render_' + nomeRede );
+      //console.log( 'vou mostrar/esconder ' + nomeRede );
 
-    nomeRede = id.split( '_' )[ 1 ]; //pegar segundo nome
-    checkSlave = document.getElementById( 'redes_render_' + nomeRede );
-    //console.log( 'vou mostrar/esconder ' + nomeRede );
+      if ( checked ) {
+        checkSlave.style = "display:inline;";
 
-    if ( checked ) {
-      checkSlave.style = "display:inline;";
+        //Preciso pegar específicamente o input nomeCompleto para não mexer no outroClassificação
+        nomeInputText = "nomeCompleto_rede-de-" + nomeRede;
+        // Tenho que listar os inputs para não pegar checkbox
+        checkSlave.querySelectorAll( `input[type=text][name=${nomeInputText}]` ).forEach( input => input.required = "true" );
+        checkSlave.querySelectorAll( 'input[type=email]' ).forEach( input => input.required = "true" );
+        checkSlave.querySelectorAll( 'input[type=tel]' ).forEach( input => input.required = "true" );
+        checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.required = "true" );
 
-      //Preciso pegar específicamente o input nomeCompleto para não mexer no outroClassificação
-      nomeInputText = "nomeCompleto_rede-de-" + nomeRede;
-      // Tenho que listar os inputs para não pegar checkbox
-      checkSlave.querySelectorAll( `input[type=text][name=${nomeInputText}]` ).forEach( input => input.required = "true" );
-      checkSlave.querySelectorAll( 'input[type=email]' ).forEach( input => input.required = "true" );
-      checkSlave.querySelectorAll( 'input[type=tel]' ).forEach( input => input.required = "true" );
-      checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.required = "true" );
+      } else {
+        checkSlave.style = "display:none;";
 
-    } else {
-      checkSlave.style = "display:none;";
+        checkSlave.querySelectorAll( 'input' ).forEach( input => input.removeAttribute( "required" ) );
+        checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.removeAttribute( "required" ) );
+      }
 
-      checkSlave.querySelectorAll( 'input' ).forEach( input => input.removeAttribute( "required" ) );
-      checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.removeAttribute( "required" ) );
-    }
+      arrumaTamanhoJanela( 2 );
 
-    arrumaTamanhoJanela( 2 );
+    } );
 
-  } );
+    /**
+     * Controle do Input File no passo 4
+     */
+    const fileMaster = document.querySelector( ".upload-inputs" );
+    //console.log( fileMaster );
+    fileMaster.addEventListener( "change", e => {
+      //const { id } = e.target;
+      //console.log( 'mudança em ' + id );
+      arrumaTamanhoJanela( 3 );
 
-  /**
-   * Controle do Input File no passo 4
-   */
-  const fileMaster = document.querySelector( ".upload-inputs" );
-  //console.log( fileMaster );
-  fileMaster.addEventListener( "change", e => {
-    //const { id } = e.target;
-    //console.log( 'mudança em ' + id );
-    arrumaTamanhoJanela( 3 );
-
-  } );
+    } );
+  }
 
 } );
 

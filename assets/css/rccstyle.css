@@ -394,3 +394,7 @@
 .textarea-start-size{
   height: 160px;
 }
+
+.noHover{
+  pointer-events: none;
+}
