@@ -4,28 +4,28 @@ var wizard3_size = '2500px';
 var wizard4_size = '500px';
 var wizard5_size = '500px';
 
-function arrumaTamanhoJanela( index ) {
+function arrumaTamanhoJanela(index) {
 
-  for ( var j = 0; j < 10; j++ ) {
+  for (var j = 0; j < 10; j++) {
 
     // console.log( 'chamei arrumaTamanhoJanela ' + index );
 
     var wizard_sizes = {}
-    var panelsContent = document.getElementsByClassName( "wizard-panel-content" );
+    var panelsContent = document.getElementsByClassName("wizard-panel-content");
 
-    for ( var i = 0; i < panelsContent.length; i++ ) {
+    for (var i = 0; i < panelsContent.length; i++) {
 
       // if ( i == index ) {
       //   console.log( i + ' : ' + panelsContent[ i ].clientHeight );
       //   console.log( i + ' : ' + panelsContent[ i ].offsetHeight );
       //   console.log( i + ' : ' + panelsContent[ i ].scrollHeight );
       // }
-      var altura = panelsContent[ i ].scrollHeight;
+      var altura = panelsContent[i].scrollHeight;
 
       //não sei pq tem que ser 300
       altura += 300;
 
-      wizard_sizes[ i ] = altura;
+      wizard_sizes[i] = altura;
     }
 
     // wizard_sizes = {
@@ -40,74 +40,74 @@ function arrumaTamanhoJanela( index ) {
     //{0: 301, 1: 1384, 2: 2174, 3: 389, 4: 677}
     //console.log( "setando altura para: " + wizard_sizes[ index ] );
 
-    document.getElementById( 'cadastro_wizard' ).style.height = wizard_sizes[ index ] + 'px';
+    document.getElementById('cadastro_wizard').style.height = wizard_sizes[index] + 'px';
   }
 }
 
-function retornaPainelAtivo( ) {
-  panels = document.getElementsByClassName( "wizard-panel" );
+function retornaPainelAtivo() {
+  panels = document.getElementsByClassName("wizard-panel");
 
-  for ( var i = 0; i < panels.length; i++ ) {
+  for (var i = 0; i < panels.length; i++) {
 
-    ativo = panels[ i ].getAttribute( "active" );
+    ativo = panels[i].getAttribute("active");
 
-    if ( ativo === "" ) {
+    if (ativo === "") {
       return i;
     }
   }
 }
 
-jQuery( document ).ready( function ( $ ) {
+jQuery(document).ready(function ($) {
 
   //colocando um if para não dá erros em outras páginas
-  if (document.getElementById('cadastro_wizard')){
+  if (document.getElementById('cadastro_wizard')) {
     // começa chamando a primeira altura
-    arrumaTamanhoJanela( 0 );
+    arrumaTamanhoJanela(0);
   }
 
   /**
    * Ajuste do tamanho da aba
    */
 
-  $( ".wizard-progress" ).find( ":button" ).each( function ( index ) {
+  $(".wizard-progress").find(":button").each(function (index) {
     // procura todos os botões dentro de wizard-progress e adiciona uma chamada a função de arrumar janela ao clicar
-    $( this ).click( function ( ) {
-      arrumaTamanhoJanela( index );
-    } );
+    $(this).click(function () {
+      arrumaTamanhoJanela(index);
+    });
 
-  } );
+  });
 
 
-  $( '.wizard-btn' ).click( function ( ) {
+  $('.wizard-btn').click(function () {
     //console.log( 'cliquei no wizard btn' );
-    index = retornaPainelAtivo( );
+    index = retornaPainelAtivo();
 
-    if ( validaFormulario( ) ) {
+    if (validaFormulario()) {
 
-      $( this ).addClass( 'wizard-btn-next' );
+      $(this).addClass('wizard-btn-next');
 
       //console.log( 'cliquei no next btn ' + index );
-      arrumaTamanhoJanela( index + 1 );
-      window.scrollTo( 0, 0 );
+      arrumaTamanhoJanela(index + 1);
+      window.scrollTo(0, 0);
 
     } else {
 
-      $( this ).removeClass( 'wizard-btn-next' );
-      arrumaTamanhoJanela( index );
+      $(this).removeClass('wizard-btn-next');
+      arrumaTamanhoJanela(index);
     }
 
 
-  } );
+  });
 
 
-  $( '.wizard-btn-prev' ).click( function ( ) {
+  $('.wizard-btn-prev').click(function () {
 
-    index = retornaPainelAtivo( );
+    index = retornaPainelAtivo();
     //console.log( 'cliquei no previous btn ' + index );
-    arrumaTamanhoJanela( index - 1 );
-    window.scrollTo( 0, 0 );
+    arrumaTamanhoJanela(index - 1);
+    window.scrollTo(0, 0);
 
-  } );
+  });
 
   /**
    * Máscaras
@@ -117,23 +117,23 @@ jQuery( document ).ready( function ( $ ) {
   //$("#telefoneDaUnidade").mask("(00) 0000-00009");
   //$("#celDaUnidade").mask("(00) 0000-00009");
   //$("#cpfDoGestor").mask("999.999.999-99");
-  $( "#cnpjDaInstituicao" ).mask( "99.999.999/9999-99" );
+  $("#cnpjDaInstituicao").mask("99.999.999/9999-99");
   //$("#cepDaUnidade").mask("00000-000");
 
-  $( "input[type='tel']" ).each( function ( index ) {
-    $( this ).mask( "(00) 0000-00009" );
-  } );
+  $("input[type='tel']").each(function (index) {
+    $(this).mask("(00) 0000-00009");
+  });
 
   //colocando um if para não dá erros em outras páginas
-  if (document.getElementById('cadastro_wizard')){
+  if (document.getElementById('cadastro_wizard') || document.getElementById('radio_function')) {
     /**
      * Controle do Input Radio no Passo 2
      */
     // https://stackoverflow.com/questions/68585868/radio-buttons-with-input-other-option
-    const radioMaster = document.querySelector( ".radio-master" );
-    const radioSlave = document.querySelector( ".radio-slave" );
+    const radioMaster = document.querySelector(".radio-master");
+    const radioSlave = document.querySelector(".radio-slave");
 
-    radioMaster.addEventListener( "input", e => {
+    radioMaster.addEventListener("input", e => {
       const { type, name, id } = e.target;
 
       //console.log( 'clqiuei em ' + id );
@@ -142,78 +142,82 @@ jQuery( document ).ready( function ( $ ) {
       // else if ( type === "text" ) container.querySelectorAll( `input[type=radio][name=${name}]` )
       //   .forEach( rad => rad.checked = false );
 
-      if ( id == "natureza_op_4" || id == "natureza_op_5" ) {
+      if (id == "natureza_op_4" || id == "natureza_op_5") {
         //console.log( 'MOSTRA' );
         radioSlave.style = "display:inline;";
       } else {
         //console.log( 'nao mostra' );
         radioSlave.style = "display:none;";
       }
+      if (document.getElementById('cadastro_wizard')) {
+        arrumaTamanhoJanela(1);
+      }
 
-      arrumaTamanhoJanela( 1 );
+    });
+    /**
+    * Controle do Input File no passo 4
+    */
+    const fileMaster = document.querySelector(".upload-inputs");
+    //console.log( fileMaster );
+    fileMaster.addEventListener("change", e => {
+      //const { id } = e.target;
+      //console.log( 'mudança em ' + id );
+      if (document.getElementById('cadastro_wizard')) {
+        arrumaTamanhoJanela(3);
+      }
 
-    } );
+    });
+  }
 
+  if (document.getElementById('cadastro_wizard')) {
     /**
      * Controle do Input Checkbox no Passo 3
      */
-    const checkMaster = document.querySelector( ".check-master" );
+    const checkMaster = document.querySelector(".check-master");
 
-    checkMaster.addEventListener( "input", e => {
+    checkMaster.addEventListener("input", e => {
       const { id, checked } = e.target;
 
-      nomeRede = id.split( '_' )[ 1 ]; //pegar segundo nome
-      checkSlave = document.getElementById( 'redes_render_' + nomeRede );
+      nomeRede = id.split('_')[1]; //pegar segundo nome
+      checkSlave = document.getElementById('redes_render_' + nomeRede);
       //console.log( 'vou mostrar/esconder ' + nomeRede );
 
-      if ( checked ) {
+      if (checked) {
         checkSlave.style = "display:inline;";
 
         //Preciso pegar específicamente o input nomeCompleto para não mexer no outroClassificação
         nomeInputText = "nomeCompleto_rede-de-" + nomeRede;
         // Tenho que listar os inputs para não pegar checkbox
-        checkSlave.querySelectorAll( `input[type=text][name=${nomeInputText}]` ).forEach( input => input.required = "true" );
-        checkSlave.querySelectorAll( 'input[type=email]' ).forEach( input => input.required = "true" );
-        checkSlave.querySelectorAll( 'input[type=tel]' ).forEach( input => input.required = "true" );
-        checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.required = "true" );
+        checkSlave.querySelectorAll(`input[type=text][name=${nomeInputText}]`).forEach(input => input.required = "true");
+        checkSlave.querySelectorAll('input[type=email]').forEach(input => input.required = "true");
+        checkSlave.querySelectorAll('input[type=tel]').forEach(input => input.required = "true");
+        checkSlave.querySelectorAll('textarea').forEach(textarea => textarea.required = "true");
 
       } else {
         checkSlave.style = "display:none;";
 
-        checkSlave.querySelectorAll( 'input' ).forEach( input => input.removeAttribute( "required" ) );
-        checkSlave.querySelectorAll( 'textarea' ).forEach( textarea => textarea.removeAttribute( "required" ) );
+        checkSlave.querySelectorAll('input').forEach(input => input.removeAttribute("required"));
+        checkSlave.querySelectorAll('textarea').forEach(textarea => textarea.removeAttribute("required"));
       }
 
-      arrumaTamanhoJanela( 2 );
+      arrumaTamanhoJanela(2);
 
-    } );
-
-    /**
-     * Controle do Input File no passo 4
-     */
-    const fileMaster = document.querySelector( ".upload-inputs" );
-    //console.log( fileMaster );
-    fileMaster.addEventListener( "change", e => {
-      //const { id } = e.target;
-      //console.log( 'mudança em ' + id );
-      arrumaTamanhoJanela( 3 );
-
-    } );
+    });
   }
 
-} );
+});
 
 
-function controleOutroClassificacao( id ) {
+function controleOutroClassificacao(id) {
 
   //console.log( "cliquei em " + id );
-  checkOutro = document.getElementById( id );
+  checkOutro = document.getElementById(id);
 
   //check_classificacao_3_rede-de-tecnologia
-  nomeRede = id.split( '_' )[ 3 ]; //pegar nome da rede
-  inputTextOutro = document.getElementById( 'outroClassificacao_' + nomeRede );
+  nomeRede = id.split('_')[3]; //pegar nome da rede
+  inputTextOutro = document.getElementById('outroClassificacao_' + nomeRede);
 
-  if ( checkOutro.checked ) {
+  if (checkOutro.checked) {
     //console.log( "ta clicado" )
     inputTextOutro.parentElement.style = "display: inline;";
     inputTextOutro.required = "true";
@@ -222,7 +226,7 @@ function controleOutroClassificacao( id ) {
   } else {
     //console.log( "nao ta " )
     inputTextOutro.parentElement.style = "display: none;";
-    inputTextOutro.removeAttribute( "required" );
+    inputTextOutro.removeAttribute("required");
   }
 
 }

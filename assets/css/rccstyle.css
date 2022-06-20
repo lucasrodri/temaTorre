@@ -398,3 +398,7 @@
 .noHover{
   pointer-events: none;
 }
+
+.font-tab-torre button{
+  font-size: 12pt !important;
+}
