@@ -625,6 +625,8 @@ function cadastro_action_form()
                     break;
             }
         }
+
+        //envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
     } //end do if de enviar
 }
 add_action('admin_post_nopriv_cadastro_candidato', 'cadastro_action_form');
