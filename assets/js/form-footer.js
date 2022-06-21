@@ -154,19 +154,6 @@ jQuery(document).ready(function ($) {
       }
 
     });
-    /**
-    * Controle do Input File no passo 4
-    */
-    const fileMaster = document.querySelector(".upload-inputs");
-    //console.log( fileMaster );
-    fileMaster.addEventListener("change", e => {
-      //const { id } = e.target;
-      //console.log( 'mudança em ' + id );
-      if (document.getElementById('cadastro_wizard')) {
-        arrumaTamanhoJanela(3);
-      }
-
-    });
   }
 
   if (document.getElementById('cadastro_wizard')) {
@@ -201,6 +188,19 @@ jQuery(document).ready(function ($) {
       }
 
       arrumaTamanhoJanela(2);
+
+    });
+    /**
+    * Controle do Input File no passo 4
+    */
+    const fileMaster = document.querySelector(".upload-inputs");
+    //console.log( fileMaster );
+    fileMaster.addEventListener("change", e => {
+      //const { id } = e.target;
+      //console.log( 'mudança em ' + id );
+      if (document.getElementById('cadastro_wizard')) {
+        arrumaTamanhoJanela(3);
+      }
 
     });
   }
