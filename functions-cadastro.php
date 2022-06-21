@@ -23,7 +23,7 @@ function cadastro_form_render()
                         <button id="cadastro_wizard_b2" class="wizard-progress-btn" type="button" title="Instituição" disabled="disabled"><span class="info">Instituição</span></button>
                         <button id="cadastro_wizard_b3" class="wizard-progress-btn" type="button" title="Redes" disabled="disabled"><span class="info">Redes</span></button>
                         <button id="cadastro_wizard_b4" class="wizard-progress-btn" type="button" title="Logo e Guia de Uso de Marca" disabled="disabled"><span class="info">Logo e Guia de Uso de Marca</span></button>
-                        <button id="cadastro_wizard_b5" class="wizard-progress-btn" type="button" title="Finalização" active="active"><span class="info">Finalização</span></button>
+                        <button id="cadastro_wizard_b5" class="wizard-progress-btn" type="button" title="Finalização" disabled="disabled"><span class="info">Finalização</span></button>
                     </div>
                     <div class="wizard-form">
                         <div class="wizard-panel" active="active">
@@ -593,11 +593,18 @@ function cadastro_action_form()
 
         // Criar o usuário
         $password = wp_generate_password();
-        $username = explode("@", $emailDoCandidato)[0];
+        $username = strtolower(explode("@", $emailDoCandidato)[0]) . gerar_numeros_aleatorios();
         $first_name = explode(" ", $nomeDoCandidato)[0];
         $last_name = implode(" ", array_slice(explode(" ", $nomeDoCandidato), 1));
 
         $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
+
+        /* if ($usuario_id == 0){
+            // redirecionar para uma página de erro
+            wp_redirect( home_url() );
+            //wp_redirect(get_permalink( 13832 ));
+            exit;
+        } */
 
         //funcao para criar a entrada no Caldera (Form geral)
         insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
@@ -644,10 +651,25 @@ function generateRandomString($length = 15)
     return $randomString;
 }
 
+// função para gerar dois números aleatórios
+function gerar_numeros_aleatorios()
+{
+    $len = 2;
+    $x = '';
+    for ($i = 0; $i < $len; $i++) {
+        $x .= intval(rand(0, 9));
+    }
+    return $x;
+}
+
 function create_new_user($username, $password, $email_address, $first_name, $last_name, $role)
 {
+    // checar email que pode dar erro se for duplicado
+    $email_id = email_exists($email_address);
+    // checar username que pode dar erro se for duplicado
     $user_id = username_exists($username);
-    if (!$user_id) {
+
+    if (!$email_id && !$user_id) {
         $userData = array(
             'user_login' => $username,
             'first_name' => $first_name,
@@ -665,10 +687,10 @@ function create_new_user($username, $password, $email_address, $first_name, $las
         return $user_id;
         */
     }
-    return $user_id;
+    return 0;
 }
 
-function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $statusGeral = "pendente",  $status = "pendente", $parecer = "", $historico = "")
+function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $statusGeral = "avaliacao",  $status = "avaliacao", $parecer = "", $historico = "")
 {
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
@@ -711,7 +733,7 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     return $entryId;
 }
 
-function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id, $status = "pendente", $versao = 0)
+function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id, $status = "avaliacao", $versao = 0)
 {
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
