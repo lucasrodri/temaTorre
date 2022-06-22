@@ -48,7 +48,7 @@ Mudanças feitas:
 O que falta/Questionamentos
 - [X] salvar outro apenas se selecionado o "Outro"
 - [X] salvar porte_op apenas se selecionado o "natureza_op4/5"
-- [ ] acrescentar loading no submit
+- [X] acrescentar loading no submit
 - [ ] acrescentar aviso de algum erro na página (página muito grande, não fica claro que tem algo errado)
 - [X] o que acontece se o nome do candidato não tem espaços?
 - [X] o que acontece se o nome no email (usado para username) já existir?

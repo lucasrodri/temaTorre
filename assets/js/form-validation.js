@@ -1,12 +1,12 @@
-function determinaPainelAtivo( panels ) {
+function determinaPainelAtivo(panels) {
 
   //panels = document.getElementsByClassName( "wizard-panel" );
 
-  for ( var i = 0; i < panels.length; i++ ) {
+  for (var i = 0; i < panels.length; i++) {
 
-    ativo = panels[ i ].getAttribute( "active" );
+    ativo = panels[i].getAttribute("active");
 
-    if ( ativo === "" ) {
+    if (ativo === "") {
       return i;
     }
 
@@ -15,87 +15,87 @@ function determinaPainelAtivo( panels ) {
 }
 
 // Element é o input, preciso pegar a div "pai" para setar o valido/invalido
-function setarInvalido( element ) {
-  element.parentElement.removeAttribute( "valid" );
-  element.parentElement.classList.remove( "success" );
+function setarInvalido(element) {
+  element.parentElement.removeAttribute("valid");
+  element.parentElement.classList.remove("success");
 
-  element.parentElement.setAttribute( "invalid", "invalid" );
+  element.parentElement.setAttribute("invalid", "invalid");
   element.parentElement.className += " danger";
 
-  if ( element.type == 'checkbox' ) {
-    classe = element.classList.item( 0 ); //pegar a classe -> ex: check_redes
+  if (element.type == 'checkbox') {
+    classe = element.classList.item(0); //pegar a classe -> ex: check_redes
 
-    if ( document.getElementById( classe + "_label" ) ) {
+    if (document.getElementById(classe + "_label")) {
       // 1a diferença: cria o label com o nome da classe, em vez do name do elemento
-      document.getElementById( classe + "_label" ).style = "";
+      document.getElementById(classe + "_label").style = "";
     } else {
       // 2a diferença: cria o label no pai do elemento pai kkk
-      element.parentElement.parentElement.insertAdjacentHTML( "beforeend",
-        '<span id="' + classe + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+      element.parentElement.parentElement.insertAdjacentHTML("beforeend",
+        '<span id="' + classe + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>');
     }
 
   } else {
-    if ( document.getElementById( element.name + "_label" ) ) {
+    if (document.getElementById(element.name + "_label")) {
 
-      document.getElementById( element.name + "_label" ).style = "";
+      document.getElementById(element.name + "_label").style = "";
 
     } else {
 
-      element.parentElement.insertAdjacentHTML( "beforeend",
-        '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>' );
+      element.parentElement.insertAdjacentHTML("beforeend",
+        '<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Preenchimento obrigatório</span>');
 
     }
   }
 }
 
-function setarValido( element ) {
-  element.parentElement.removeAttribute( "invalid" );
-  element.parentElement.classList.remove( "danger" );
+function setarValido(element) {
+  element.parentElement.removeAttribute("invalid");
+  element.parentElement.classList.remove("danger");
 
-  if ( !element.classList.contains( 'warning' ) ) {
+  if (!element.classList.contains('warning')) {
 
-    element.parentElement.setAttribute( "valid", "valid" );
+    element.parentElement.setAttribute("valid", "valid");
     element.parentElement.className += " success";
 
   }
 
-  if ( document.getElementById( element.name + "_label" ) ) {
-    document.getElementById( element.name + "_label" ).style = "display: none;";
+  if (document.getElementById(element.name + "_label")) {
+    document.getElementById(element.name + "_label").style = "display: none;";
   }
 
-  if ( element.type == 'checkbox' ) {
-    classe = element.classList.item( 0 ); //pegar a classe -> ex: check_redes
-    if ( document.getElementById( classe + "_label" ) ) {
-      document.getElementById( classe + "_label" ).style = "display: none;";
+  if (element.type == 'checkbox') {
+    classe = element.classList.item(0); //pegar a classe -> ex: check_redes
+    if (document.getElementById(classe + "_label")) {
+      document.getElementById(classe + "_label").style = "display: none;";
     }
   }
 }
 
-function mostrarAvisoValidacao( element, nome = '' ) {
-  element.parentElement.removeAttribute( "valid" );
-  element.parentElement.classList.remove( "success" );
+function mostrarAvisoValidacao(element, nome = '') {
+  element.parentElement.removeAttribute("valid");
+  element.parentElement.classList.remove("success");
 
   element.parentElement.className += " warning";
 
-  if ( document.getElementById( element.name + "_warning" ) ) {
+  if (document.getElementById(element.name + "_warning")) {
 
-    document.getElementById( element.name + "_warning" ).style = "";
+    document.getElementById(element.name + "_warning").style = "";
 
   } else {
 
-    element.parentElement.insertAdjacentHTML( "beforeend",
-      '<span id="' + element.name + '_warning" class="feedback warning" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Insira um ' + nome + ' válido</span>' );
+    element.parentElement.insertAdjacentHTML("beforeend",
+      '<span id="' + element.name + '_warning" class="feedback warning" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Insira um ' + nome + ' válido</span>');
 
   }
 }
 
-function ocultarAvisoValidacao( element ) {
-  if ( document.getElementById( element.name + "_warning" ) ) {
-    document.getElementById( element.name + "_warning" ).style = "display: none;";
+function ocultarAvisoValidacao(element) {
+  if (document.getElementById(element.name + "_warning")) {
+    document.getElementById(element.name + "_warning").style = "display: none;";
   }
 
-  element.parentElement.classList.remove( "warning" );
-  element.parentElement.setAttribute( "valid", "valid" );
+  element.parentElement.classList.remove("warning");
+  element.parentElement.setAttribute("valid", "valid");
   element.parentElement.className += " success"
 
 }
@@ -287,17 +287,17 @@ function validaFormulario( ) {
 }
 */
 
-function validaFormulario( ) {
+function validaFormulario() {
 
   var x, y, t, currentTab, valid = true;
 
-  x = document.getElementsByClassName( "wizard-panel" );
+  x = document.getElementsByClassName("wizard-panel");
 
-  currentTab = determinaPainelAtivo( x );
+  currentTab = determinaPainelAtivo(x);
 
-  y = x[ currentTab ].getElementsByTagName( "input" );
+  y = x[currentTab].getElementsByTagName("input");
   //s = x[ currentTab ].getElementsByTagName( "select" );
-  t = x[ currentTab ].getElementsByTagName( "textarea" );
+  t = x[currentTab].getElementsByTagName("textarea");
 
   //console.log( "tamanho de y (input) " + y.length );
   //console.log( "tamanho de s (select) " + s.length );
@@ -307,20 +307,20 @@ function validaFormulario( ) {
    * Checar Input (y)
    */
 
-  var checarRadio = [ ];
-  var checarCheckbox = [ ];
+  var checarRadio = [];
+  var checarCheckbox = [];
 
-  for ( i = 0; i < y.length; i++ ) {
+  for (i = 0; i < y.length; i++) {
 
-    requirido = y[ i ].getAttribute( "required" );
+    requirido = y[i].getAttribute("required");
     flagRequirido = false;
 
     // Checa apenas se o campo for requerido
-    if ( requirido === "" ) {
+    if (requirido === "") {
       flagRequirido = true;
     }
 
-    switch ( y[ i ].type ) {
+    switch (y[i].type) {
       case "text":
         //console.log( "text" );
 
@@ -329,18 +329,18 @@ function validaFormulario( ) {
         //console.log( "valor: " + y[ i ].value );
         //console.log( 'validade ' + y[ i ].checkValidity( ) );
 
-        if ( flagRequirido && ( y[ i ].value == "" ) ) {
-          setarInvalido( y[ i ] );
+        if (flagRequirido && (y[i].value == "")) {
+          setarInvalido(y[i]);
           valid = false;
         }
 
-        if ( y[ i ].name == "cnpjDaInstituicao" ) {
+        if (y[i].name == "cnpjDaInstituicao") {
 
-          if ( !IsCNPJ( y[ i ].value ) ) {
-            mostrarAvisoValidacao( y[ i ], 'CNPJ' );
+          if (!IsCNPJ(y[i].value)) {
+            mostrarAvisoValidacao(y[i], 'CNPJ');
             valid = false;
           } else {
-            ocultarAvisoValidacao( y[ i ] );
+            ocultarAvisoValidacao(y[i]);
           }
         }
 
@@ -349,16 +349,16 @@ function validaFormulario( ) {
       case "email":
         //console.log( "email" );
 
-        if ( flagRequirido && ( y[ i ].value == "" ) ) {
-          setarInvalido( y[ i ] );
+        if (flagRequirido && (y[i].value == "")) {
+          setarInvalido(y[i]);
           valid = false;
         }
 
-        if ( !IsEmail( y[ i ].value ) ) {
-          mostrarAvisoValidacao( y[ i ], 'E-mail' );
+        if (!IsEmail(y[i].value)) {
+          mostrarAvisoValidacao(y[i], 'E-mail');
           valid = false;
         } else {
-          ocultarAvisoValidacao( y[ i ] );
+          ocultarAvisoValidacao(y[i]);
         }
 
         break;
@@ -367,8 +367,8 @@ function validaFormulario( ) {
         //console.log( "file" );
 
         var extensoesPermitidas = {
-          'logo_instituicao': [ 'jpg', 'png', 'jpeg' ],
-          'guia_instituicao': [ 'pdf' ],
+          'logo_instituicao': ['jpg', 'png', 'jpeg'],
+          'guia_instituicao': ['pdf'],
         }
 
         var tamanhoPermitido = {
@@ -376,32 +376,32 @@ function validaFormulario( ) {
           'guia_instituicao': 26214400,
         }
 
-        if ( flagRequirido || ( y[ i ].value != "" ) ) {
+        if (flagRequirido || (y[i].value != "")) {
 
           //checar extensão
-          var nomeArquivo = y[ i ].value.split( "." );
-          var extensao = nomeArquivo[ nomeArquivo.length - 1 ].toLowerCase( );
+          var nomeArquivo = y[i].value.split(".");
+          var extensao = nomeArquivo[nomeArquivo.length - 1].toLowerCase();
 
           // console.log( "nomeArquivo: " + nomeArquivo );
           // console.log( "extensao: " + extensao );
           // console.log( "verificacao: " + extensoesPermitidas[ y[ i ].name ].includes( extensao ) );
 
-          if ( !extensoesPermitidas[ y[ i ].name ].includes( extensao ) || y[ i ].files.length == 0 ) {
-            setarInvalido( y[ i ] );
+          if (!extensoesPermitidas[y[i].name].includes(extensao) || y[i].files.length == 0) {
+            setarInvalido(y[i]);
             valid = false;
           }
 
-          if ( y[ i ].files.length > 0 ) {
-            var tamanho = y[ i ].files[ 0 ].size;
+          if (y[i].files.length > 0) {
+            var tamanho = y[i].files[0].size;
             //console.log( "tamanho: " + tamanho );
 
-            if ( tamanho > tamanhoPermitido[ y[ i ].name ] ) {
+            if (tamanho > tamanhoPermitido[y[i].name]) {
               //setarInvalido( y[ i ] );
               //valid = false;
-              mostrarAvisoValidacao( document.getElementById( y[ i ].name ), 'Arquivo' );
+              mostrarAvisoValidacao(document.getElementById(y[i].name), 'Arquivo');
               valid = false;
             } else {
-              ocultarAvisoValidacao( document.getElementById( y[ i ].name ) );
+              ocultarAvisoValidacao(document.getElementById(y[i].name));
             }
           }
 
@@ -412,17 +412,17 @@ function validaFormulario( ) {
       case "url":
         //console.log( "url" );
 
-        if ( flagRequirido && ( y[ i ].value == "" ) ) {
-          setarInvalido( y[ i ] );
+        if (flagRequirido && (y[i].value == "")) {
+          setarInvalido(y[i]);
           valid = false;
         }
 
-        if ( y[ i ].name == "urlDaInstituicao" ) {
-          if ( !IsURL( y[ i ].value ) ) {
-            mostrarAvisoValidacao( y[ i ], 'URL' );
+        if (y[i].name == "urlDaInstituicao") {
+          if (!IsURL(y[i].value)) {
+            mostrarAvisoValidacao(y[i], 'URL');
             valid = false;
           } else {
-            ocultarAvisoValidacao( y[ i ] );
+            ocultarAvisoValidacao(y[i]);
           }
 
         }
@@ -443,16 +443,16 @@ function validaFormulario( ) {
         //   valid = false;
         // }
 
-        if ( flagRequirido && ( y[ i ].value == "" ) ) {
-          setarInvalido( y[ i ] );
+        if (flagRequirido && (y[i].value == "")) {
+          setarInvalido(y[i]);
           valid = false;
         }
 
-        if ( !y[ i ].checkValidity( ) ) {
+        if (!y[i].checkValidity()) {
           valid = false;
-          mostrarAvisoValidacao( y[ i ], 'Telefone' );
+          mostrarAvisoValidacao(y[i], 'Telefone');
         } else {
-          ocultarAvisoValidacao( y[ i ] );
+          ocultarAvisoValidacao(y[i]);
         }
 
 
@@ -472,18 +472,18 @@ function validaFormulario( ) {
         }
         */
 
-        classe = y[ i ].classList.item( 0 );
+        classe = y[i].classList.item(0);
         // If específico para natureza_op
-        if ( classe == 'natureza_op' ) {
-          if ( !checarRadio.includes( classe ) ) {
-            checarRadio.push( classe );
+        if (classe == 'natureza_op') {
+          if (!checarRadio.includes(classe)) {
+            checarRadio.push(classe);
           }
         }
 
         // Se o natureza_op for igual 4 ou 5 (instituição privada), inclui o outro radio para validação
-        if ( y[ i ].checked == true && ( y[ i ].id == "natureza_op_4" || y[ i ].id == "natureza_op_5" ) ) {
+        if (y[i].checked == true && (y[i].id == "natureza_op_4" || y[i].id == "natureza_op_5")) {
           //console.log( 'entrei na validação dos op4 e op5' );
-          checarRadio.push( 'porte_op' );
+          checarRadio.push('porte_op');
         }
 
         break;
@@ -492,27 +492,27 @@ function validaFormulario( ) {
         //console.log( "checkbox" );
         //console.log( "--------validando " + y[ i ].name );
 
-        classe = y[ i ].classList.item( 0 );
+        classe = y[i].classList.item(0);
 
-        if ( classe == 'checkConcordo' ) {
-          if ( y[ i ].checked == false ) {
-            setarInvalido( y[ i ] );
+        if (classe == 'checkConcordo') {
+          if (y[i].checked == false) {
+            setarInvalido(y[i]);
             valid = false;
           }
         }
 
         // If específico para check_redes
-        if ( classe == 'check_redes' ) {
+        if (classe == 'check_redes') {
 
-          if ( !checarCheckbox.includes( classe ) ) {
-            checarCheckbox.push( classe );
+          if (!checarCheckbox.includes(classe)) {
+            checarCheckbox.push(classe);
           }
 
           // Se algum dos check de check_redes estiver marcado, os outros dele estarão abertos
-          if ( y[ i ].checked == true ) {
+          if (y[i].checked == true) {
 
             //console.log( 'entrei na validação do ' + y[ i ].id );
-            nomeRede = y[ i ].id.split( '_' )[ 1 ]; //pegar segundo nome
+            nomeRede = y[i].id.split('_')[1]; //pegar segundo nome
 
             checkClassificacao = 'check_classificacao_rede-de-' + nomeRede;
             checkPublico = 'check_publico_rede-de-' + nomeRede;
@@ -522,10 +522,10 @@ function validaFormulario( ) {
             // console.log( checkPublico );
             // console.log( checkAbrangencia );
 
-            if ( !checarCheckbox.includes( checkClassificacao ) ) {
-              checarCheckbox.push( checkClassificacao );
-              checarCheckbox.push( checkPublico );
-              checarCheckbox.push( checkAbrangencia );
+            if (!checarCheckbox.includes(checkClassificacao)) {
+              checarCheckbox.push(checkClassificacao);
+              checarCheckbox.push(checkPublico);
+              checarCheckbox.push(checkAbrangencia);
             }
           }
         }
@@ -533,8 +533,8 @@ function validaFormulario( ) {
         break;
 
       default:
-        console.log( "default" );
-        console.log( y[ i ].type );
+        console.log("default");
+        console.log(y[i].type);
         // code block
         break;
 
@@ -547,12 +547,12 @@ function validaFormulario( ) {
 
   //console.log( 'checarCheckbox' );
   //console.log( checarCheckbox );
-  for ( c = 0; c < checarRadio.length; c++ ) {
-    valid = validaFormularioRadio( x, currentTab, checarRadio[ c ], valid );
+  for (c = 0; c < checarRadio.length; c++) {
+    valid = validaFormularioRadio(x, currentTab, checarRadio[c], valid);
   }
 
-  for ( c = 0; c < checarCheckbox.length; c++ ) {
-    valid = validaFormularioCheckbox( x, currentTab, checarCheckbox[ c ], valid );
+  for (c = 0; c < checarCheckbox.length; c++) {
+    valid = validaFormularioCheckbox(x, currentTab, checarCheckbox[c], valid);
   }
 
   //console.log( "VALID depois da validaFormularioRadio: " + valid );
@@ -561,19 +561,19 @@ function validaFormulario( ) {
   /**
    * Checar Textarea (t)
    */
-  for ( i = 0; i < t.length; i++ ) {
+  for (i = 0; i < t.length; i++) {
 
-    requirido = t[ i ].getAttribute( "required" );
+    requirido = t[i].getAttribute("required");
     flagRequirido = false;
 
     // mesma lógica do ativo
-    if ( requirido === "" ) {
+    if (requirido === "") {
       flagRequirido = true;
     }
 
-    if ( flagRequirido ) {
-      if ( t[ i ].value == "" ) {
-        setarInvalido( t[ i ] );
+    if (flagRequirido) {
+      if (t[i].value == "") {
+        setarInvalido(t[i]);
         valid = false;
       }
     }
@@ -586,83 +586,83 @@ function validaFormulario( ) {
   return valid;
 }
 
-function validarEspecifico( name ) {
-  element = document.getElementById( name );
+function validarEspecifico(name) {
+  element = document.getElementById(name);
 
-  if ( name == "cnpjDaInstituicao" ) {
+  if (name == "cnpjDaInstituicao") {
 
     //console.log( "validar text cnpjDaInstituicao" );
     //console.log( IsCNPJ( element.value ) );
 
-    if ( !IsCNPJ( element.value ) ) {
-      mostrarAvisoValidacao( element, 'CNPJ' );
+    if (!IsCNPJ(element.value)) {
+      mostrarAvisoValidacao(element, 'CNPJ');
     } else {
-      ocultarAvisoValidacao( element );
+      ocultarAvisoValidacao(element);
     }
 
   }
 
-  if ( name == "urlDaInstituicao" ) {
+  if (name == "urlDaInstituicao") {
 
     //console.log( "validar text urlDaInstituicao" );
     //.log( IsURL( element.value ) );
 
-    if ( !IsURL( element.value ) ) {
-      mostrarAvisoValidacao( element, 'URL' );
+    if (!IsURL(element.value)) {
+      mostrarAvisoValidacao(element, 'URL');
     } else {
-      ocultarAvisoValidacao( element );
+      ocultarAvisoValidacao(element);
     }
 
   }
 
-  if ( element.type == "email" ) {
+  if (element.type == "email") {
 
-    if ( !IsEmail( element.value ) ) {
-      mostrarAvisoValidacao( element, 'E-mail' );
+    if (!IsEmail(element.value)) {
+      mostrarAvisoValidacao(element, 'E-mail');
     } else {
-      ocultarAvisoValidacao( element );
+      ocultarAvisoValidacao(element);
     }
 
   }
 
-  if ( element.type == "tel" ) {
+  if (element.type == "tel") {
 
-    if ( !element.checkValidity( ) ) {
-      mostrarAvisoValidacao( element, 'Telefone' );
+    if (!element.checkValidity()) {
+      mostrarAvisoValidacao(element, 'Telefone');
     } else {
-      ocultarAvisoValidacao( element );
+      ocultarAvisoValidacao(element);
     }
   }
 
 
 }
 
-function validaFormularioRadio( x, currentTab, classe, valid ) {
+function validaFormularioRadio(x, currentTab, classe, valid) {
 
   //console.log( "checando classe " + classe )
   var r, flag = false;
-  r = x[ currentTab ].getElementsByClassName( classe );
+  r = x[currentTab].getElementsByClassName(classe);
 
   //console.log( "tamanho de r (radio) " + r.length );
 
-  if ( r.length > 0 ) {
+  if (r.length > 0) {
 
     flag = false;
 
-    for ( i = 0; i < r.length; i++ ) {
-      if ( r[ i ].checked ) {
+    for (i = 0; i < r.length; i++) {
+      if (r[i].checked) {
         flag = true;
       }
     }
 
-    if ( !flag ) {
+    if (!flag) {
 
       //setarInvalido( r[ 0 ] );
 
       //for ( i = 0; i < r.length; i++ ) {
       // rodar o for ao inverso
-      for ( i = r.length - 1; i >= 0; i-- ) {
-        setarInvalido( r[ i ] );
+      for (i = r.length - 1; i >= 0; i--) {
+        setarInvalido(r[i]);
       }
 
       //r[ 0 ].className += " invalid";
@@ -675,28 +675,28 @@ function validaFormularioRadio( x, currentTab, classe, valid ) {
 }
 
 
-function validaFormularioCheckbox( x, currentTab, classe, valid ) {
+function validaFormularioCheckbox(x, currentTab, classe, valid) {
 
   //console.log( "checando classe " + classe )
   var r, flag = false;
-  r = x[ currentTab ].getElementsByClassName( classe );
+  r = x[currentTab].getElementsByClassName(classe);
 
   //console.log( "tamanho de r (checkbox) " + r.length );
 
-  if ( r.length > 0 ) {
+  if (r.length > 0) {
 
     flag = false;
 
-    for ( i = 0; i < r.length; i++ ) {
-      if ( r[ i ].checked ) {
+    for (i = 0; i < r.length; i++) {
+      if (r[i].checked) {
         flag = true;
       }
     }
 
-    if ( !flag ) {
+    if (!flag) {
 
-      for ( i = 0; i < r.length; i++ ) {
-        setarInvalido( r[ i ] );
+      for (i = 0; i < r.length; i++) {
+        setarInvalido(r[i]);
       }
 
       valid = false;
@@ -706,22 +706,22 @@ function validaFormularioCheckbox( x, currentTab, classe, valid ) {
   return valid;
 }
 
-function validaFormularioGeral( x, nome, flag, valid ) {
+function validaFormularioGeral(x, nome, flag, valid) {
   var r, y;
-  y = x[ currentTab ].getElementsByTagName( "input" );
-  for ( i = 0; i < y.length; i++ ) {
-    if ( y[ i ].name == nome ) {
-      if ( flag ) {
-        if ( !y[ i ].checkValidity( ) ) {
-          y[ i ].className += " invalid";
-          document.getElementById( y[ i ].name + "_label" ).style = "";
+  y = x[currentTab].getElementsByTagName("input");
+  for (i = 0; i < y.length; i++) {
+    if (y[i].name == nome) {
+      if (flag) {
+        if (!y[i].checkValidity()) {
+          y[i].className += " invalid";
+          document.getElementById(y[i].name + "_label").style = "";
           valid = false;
         }
       } else {
-        if ( y[ i ].value != "" ) {
-          if ( !y[ i ].checkValidity( ) ) {
-            y[ i ].className += " invalid";
-            document.getElementById( y[ i ].name + "_label" ).style = "";
+        if (y[i].value != "") {
+          if (!y[i].checkValidity()) {
+            y[i].className += " invalid";
+            document.getElementById(y[i].name + "_label").style = "";
             valid = false;
           }
         }
@@ -731,29 +731,29 @@ function validaFormularioGeral( x, nome, flag, valid ) {
   return valid;
 }
 
-function getValueRadio( radioElement ) {
-  if ( radioElement.length > 0 ) {
-    for ( i = 0; i < radioElement.length; i++ ) {
-      if ( radioElement[ i ].checked ) {
-        return radioElement[ i ].value;
+function getValueRadio(radioElement) {
+  if (radioElement.length > 0) {
+    for (i = 0; i < radioElement.length; i++) {
+      if (radioElement[i].checked) {
+        return radioElement[i].value;
       }
     }
   }
   return "";
 }
 
-function changeError( name ) {
-  setarValido( document.getElementById( name ) );
+function changeError(name) {
+  setarValido(document.getElementById(name));
 }
 
 
-function changeErrorRadio( name ) {
-  r = document.getElementsByClassName( name );
+function changeErrorRadio(name) {
+  r = document.getElementsByClassName(name);
 
-  if ( r.length > 0 ) {
+  if (r.length > 0) {
 
-    for ( i = 0; i < r.length; i++ ) {
-      setarValido( r[ i ] );
+    for (i = 0; i < r.length; i++) {
+      setarValido(r[i]);
     }
 
   }
@@ -763,157 +763,157 @@ function changeErrorRadio( name ) {
   // }
 }
 
-function changeErrorCheck( name ) {
+function changeErrorCheck(name) {
 
   //uso um element para pegar a classe
-  element = document.getElementById( name );
-  classe = element.classList.item( 0 ); //pegar a classe -> check_redes
+  element = document.getElementById(name);
+  classe = element.classList.item(0); //pegar a classe -> check_redes
   //console.log( classe );
 
   //agora sim, uso a classe pra fazer o que precis
-  r = document.getElementsByClassName( classe );
+  r = document.getElementsByClassName(classe);
 
-  if ( r.length > 0 ) {
+  if (r.length > 0) {
 
-    for ( i = 0; i < r.length; i++ ) {
-      setarValido( r[ i ] );
+    for (i = 0; i < r.length; i++) {
+      setarValido(r[i]);
     }
 
   }
 }
 
-function changeSelect( name ) {
-  if ( document.getElementById( name ).value == "Outro" ) {
-    document.getElementById( name + "outro" ).disabled = false;
-    document.getElementById( name + "outro" ).required = true;
-    document.getElementById( name + "outro" ).style = "";
-    document.getElementById( name + "outro" + "div" ).style = "";
+function changeSelect(name) {
+  if (document.getElementById(name).value == "Outro") {
+    document.getElementById(name + "outro").disabled = false;
+    document.getElementById(name + "outro").required = true;
+    document.getElementById(name + "outro").style = "";
+    document.getElementById(name + "outro" + "div").style = "";
   } else {
-    document.getElementById( name + "outro" ).disabled = true;
-    document.getElementById( name + "outro" ).required = false;
-    document.getElementById( name + "outro" ).style = "background-color: #bbbbbb;";
-    document.getElementById( name + "outro" ).value = "";
-    document.getElementById( name + "outro" + "div" ).style = "display: none;";
-    changeError( name + "outro" );
+    document.getElementById(name + "outro").disabled = true;
+    document.getElementById(name + "outro").required = false;
+    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
+    document.getElementById(name + "outro").value = "";
+    document.getElementById(name + "outro" + "div").style = "display: none;";
+    changeError(name + "outro");
   }
-  if ( document.getElementById( name + "_label" ) ) {
-    changeError( name )
+  if (document.getElementById(name + "_label")) {
+    changeError(name)
   }
 }
 
-function changeCheck( name ) {
-  if ( document.getElementById( name + "number" ).hasAttribute( "disabled" ) ) {
-    document.getElementById( name + "number" ).disabled = false;
-    document.getElementById( name + "number" ).required = true;
-    document.getElementById( name + "number" ).style = "";
+function changeCheck(name) {
+  if (document.getElementById(name + "number").hasAttribute("disabled")) {
+    document.getElementById(name + "number").disabled = false;
+    document.getElementById(name + "number").required = true;
+    document.getElementById(name + "number").style = "";
 
-    if ( document.getElementById( name + "outro" + "div" ) ) {
-      document.getElementById( name + "outro" + "div" ).style = "";
+    if (document.getElementById(name + "outro" + "div")) {
+      document.getElementById(name + "outro" + "div").style = "";
     }
   } else {
-    document.getElementById( name + "number" ).disabled = true;
-    document.getElementById( name + "number" ).required = false;
-    document.getElementById( name + "number" ).style = "background-color: #bbbbbb;";
-    document.getElementById( name + "number" ).value = "";
+    document.getElementById(name + "number").disabled = true;
+    document.getElementById(name + "number").required = false;
+    document.getElementById(name + "number").style = "background-color: #bbbbbb;";
+    document.getElementById(name + "number").value = "";
 
-    if ( document.getElementById( name + "outro" + "div" ) ) {
-      document.getElementById( name + "outro" + "div" ).style = "display: none;";
+    if (document.getElementById(name + "outro" + "div")) {
+      document.getElementById(name + "outro" + "div").style = "display: none;";
     }
   }
-  if ( document.getElementById( name + "_label" ) ) {
-    changeError( name )
+  if (document.getElementById(name + "_label")) {
+    changeError(name)
   }
-  if ( document.getElementById( name + "number_label" ) ) {
-    changeError( name + "number" )
+  if (document.getElementById(name + "number_label")) {
+    changeError(name + "number")
   }
 }
 
-function changeRadio( name ) {
-  if ( strcmp( getValueRadio( document.getElementsByName( name ) ), "Próprio" ) ) {
-    document.getElementById( name + "outro" ).disabled = false;
-    document.getElementById( name + "outro" ).required = true;
-    document.getElementById( name + "outro" ).style = "";
-    document.getElementById( name + "outro" + "div" ).style = "";
+function changeRadio(name) {
+  if (strcmp(getValueRadio(document.getElementsByName(name)), "Próprio")) {
+    document.getElementById(name + "outro").disabled = false;
+    document.getElementById(name + "outro").required = true;
+    document.getElementById(name + "outro").style = "";
+    document.getElementById(name + "outro" + "div").style = "";
   } else {
-    document.getElementById( name + "outro" ).disabled = true;
-    document.getElementById( name + "outro" ).required = false;
-    document.getElementById( name + "outro" ).style = "background-color: #bbbbbb;";
-    document.getElementById( name + "outro" ).value = "";
-    document.getElementById( name + "outro" + "div" ).style = "display: none;";
-    changeError( name + "outro" );
+    document.getElementById(name + "outro").disabled = true;
+    document.getElementById(name + "outro").required = false;
+    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
+    document.getElementById(name + "outro").value = "";
+    document.getElementById(name + "outro" + "div").style = "display: none;";
+    changeError(name + "outro");
   }
-  if ( document.getElementById( name + "_label" ) ) {
-    changeError( name )
+  if (document.getElementById(name + "_label")) {
+    changeError(name)
   }
 }
 
-function changeRadio2( name ) {
-  if ( strcmp( getValueRadio( document.getElementsByName( name ) ), "Outro" ) ) {
-    document.getElementById( name + "outro" ).disabled = true;
-    document.getElementById( name + "outro" ).required = false;
-    document.getElementById( name + "outro" ).style = "background-color: #bbbbbb;";
-    document.getElementById( name + "outro" ).value = "";
-    document.getElementById( name + "outro" + "div" ).style = "display: none;";
-    changeError( name + "outro" );
+function changeRadio2(name) {
+  if (strcmp(getValueRadio(document.getElementsByName(name)), "Outro")) {
+    document.getElementById(name + "outro").disabled = true;
+    document.getElementById(name + "outro").required = false;
+    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
+    document.getElementById(name + "outro").value = "";
+    document.getElementById(name + "outro" + "div").style = "display: none;";
+    changeError(name + "outro");
   } else {
-    document.getElementById( name + "outro" ).disabled = false;
-    document.getElementById( name + "outro" ).required = true;
-    document.getElementById( name + "outro" ).style = "";
-    document.getElementById( name + "outro" + "div" ).style = "";
+    document.getElementById(name + "outro").disabled = false;
+    document.getElementById(name + "outro").required = true;
+    document.getElementById(name + "outro").style = "";
+    document.getElementById(name + "outro" + "div").style = "";
   }
-  if ( document.getElementById( name + "_label" ) ) {
-    changeError( name )
+  if (document.getElementById(name + "_label")) {
+    changeError(name)
   }
 }
 
-function strcmp( a, b ) {
-  a = a.toString( ), b = b.toString( );
-  for ( var i = 0, n = Math.max( a.length, b.length ); i < n && a.charAt( i ) === b.charAt( i ); ++i )
-  ;
-  if ( i === n )
+function strcmp(a, b) {
+  a = a.toString(), b = b.toString();
+  for (var i = 0, n = Math.max(a.length, b.length); i < n && a.charAt(i) === b.charAt(i); ++i)
+    ;
+  if (i === n)
     return 0;
-  return a.charAt( i ) > b.charAt( i ) ? -1 : 1;
+  return a.charAt(i) > b.charAt(i) ? -1 : 1;
 }
 
-function changeNumber( name ) {
+function changeNumber(name) {
   var valor, min, max;
 
-  valor = parseInt( document.getElementById( name ).value );
-  min = parseInt( document.getElementById( name ).min );
-  max = parseInt( document.getElementById( name ).max );
+  valor = parseInt(document.getElementById(name).value);
+  min = parseInt(document.getElementById(name).min);
+  max = parseInt(document.getElementById(name).max);
 
-  if ( valor ) {
+  if (valor) {
     //para pegar só a parte inteira
-    document.getElementById( name ).value = valor;
+    document.getElementById(name).value = valor;
 
-    if ( valor < min ) {
-      document.getElementById( name ).value = min;
-    } else if ( valor > max ) {
-      document.getElementById( name ).value = max;
+    if (valor < min) {
+      document.getElementById(name).value = min;
+    } else if (valor > max) {
+      document.getElementById(name).value = max;
     }
   }
 
-  if ( document.getElementById( name + "_label" ) ) {
-    changeError( name )
+  if (document.getElementById(name + "_label")) {
+    changeError(name)
 
     //document.getElementById(name + "_label").style = "display: none;";
     //document.getElementById(name).classList.remove("invalid");
   }
 }
 
-function IsEmail( email ) {
-  if ( email == "" ) {
+function IsEmail(email) {
+  if (email == "") {
     return true;
   }
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test( email );
+  return re.test(email);
 }
 
-function IsURL( url ) {
-  if ( url == "" ) {
+function IsURL(url) {
+  if (url == "") {
     return true;
   } else {
-    if ( url.indexOf( "http://" ) == 0 || url.indexOf( "https://" ) == 0 ) {
+    if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) {
       return true;
     } else {
       return false;
@@ -921,12 +921,12 @@ function IsURL( url ) {
   }
 }
 
-function IsCPF( cpf ) {
-  cpf = cpf.replace( /[^\d]+/g, '' );
-  if ( cpf == '' )
+function IsCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf == '')
     return false;
   // Elimina CPFs invalidos conhecidos    
-  if ( cpf.length != 11 ||
+  if (cpf.length != 11 ||
     cpf == "00000000000" ||
     cpf == "11111111111" ||
     cpf == "22222222222" ||
@@ -936,92 +936,92 @@ function IsCPF( cpf ) {
     cpf == "66666666666" ||
     cpf == "77777777777" ||
     cpf == "88888888888" ||
-    cpf == "99999999999" )
+    cpf == "99999999999")
     return false;
   // Valida 1o digito 
   add = 0;
-  for ( i = 0; i < 9; i++ )
-    add += parseInt( cpf.charAt( i ) ) * ( 10 - i );
-  rev = 11 - ( add % 11 );
-  if ( rev == 10 || rev == 11 )
+  for (i = 0; i < 9; i++)
+    add += parseInt(cpf.charAt(i)) * (10 - i);
+  rev = 11 - (add % 11);
+  if (rev == 10 || rev == 11)
     rev = 0;
-  if ( rev != parseInt( cpf.charAt( 9 ) ) )
+  if (rev != parseInt(cpf.charAt(9)))
     return false;
   // Valida 2o digito 
   add = 0;
-  for ( i = 0; i < 10; i++ )
-    add += parseInt( cpf.charAt( i ) ) * ( 11 - i );
-  rev = 11 - ( add % 11 );
-  if ( rev == 10 || rev == 11 )
+  for (i = 0; i < 10; i++)
+    add += parseInt(cpf.charAt(i)) * (11 - i);
+  rev = 11 - (add % 11);
+  if (rev == 10 || rev == 11)
     rev = 0;
-  if ( rev != parseInt( cpf.charAt( 10 ) ) )
+  if (rev != parseInt(cpf.charAt(10)))
     return false;
   return true;
 }
 
 // https://gist.github.com/alexbruno/6623b5afa847f891de9cb6f704d86d02
-function IsCNPJ( value ) {
-  if ( !value ) return false
+function IsCNPJ(value) {
+  if (!value) return false
 
   // Aceita receber o valor como string, número ou array com todos os dígitos
   const isString = typeof value === 'string'
-  const validTypes = isString || Number.isInteger( value ) || Array.isArray( value )
+  const validTypes = isString || Number.isInteger(value) || Array.isArray(value)
 
   // Elimina valor em formato inválido
-  if ( !validTypes ) return false
+  if (!validTypes) return false
 
   // Filtro inicial para entradas do tipo string
-  if ( isString ) {
+  if (isString) {
     // Limita ao máximo de 18 caracteres, para CNPJ formatado
-    if ( value.length > 18 ) return false
+    if (value.length > 18) return false
 
     // Teste Regex para veificar se é uma string apenas dígitos válida
-    const digitsOnly = /^\d{14}$/.test( value )
-      // Teste Regex para verificar se é uma string formatada válida
-    const validFormat = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/.test( value )
+    const digitsOnly = /^\d{14}$/.test(value)
+    // Teste Regex para verificar se é uma string formatada válida
+    const validFormat = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/.test(value)
 
     // Se o formato é válido, usa um truque para seguir o fluxo da validação
-    if ( digitsOnly || validFormat ) true
-      // Se não, retorna inválido
+    if (digitsOnly || validFormat) true
+    // Se não, retorna inválido
     else return false
   }
 
   // Guarda um array com todos os dígitos do valor
-  const match = value.toString( ).match( /\d/g )
-  const numbers = Array.isArray( match ) ? match.map( Number ) : [ ]
+  const match = value.toString().match(/\d/g)
+  const numbers = Array.isArray(match) ? match.map(Number) : []
 
   // Valida a quantidade de dígitos
-  if ( numbers.length !== 14 ) return false
+  if (numbers.length !== 14) return false
 
   // Elimina inválidos com todos os dígitos iguais
-  const items = [ ...new Set( numbers ) ]
-  if ( items.length === 1 ) return false
+  const items = [...new Set(numbers)]
+  if (items.length === 1) return false
 
   // Cálculo validador
-  const calc = ( x ) => {
-    const slice = numbers.slice( 0, x )
+  const calc = (x) => {
+    const slice = numbers.slice(0, x)
     let factor = x - 7
     let sum = 0
 
-    for ( let i = x; i >= 1; i-- ) {
-      const n = slice[ x - i ]
+    for (let i = x; i >= 1; i--) {
+      const n = slice[x - i]
       sum += n * factor--
-        if ( factor < 2 ) factor = 9
+      if (factor < 2) factor = 9
     }
 
-    const result = 11 - ( sum % 11 )
+    const result = 11 - (sum % 11)
 
     return result > 9 ? 0 : result
   }
 
   // Separa os 2 últimos dígitos de verificadores
-  const digits = numbers.slice( 12 )
+  const digits = numbers.slice(12)
 
   // Valida 1o. dígito verificador
-  const digit0 = calc( 12 )
-  if ( digit0 !== digits[ 0 ] ) return false
+  const digit0 = calc(12)
+  if (digit0 !== digits[0]) return false
 
   // Valida 2o. dígito verificador
-  const digit1 = calc( 13 )
-  return digit1 === digits[ 1 ]
+  const digit1 = calc(13)
+  return digit1 === digits[1]
 }

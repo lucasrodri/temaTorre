@@ -284,7 +284,7 @@ function cadastro_form_render()
                                         </button>
                                     </div>
                                     <div class="col-md-6 align-button-left">
-                                        <input type="submit" class="br-button primary" value="Concluir" name="enviar">
+                                        <input id="btn_enviar" type="submit" class="br-button primary" value="Concluir" name="enviar">
                                         <!-- <div id='loading_submit' class="loading medium" style='display:none;'></div> -->
                                     </div>
                                 </div>
@@ -300,7 +300,8 @@ function cadastro_form_render()
 }
 
 
-function cadastro_redes_render($rede_nome, $entrada = "") {
+function cadastro_redes_render($rede_nome, $entrada = "")
+{
     $title = get_options($rede_nome)[0];
     $opcoes = get_options($rede_nome)[1];
     $publicos = get_options($rede_nome)[2];
@@ -325,7 +326,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> <?php if (contem(valida($entrada, 'fld_8777940'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> <?php if (contem(valida($entrada, 'fld_8777940'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -336,7 +337,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mb-3">
         <div class="br-input" style="display:none;">
             <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6678080'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6678080'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
         </div>
     </div>
 
@@ -345,7 +346,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_4665383'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_4665383'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
                 <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($publicos) - 1) echo '<br>'; ?>
             </div>
@@ -357,7 +358,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
             <div class="br-checkbox d-inline">
-                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_2391778'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_2391778'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($abrangencia) - 1) echo '<br>'; ?>
             </div>
@@ -371,21 +372,21 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mb-3">
         <div class="br-input">
             <label for="nomeCompleto_<?php echo $rede_nome; ?>">Nome completo<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6140408'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6140408'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="emailRepresentante_<?php echo $rede_nome; ?>">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_7130000'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_7130000'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_5051662'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_5051662'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?> />
         </div>
     </div>
 
@@ -593,18 +594,19 @@ function cadastro_action_form()
 
         // Criar o usuário
         $password = wp_generate_password();
-        $username = strtolower(explode("@", $emailDoCandidato)[0]) . gerar_numeros_aleatorios();
+        $username = str_replace(".", "", str_replace("@", "", strtolower($emailDoCandidato))) . gerar_numeros_aleatorios();
         $first_name = explode(" ", $nomeDoCandidato)[0];
         $last_name = implode(" ", array_slice(explode(" ", $nomeDoCandidato), 1));
 
         $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
 
-        /* if ($usuario_id == 0){
-            // redirecionar para uma página de erro
-            wp_redirect( home_url() );
+        // Não deve entrar nesse if pq agora tem verificação no frontend, mas VAI QUE
+        if ($usuario_id == 0) {
+            // redirecionar para a página de erro
+            wp_redirect(home_url('/erro'));
             //wp_redirect(get_permalink( 13832 ));
             exit;
-        } */
+        }
 
         //funcao para criar a entrada no Caldera (Form geral)
         insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
@@ -634,7 +636,12 @@ function cadastro_action_form()
             }
         }
 
-        //envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
+        envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
+
+        // redirecionar para a página de sucesso
+        wp_redirect(esc_url(home_url('/sucesso')));
+        //wp_redirect(get_permalink( 13832 ));
+        exit;
     } //end do if de enviar
 }
 add_action('admin_post_nopriv_cadastro_candidato', 'cadastro_action_form');
@@ -824,4 +831,28 @@ function upload_documento($documento, $usuario, $n)
     wp_update_attachment_metadata($attach_id, $attach_data);
 
     return wp_get_attachment_url($attach_id);
+}
+
+// Função para checar email
+// https://stackoverflow.com/questions/70497437/check-if-email-exists-in-wordpress-through-ajax-on-html-form-submision
+add_action('wp_ajax_email_exists_check', 'email_exists_check');
+add_action('wp_ajax_nopriv_email_exists_check', 'email_exists_check');
+
+function email_exists_check()
+{
+
+    if (isset($_POST['email'])) {
+        // Sanitize your input.
+        $email = sanitize_text_field(wp_unslash($_POST['email']));
+        // do check.
+        if (email_exists($email)) {
+            $response = true;
+        } else {
+            $response = false;
+        }
+        // send json and exit.
+        wp_send_json($response);
+    }
+
+    die();
 }

@@ -86,7 +86,7 @@ function candidato_view()
                 </li>
                 <?php for ($i = 2; $i < count(explode(";", $redes)) + 1; $i++) : ?>
                     <li class="tab-item">
-                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $redes)[$i - 2])[2]?></span></button>
+                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $redes)[$i - 2])[2] ?></span></button>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -124,7 +124,7 @@ function render_geral_data($entrada)
         <div class="mb-3">
             <div class="br-input">
                 <label for="nomeDaInstituicao">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_266564'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_266564'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
 
@@ -145,15 +145,15 @@ function render_geral_data($entrada)
                 <label for="natureza_op_2">Instituição pública estadual</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública municipal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública municipal")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública municipal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública municipal")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="natureza_op_3">Instituição pública municipal</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada com fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada com fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada com fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada com fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada sem fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada sem fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada sem fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada sem fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
                 <br>
             </div>
@@ -162,23 +162,23 @@ function render_geral_data($entrada)
         <div class="mb-3 radio-slave" <?php if (valida($entrada, 'fld_7125239') == "") echo 'style="display:none;"' ?>>
             <p class="label mb-3">Porte da instituição privada<span class="field_required" style="color:#ee0000;">*</span></p>
             <div class="br-radio">
-                <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
                 <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões</label>
                 <br>
             </div>
@@ -187,7 +187,7 @@ function render_geral_data($entrada)
         <div class="mt-3 mb-3">
             <div class="br-input">
                 <label for="cnpjDaInstituicao">CNPJ<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_3000518'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_3000518'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
 
@@ -200,7 +200,7 @@ function render_geral_data($entrada)
         <div class="mt-3 mb-3">
             <div class="br-input">
                 <label for="urlDaInstituicao">Página da internet<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1962476'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1962476'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
         <!-- Marca e Uploads -->
@@ -227,14 +227,14 @@ function render_geral_data($entrada)
         <div class="mb-3">
             <div class="br-input">
                 <label for="nomeDoCandidato">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="nomeDoCandidato" name="nomeDoCandidato" type="text" placeholder="Nome completo" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_1333267'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="nomeDoCandidato" name="nomeDoCandidato" type="text" placeholder="Nome completo" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_1333267'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
 
         <div class="mb-3">
             <div class="br-input">
                 <label for="emailDoCandidato">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>/>
+                <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
         <div class="row mt-5">

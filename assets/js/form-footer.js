@@ -59,7 +59,7 @@ function retornaPainelAtivo() {
 
 jQuery(document).ready(function ($) {
 
-  //colocando um if para não dá erros em outras páginas
+  //colocando um if para não dar erros em outras páginas
   if (document.getElementById('cadastro_wizard')) {
     // começa chamando a primeira altura
     arrumaTamanhoJanela(0);
@@ -124,8 +124,9 @@ jQuery(document).ready(function ($) {
     $(this).mask("(00) 0000-00009");
   });
 
-  //colocando um if para não dá erros em outras páginas
+  //colocando um if para não dar erros em outras páginas
   if (document.getElementById('cadastro_wizard') || document.getElementById('radio_function')) {
+
     /**
      * Controle do Input Radio no Passo 2
      */
@@ -157,6 +158,7 @@ jQuery(document).ready(function ($) {
   }
 
   if (document.getElementById('cadastro_wizard')) {
+
     /**
      * Controle do Input Checkbox no Passo 3
      */
@@ -190,9 +192,10 @@ jQuery(document).ready(function ($) {
       arrumaTamanhoJanela(2);
 
     });
+
     /**
-    * Controle do Input File no passo 4
-    */
+     * Controle do Input File no passo 4
+     */
     const fileMaster = document.querySelector(".upload-inputs");
     //console.log( fileMaster );
     fileMaster.addEventListener("change", e => {
@@ -204,6 +207,68 @@ jQuery(document).ready(function ($) {
 
     });
   }
+
+  /**
+   * Validação do Email do Candidato no passo 5
+   * Seta o disabled do botão de envio caso o email esteja inválido ou já exista na base
+   */
+  $("#emailDoCandidato").focusout(function () {
+    //console.log('chamando focusout')
+
+    element = $('#emailDoCandidato')[0];
+    email = $('#emailDoCandidato').val(); //email
+
+    if (IsEmail(email)) {
+
+      $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: my_ajax_object.ajax_url,
+        data: {
+          email: email,
+          action: 'email_exists_check',
+        }
+      })
+        .done(function (data) {
+          if (data === true) {
+            // mostra aviso de erro
+            $(element.parentElement).append('<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Esse e-mail já existe na base</span>');
+            $("#btn_enviar")[0].setAttribute("disabled", "true");
+          } else {
+            $("#btn_enviar")[0].removeAttribute("disabled");
+          }
+        });
+
+    } else {
+      console.log('E-mail inválido');
+      $("#btn_enviar")[0].setAttribute("disabled", "true");
+    }
+
+  });
+
+  /**
+   * Inclusão de loading ao submeter
+   */
+  $(document).on("submit", "form.card", function (e) {
+
+    //console.log('entrei no onSubmit ');
+
+    var filterVal = 'blur(5px)';
+
+    $('<div/>', {
+      'class': 'loading medium',
+      'style': 'display: contents;',
+    }).insertAfter($('#cadastro_wizard'));
+
+    $('#cadastro_wizard')
+      .css('filter', filterVal)
+      .css('webkitFilter', filterVal)
+      .css('mozFilter', filterVal)
+      .css('oFilter', filterVal)
+      .css('msFilter', filterVal);
+
+  });
+
 
 });
 
