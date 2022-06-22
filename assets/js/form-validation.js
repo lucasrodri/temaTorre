@@ -344,6 +344,17 @@ function validaFormulario() {
           }
         }
 
+
+        if (y[i].name == "cepDaInstituicao") {
+
+          if (!y[i].checkValidity()) {
+            valid = false;
+            mostrarAvisoValidacao(y[i], 'CEP');
+          } else {
+            ocultarAvisoValidacao(y[i]);
+          }
+        }
+
         break;
 
       case "email":
@@ -614,6 +625,16 @@ function validarEspecifico(name) {
     }
 
   }
+
+  if (name == "cepDaInstituicao") {
+
+    if (!element.checkValidity()) {
+      mostrarAvisoValidacao(element, 'CEP');
+    } else {
+      ocultarAvisoValidacao(element);
+    }
+  }
+
 
   if (element.type == "email") {
 

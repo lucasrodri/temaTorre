@@ -143,6 +143,72 @@ function cadastro_form_render()
                                         </div>
                                     </div>
 
+                                    <h4>Endereço</h4>
+
+                                    <div class="mb-3">
+                                        <div class="br-input">
+                                            <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
+                                            <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required />
+                                        </div>
+
+                                        <div class="br-input">
+                                            <label for="complementoDaInstituicao">Complemento</label>
+                                            <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" />
+                                        </div>
+
+                                        <div class="br-select">
+                                            <div class="br-input">
+                                                <label for="estadoDaInstituicao">Estado</label>
+                                                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
+                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <div class="br-list" tabindex="0">
+                                                <div class="br-item" tabindex="-1">
+                                                    <div class="br-radio">
+                                                        <input id="estado0" type="radio" name="estados-simples" value="estado0" />
+                                                        <label for="estado0">estado 1</label>
+                                                    </div>
+                                                </div>
+                                                <div class="br-item" tabindex="-1">
+                                                    <div class="br-radio">
+                                                        <input id="estado1" type="radio" name="estados-simples" value="estado1" />
+                                                        <label for="estado1">estado 2</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="br-select">
+                                            <div class="br-input">
+                                                <label for="cidadeDaInstituicao">Cidade</label>
+                                                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required />
+                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <div class="br-list" tabindex="0">
+                                                <div class="br-item" tabindex="-1">
+                                                    <div class="br-radio">
+                                                        <input id="cidade0" type="radio" name="cidades-simples" value="rb0" />
+                                                        <label for="cidade0">cidade 1</label>
+                                                    </div>
+                                                </div>
+                                                <div class="br-item" tabindex="-1">
+                                                    <div class="br-radio">
+                                                        <input id="cidade1" type="radio" name="cidades-simples" value="cidade1" />
+                                                        <label for="cidade1">cidade 2</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="br-input">
+                                            <label for="cepDaInstituicao">CEP<span class="field_required" style="color:#ee0000;">*</span></label>
+                                            <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" 
+                                            maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="wizard-panel-btn">
@@ -501,6 +567,17 @@ function cadastro_action_form()
     if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
     else $urlDaInstituicao = "";
 
+    if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
+    else $enderecoDaInstituicao = "";
+    if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
+    else $complementoDaInstituicao = "";
+    if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
+    else $estadoDaInstituicao = "";
+    if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
+    else $cidadeDaInstituicao = "";
+    if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
+    else $cepDaInstituicao = "";
+
     //Redes checkbox
     $redes = "";
     if (isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
@@ -609,7 +686,7 @@ function cadastro_action_form()
         }
 
         //funcao para criar a entrada no Caldera (Form geral)
-        insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
+        insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
 
         //REMOVER ESSE RETURN QUANDO TERMINAR AS FUNCOES ABAIXO
         //return;
@@ -697,7 +774,7 @@ function create_new_user($username, $password, $email_address, $first_name, $las
     return 0;
 }
 
-function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $statusGeral = "avaliacao",  $status = "avaliacao", $parecer = "", $historico = "")
+function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id = 0, $statusGeral = "avaliacao",  $status = "avaliacao", $parecer = "", $historico = "")
 {
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
@@ -722,7 +799,15 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3000518', $cnpjDaInstituicao));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2471360', $CNAEDaInstituicao));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1962476', $urlDaInstituicao));
+
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3971477', $enderecoDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_937636', $complementoDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1588802', $estadoDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2343542', $cidadeDaInstituicao));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1936573', $cepDaInstituicao));
+
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4891375', $redes));
+    
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5438248', $doc1UnidadeUrl));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9588438', $doc2UnidadeUrl));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));

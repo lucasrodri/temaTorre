@@ -118,7 +118,7 @@ jQuery(document).ready(function ($) {
   //$("#celDaUnidade").mask("(00) 0000-00009");
   //$("#cpfDoGestor").mask("999.999.999-99");
   $("#cnpjDaInstituicao").mask("99.999.999/9999-99");
-  //$("#cepDaUnidade").mask("00000-000");
+  $("#cepDaInstituicao").mask("00000-000");
 
   $("input[type='tel']").each(function (index) {
     $(this).mask("(00) 0000-00009");

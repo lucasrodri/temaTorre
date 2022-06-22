@@ -53,7 +53,7 @@ function candidato_view()
             </colgroup>
             <thead>
                 <tr>
-                    <th scope="col">Data</th>
+                    <th scope="col">Data de submissão</th>
                     <th scope="col">Nome da Instituição</th>
                     <th scope="col">Status</th>
                 </tr>
@@ -203,12 +203,50 @@ function render_geral_data($entrada)
                 <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1962476'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
             </div>
         </div>
+
+
+        <h4>Endereço</h4>
+        <div class="mb-3">
+            <div class="br-input">
+                <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
+                <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_3971477'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+            </div>
+
+            <div class="br-input">
+                <label for="complementoDaInstituicao">Complemento</label>
+                <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_937636'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+            </div>
+
+            <div class="br-input">
+                <label for="estadoDaInstituicao">Estado</label>
+                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_1588802'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+            </div>
+
+            <div class="br-input">
+                <label for="cidadeDaInstituicao">Cidade</label>
+                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_2343542'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+            </div>
+
+            <div class="br-input">
+                <label for="cepDaInstituicao">CEP<span class="field_required" style="color:#ee0000;">*</span></label>
+                <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1936573'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+            </div>
+        </div>
+
+
         <!-- Marca e Uploads -->
         <div class="h3">Logo e Guia de Uso de Marca</div>
         <!-- <div class="text my-text-wizard" tabindex="0">Conteúdo aqui</div> -->
         <div class="mt-3 mb-3">
             <div class="br-input">
                 <label for="urlDaInstituicao">Logo<span class="field_required" style="color:#ee0000;">*</span></label><br>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="br-card">
+                        <div class="card-content"><img src="<?php echo valida($entrada, 'fld_5438248') ?>" alt="Logo" /></div>
+                    </div>
+                </div>
+
                 <a href="<?php echo valida($entrada, 'fld_5438248') ?>" target="_blank"><?php echo valida($entrada, 'fld_5438248') ?></a>
                 <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p>
             </div>
@@ -220,6 +258,8 @@ function render_geral_data($entrada)
                 <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p>
             </div>
         </div>
+
+
         <!-- Dados de contato -->
         <h4>Dados de contato</h4>
         <p>Informe os dados de contato para receber a cópia dos dados registrados no cadastro das informações da instituição para publicação na Torre MCTI</p>
