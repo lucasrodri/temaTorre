@@ -312,12 +312,12 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
 
     <div class="br-textarea mb-3">
         <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_605717'); ?>"><?php echo valida($entrada, 'fld_605717'); ?></textarea>
+        <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_605717'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>><?php echo valida($entrada, 'fld_605717'); ?></textarea>
     </div>
 
     <div class="br-textarea mb-3">
         <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_4486725'); ?>"><?php echo valida($entrada, 'fld_4486725'); ?></textarea>
+        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_4486725'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>><?php echo valida($entrada, 'fld_4486725'); ?></textarea>
     </div>
 
     <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -325,7 +325,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($opcoes as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> <?php if (contem(valida($entrada, 'fld_8777940'), $value)) echo "checked"; ?> />
+                <input id="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_classificacao_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if ($key == count($opcoes) - 1) echo 'onclick="controleOutroClassificacao(id)"'; ?> <?php if (contem(valida($entrada, 'fld_8777940'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
                 <label for="check_classificacao_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($opcoes) - 1) echo '<br>'; ?>
             </div>
@@ -336,7 +336,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mb-3">
         <div class="br-input" style="display:none;">
             <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6678080'); ?>" />
+            <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6678080'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
         </div>
     </div>
 
@@ -345,7 +345,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($publicos as $key => $value) { ?>
             <div class="br-checkbox">
-                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_4665383'), $value)) echo "checked"; ?>/>
+                <input id="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_publico_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_4665383'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
                 <label for="check_publico_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($publicos) - 1) echo '<br>'; ?>
             </div>
@@ -357,7 +357,7 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mt-3 mb-1">
         <?php foreach ($abrangencia as $key => $value) { ?>
             <div class="br-checkbox d-inline">
-                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_2391778'), $value)) echo "checked"; ?>/>
+                <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_2391778'), $value)) echo "checked"; ?> <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
                 <label for="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>"><?php echo $value; ?></label>
                 <?php if ($key == count($abrangencia) - 1) echo '<br>'; ?>
             </div>
@@ -371,21 +371,21 @@ function cadastro_redes_render($rede_nome, $entrada = "") {
     <div class="mb-3">
         <div class="br-input">
             <label for="nomeCompleto_<?php echo $rede_nome; ?>">Nome completo<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6140408'); ?>"/>
+            <input id="nomeCompleto_<?php echo $rede_nome; ?>" name="nomeCompleto_<?php echo $rede_nome; ?>" type="text" placeholder="Nome completo" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6140408'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="emailRepresentante_<?php echo $rede_nome; ?>">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_7130000'); ?>"/>
+            <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_7130000'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
         </div>
     </div>
 
     <div class="mb-3">
         <div class="br-input">
             <label for="telefoneRepresentante_<?php echo $rede_nome; ?>">Telefone<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_5051662'); ?>"/>
+            <input id="telefoneRepresentante_<?php echo $rede_nome; ?>" name="telefoneRepresentante_<?php echo $rede_nome; ?>" type="tel" placeholder="(99) 9999-9999" pattern="\(\d{2}\)[\s]?\d{4}[-\s]?\d{4,5}" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_5051662'); ?>" <?php if (valida($entrada, 'fld_3707629') == "avaliacao") echo "disabled"; ?>/>
         </div>
     </div>
 
