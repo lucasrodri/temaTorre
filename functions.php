@@ -1397,6 +1397,7 @@ function sm_pre_get_posts( $query ) {
 }
 add_action( 'pre_get_posts', 'sm_pre_get_posts', 1 );
 
+include "criar-tabelas.php";
 include "functions-cadastro.php";
 include "functions-email.php";
 include "functions-candidato.php";

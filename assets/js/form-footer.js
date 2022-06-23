@@ -273,6 +273,65 @@ jQuery(document).ready(function ($) {
 });
 
 
+/**
+ * Controle do carregaCidade para a seleção de estados
+ */
+
+var selectAberto = 0;
+
+function carregaCidade(id) {
+
+  console.log("chamei com o id " + id);
+
+  // var elementoSelect = document.getElementById('selectEstado'+id);
+  // elementoSelect.style = "display: block;";
+
+  if (selectAberto != id) {
+
+    // esconde o select que estava aberto
+    if (selectAberto != 0) {
+    var elementoSelect = document.getElementById('selectEstado' + selectAberto);
+    elementoSelect.style = "display: none;";
+    }
+
+    // mostra o novo select
+    var elementoSelect = document.getElementById('selectEstado' + id);
+    elementoSelect.style = "display: block;";
+
+    //seta o novo valor de selectAberto
+    selectAberto = id;
+  }
+
+
+  // jQuery(function ($) {
+  //   $.ajax({
+  //     type: "POST",
+  //     url: my_ajax_object.ajax_url,
+  //     data: {
+  //       action: 'carrega_cidade',
+  //       id: id
+  //     },
+  //     beforeSend: function () {
+  //       $('#loading_cidade').css('display', 'contents');
+  //       //console.log("entrei no before");
+  //     },
+  //     success: function (html) {
+  //       //console.log("sucess!");
+  //       $('#cidadeDaInstituicao')[0].removeAttribute("disabled");
+  //       $('#cidadeDaInstituicaoButton')[0].removeAttribute("disabled");
+  //       $('#cidadeDaInstituicaoOpcoes').html(html);
+  //       $('#loading_cidade').css('display', 'none');
+  //     }
+  //   });
+  // });
+}
+
+function setarValorCidade(value) {
+  console.log('chamei esse aqui com value ' + value);
+  document.getElementById('cidadeDaInstituicao').value = value;
+  console.log(document.getElementById('cidadeDaInstituicao').value);
+}
+
 function controleOutroClassificacao(id) {
 
   //console.log( "cliquei em " + id );

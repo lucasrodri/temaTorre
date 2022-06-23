@@ -146,6 +146,23 @@ function cadastro_form_render()
                                     <h4>Endereço</h4>
 
                                     <div class="mb-3">
+
+                                        <div class="br-select">
+                                            <div class="br-input">
+                                                <label for="estadoDaInstituicao">Estado</label>
+                                                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
+                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <?php echo carrega_estados() ?>
+                                        </div>
+
+                                        <?php echo carrega_selects_cidades() ?>
+
+                                        <div class="br-input">
+                                            <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />
+                                        </div>
+
                                         <div class="br-input">
                                             <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
                                             <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required />
@@ -156,59 +173,12 @@ function cadastro_form_render()
                                             <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" />
                                         </div>
 
-                                        <div class="br-select">
-                                            <div class="br-input">
-                                                <label for="estadoDaInstituicao">Estado</label>
-                                                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
-                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
-                                                </button>
-                                            </div>
-                                            <div class="br-list" tabindex="0">
-                                                <div class="br-item" tabindex="-1">
-                                                    <div class="br-radio">
-                                                        <input id="estado0" type="radio" name="estados-simples" value="estado0" />
-                                                        <label for="estado0">estado 1</label>
-                                                    </div>
-                                                </div>
-                                                <div class="br-item" tabindex="-1">
-                                                    <div class="br-radio">
-                                                        <input id="estado1" type="radio" name="estados-simples" value="estado1" />
-                                                        <label for="estado1">estado 2</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="br-select">
-                                            <div class="br-input">
-                                                <label for="cidadeDaInstituicao">Cidade</label>
-                                                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required />
-                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
-                                                </button>
-                                            </div>
-                                            <div class="br-list" tabindex="0">
-                                                <div class="br-item" tabindex="-1">
-                                                    <div class="br-radio">
-                                                        <input id="cidade0" type="radio" name="cidades-simples" value="rb0" />
-                                                        <label for="cidade0">cidade 1</label>
-                                                    </div>
-                                                </div>
-                                                <div class="br-item" tabindex="-1">
-                                                    <div class="br-radio">
-                                                        <input id="cidade1" type="radio" name="cidades-simples" value="cidade1" />
-                                                        <label for="cidade1">cidade 2</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="br-input">
                                             <label for="cepDaInstituicao">CEP<span class="field_required" style="color:#ee0000;">*</span></label>
-                                            <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" 
-                                            maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
+                                            <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="wizard-panel-btn">
@@ -807,7 +777,7 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1936573', $cepDaInstituicao));
 
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4891375', $redes));
-    
+
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5438248', $doc1UnidadeUrl));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9588438', $doc2UnidadeUrl));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1333267', $nomeDoCandidato));
@@ -940,4 +910,156 @@ function email_exists_check()
     }
 
     die();
+}
+
+/**
+ * Funções para os Selects de Estado e Cidade
+ */
+
+function carrega_estados()
+{
+    // Função que carrega o estado enquanto a página carrega
+
+    global $wpdb;
+    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    //$estados = $wpdb->get_col($sql);
+    $estados = $wpdb->get_results($sql);
+
+    echo '<div class="br-list" tabindex="0">';
+    //check if array is empty
+    if (!empty($estados)) {
+
+        foreach ($estados as $item) {
+            echo '<div class="br-item" tabindex="-1">';
+            echo '<div class="br-radio">';
+            echo '<input id="' . $item->codigo_uf . '" type="radio" name="estados-simples" onchange="carregaCidade(id)" value="' . $item->nome . '" />';
+            echo '<label for="' . $item->codigo_uf . '">' . $item->nome . '</label>';
+            echo '</div></div>';
+        }
+    } else {
+        echo '<option value="">Estado não disponível</option>';
+    }
+    echo '</div>';
+}
+
+function carrega_cidade()
+{
+    // Função que não funcionou, DSGOV não consegue fazer o select se ele for gerado depois que a página carregou 
+
+    /*
+	* Função que gera um select html com as cidades do estado escolhido
+	*
+	* Função chamada pelo Javascript JS
+	*/
+
+    $id = (isset($_POST['id'])) ? $_POST['id'] : '';
+
+    if (empty($id))
+        return;
+
+    $estadoUnidade = $_POST["id"];
+
+    global $wpdb;
+    $sql = "SELECT codigo_ibge, nome FROM wp_tematorre_municipios WHERE codigo_uf=\"" . $estadoUnidade . "\" order by nome;";
+    //$cidades = $wpdb->get_col($sql);
+    $cidades = $wpdb->get_results($sql);
+
+    // echo '<div class="br-list" tabindex="0">';
+    //check if array is empty
+
+    // echo '<div class="br-select">';
+    // echo '<div class="br-input">';
+    // echo '<label for="cidadeDaInstituicao">Cidade</label>';
+    // echo '<input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" required />';
+    // echo '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
+    // echo '</button>';
+    // echo '</div>';
+    // echo '<div class="br-list" tabindex="0">';
+
+    if (!empty($cidades)) {
+        $count = 1;
+
+        foreach ($cidades as $item) {
+            echo '<div class="br-item" tabindex="-1">';
+            echo '<div class="br-radio">';
+            echo '<input id="meuid' . $count . '" type="radio" name="cidades-simples" value="' . $item->nome . '" />';
+            echo '<label for="meuid' . $count . '">' . $item->nome . '</label>';
+            echo '</div></div>';
+
+            $count += 1;
+        }
+    } else {
+        echo '<option value="">Cidade não disponível</option>';
+    }
+
+    // echo '</div>'; //br-list
+    // echo '</div>'; //br-select
+    die();
+}
+//add_action('wp_ajax_carrega_cidade', 'carrega_cidade');
+
+function retorna_nome_uf($codigoEstado)
+{
+    // Função para retornar o nome do estado a partir do cópdigp
+    global $wpdb;
+    $sql = "SELECT nome FROM wp_tematorre_estados WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $estados = $wpdb->get_col($sql);
+
+    if (!empty($estados)) {
+        return $estados[0];
+    }
+
+    return;
+}
+
+function carrega_selects_cidades()
+{
+    // Função que carrega o select de cidades para cada estado enquanto a página carrega
+
+    global $wpdb;
+    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    //$estados = $wpdb->get_col($sql);
+    $estados = $wpdb->get_results($sql);
+
+    //check if array is empty
+    if (!empty($estados)) {
+
+        foreach ($estados as $item) {
+            echo gera_select_cidade($item->codigo_uf);
+        }
+    }
+}
+
+function gera_select_cidade($codigoEstado)
+{
+    global $wpdb;
+    $sql = "SELECT codigo_ibge, nome FROM wp_tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $cidades = $wpdb->get_results($sql);
+
+    $estadoUnidade = retorna_nome_uf($codigoEstado);
+
+    $select = '';
+    $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select" style="display: none;">';
+    $select .=  '<div class="br-input">';
+    $select .=  '<label for="cidadeDaInstituicao' . $codigoEstado . '">Cidades de ' . $estadoUnidade . '</label>';
+    $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" />';
+    $select .=  '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
+    $select .=  '</button>';
+    $select .=  '</div>';
+    $select .=  '<div class="br-list" tabindex="0">';
+
+    if (!empty($cidades)) {
+        foreach ($cidades as $item) {
+            $select .=  '<div class="br-item" tabindex="-1">';
+            $select .=  '<div class="br-radio">';
+            $select .=  '<input id="' . $item->codigo_ibge . '" type="radio" name="cidades-simples" value="' . $item->nome . '" onchange="setarValorCidade(value)" />';
+            $select .=  '<label for="' . $item->codigo_ibge . '">' . $item->nome . '</label>';
+            $select .=  '</div></div>';
+        }
+    }
+
+    $select .=  '</div>'; //br-list
+    $select .=  '</div>'; //br-select
+
+    return $select;
 }
