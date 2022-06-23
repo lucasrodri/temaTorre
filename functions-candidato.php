@@ -8,12 +8,13 @@ add_shortcode('shortcode_candidato_view', 'candidato_view');
 
 function candidato_view()
 {
+    
     require_once(CFCORE_PATH . 'classes/admin.php');
     $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 10;
+    $usuario_id = 11;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -42,7 +43,6 @@ function candidato_view()
     $date = date('M d, Y', strtotime($entradas["date"]));
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
 ?>
-
     <div class="br-table mb-3">
         <div class="table-header"></div>
         <table>
