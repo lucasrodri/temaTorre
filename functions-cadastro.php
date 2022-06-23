@@ -150,7 +150,7 @@ function cadastro_form_render()
                                             <div class="col-md-6">
                                                 <div class="br-select max-width-torre">
                                                     <div class="br-input">
-                                                        <label for="estadoDaInstituicao">Estado</label>
+                                                        <label for="estadoDaInstituicao">Estado<span class="field_required" style="color:#ee0000;">*</span></label>
                                                         <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
                                                         <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
                                                         </button>
@@ -159,12 +159,21 @@ function cadastro_form_render()
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
+                                                <div class="br-input" id='cidadeDaInstituicaoInicioDiv'>
+                                                    <!-- Esse input só é usado para gerar o placeholder assim que a página é carregada -->
+                                                    <label for="cidadeDaInstituicaoInicio">Cidade<span class="field_required" style="color:#ee0000;">*</span></label>
+                                                    <input id="cidadeDaInstituicaoInicio" name="cidadeDaInstituicaoInicio" type="text" placeholder="Escolha um estado primeiro" onchange="changeError(name)" disabled required />
+                                                </div>
+
                                                 <?php echo carrega_selects_cidades() ?>
-                                            </div>
-                                            <div class="br-input">
-                                                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />
+
+                                                <div class="br-input">
+                                                    <!-- Esse input que realmente guarda o valor da cidadeDaInstituicao -->
+                                                    <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />
+                                                </div>
                                             </div>
                                         </div>
+
                                         <div class="br-input">
                                             <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
                                             <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required />
@@ -1025,7 +1034,6 @@ function carrega_selects_cidades()
 
     //check if array is empty
     if (!empty($estados)) {
-
         foreach ($estados as $item) {
             echo gera_select_cidade($item->codigo_uf);
         }
@@ -1043,8 +1051,8 @@ function gera_select_cidade($codigoEstado)
     $select = '';
     $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select max-width-torre" style="display: none;">';
     $select .=  '<div class="br-input">';
-    $select .=  '<label for="cidadeDaInstituicao' . $codigoEstado . '">Cidades de ' . $estadoUnidade . '</label>';
-    $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" />';
+    $select .=  '<label for="cidadeDaInstituicao' . $codigoEstado . '">Cidades de ' . $estadoUnidade . '<span class="field_required" style="color:#ee0000;">*</span></label>';
+    $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" disabled />';
     $select .=  '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
     $select .=  '</button>';
     $select .=  '</div>';

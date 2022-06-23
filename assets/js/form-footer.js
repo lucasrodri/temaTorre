@@ -281,7 +281,7 @@ var selectAberto = 0;
 
 function carregaCidade(id) {
 
-  console.log("chamei com o id " + id);
+  // console.log("chamei com o id " + id);
 
   // var elementoSelect = document.getElementById('selectEstado'+id);
   // elementoSelect.style = "display: block;";
@@ -290,13 +290,20 @@ function carregaCidade(id) {
 
     // esconde o select que estava aberto
     if (selectAberto != 0) {
-    var elementoSelect = document.getElementById('selectEstado' + selectAberto);
-    elementoSelect.style = "display: none;";
+      document.getElementById('selectEstado' + selectAberto).style = "display: none;";
+      document.getElementById('cidadeDaInstituicao' + selectAberto).setAttribute("disabled", "true");
+      document.getElementById('cidadeDaInstituicao' + selectAberto).removeAttribute("required");
+
+    } else {
+      // esconder o primeiro select criado
+      document.getElementById('cidadeDaInstituicaoInicioDiv').style = "display: none;";
+      document.getElementById('cidadeDaInstituicaoInicio').removeAttribute("required");
     }
 
     // mostra o novo select
-    var elementoSelect = document.getElementById('selectEstado' + id);
-    elementoSelect.style = "display: block;";
+    document.getElementById('selectEstado' + id).style = "display: block;";
+    document.getElementById('cidadeDaInstituicao' + id).removeAttribute("disabled");
+    document.getElementById('cidadeDaInstituicao' + id).setAttribute("required", "");
 
     //seta o novo valor de selectAberto
     selectAberto = id;
@@ -326,10 +333,11 @@ function carregaCidade(id) {
   // });
 }
 
+// Função chamada para setar o value do input hidden que vai guardar o valor da cidadeDaInstituicao
 function setarValorCidade(value) {
-  console.log('chamei esse aqui com value ' + value);
+  //console.log('chamei esse aqui com value ' + value);
   document.getElementById('cidadeDaInstituicao').value = value;
-  console.log(document.getElementById('cidadeDaInstituicao').value);
+  //console.log(document.getElementById('cidadeDaInstituicao').value);
 }
 
 function controleOutroClassificacao(id) {
