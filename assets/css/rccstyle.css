@@ -402,3 +402,7 @@
 .font-tab-torre button{
   font-size: 12pt !important;
 }
+
+.max-width-torre{
+  max-width: 100% !important;
+}

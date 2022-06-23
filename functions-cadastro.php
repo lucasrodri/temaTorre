@@ -146,23 +146,25 @@ function cadastro_form_render()
                                     <h4>Endereço</h4>
 
                                     <div class="mb-3">
-
-                                        <div class="br-select">
-                                            <div class="br-input">
-                                                <label for="estadoDaInstituicao">Estado</label>
-                                                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
-                                                <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
-                                                </button>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="br-select max-width-torre">
+                                                    <div class="br-input">
+                                                        <label for="estadoDaInstituicao">Estado</label>
+                                                        <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />
+                                                        <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                    <?php echo carrega_estados() ?>
+                                                </div>
                                             </div>
-                                            <?php echo carrega_estados() ?>
+                                            <div class="col-md-6">
+                                                <?php echo carrega_selects_cidades() ?>
+                                            </div>
+                                            <div class="br-input">
+                                                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />
+                                            </div>
                                         </div>
-
-                                        <?php echo carrega_selects_cidades() ?>
-
-                                        <div class="br-input">
-                                            <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />
-                                        </div>
-
                                         <div class="br-input">
                                             <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
                                             <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required />
@@ -1039,7 +1041,7 @@ function gera_select_cidade($codigoEstado)
     $estadoUnidade = retorna_nome_uf($codigoEstado);
 
     $select = '';
-    $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select" style="display: none;">';
+    $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select max-width-torre" style="display: none;">';
     $select .=  '<div class="br-input">';
     $select .=  '<label for="cidadeDaInstituicao' . $codigoEstado . '">Cidades de ' . $estadoUnidade . '</label>';
     $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" />';
