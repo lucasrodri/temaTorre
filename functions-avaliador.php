@@ -30,12 +30,10 @@ function avaliador_view()
             $entradas[$user_id][] = $umaEntrada['_date'];
         }
     }
-
-    //$date = date('M d, Y', strtotime($entradas["date"]));
-    //$redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
+    $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
 ?>
 
-    <div class="br-table mb-3">
+    <div class="br-table mb-5">
         <div class="table-header"></div>
         <table>
             <colgroup>
@@ -51,44 +49,27 @@ function avaliador_view()
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td data-th="Data">sds</td>
-                    <td data-th="Nome">dsds</td>
-                    <td data-th="Status">sdds</td>
-                </tr>
-                <tr>
-                    <td data-th="Data">sds</td>
-                    <td data-th="Nome">dsds</td>
-                    <td data-th="Status">sdds</td>
-                </tr>
-                <tr>
-                    <td data-th="Data">sds</td>
-                    <td data-th="Nome">dsds</td>
-                    <td data-th="Status">sdds</td>
-                </tr>
+                <?php foreach ($entradas as $key => $entrada) : ?>
+                    <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
+                    <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>');">
+                        <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
+                        <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
+                        <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_4899711')); ?></td>
+                    </tr>
+                <?php endforeach ?>
             </tbody>
         </table>
-        <!-- Rodapé -->
     </div>
 
-
-
-    <div id="edit-form-div-button" class="row mt-5 mb-5">
-        <div class="col-md-12 mr-4">
-            <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
-            <button class="br-button success mr-sm-3" type="button" onclick="carrega_avaliador()">Teste Ajax
-            </button>
-        </div>
-    </div>
-    <div id="edit-form-div" class="br-tab mt-5" style="">
+    <div id="edit-form-div" class="br-tab mt-5" style="display: none;">
         <nav class="tab-nav font-tab-torre">
             <ul>
                 <li class="tab-item active">
                     <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
                 </li>
-                <?php for ($i = 2; $i < 6; $i++) : ?>
-                    <li class="tab-item">
-                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name">TESTE</span></button>
+                <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                    <li class="tab-item" id="tab-item-<?php echo $i; ?>" style="display: none;">
+                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $todas_redes)[$i - 2])[2] ?></span></button>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -97,9 +78,18 @@ function avaliador_view()
             <div class="tab-panel active" id="panel-1">
                 <div id="tab_instituicao"></div>
             </div>
-            <?php for ($i = 2; $i < 6; $i++) : ?>
-                <div class="tab-panel" id="panel-<?php echo $i; ?>">
-                    <div id="tab_redes_<?php echo $i; ?>"></div>
+            <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                <div class="tab-panel" id="panel-<?php echo $i; ?>" style="display: none;">
+                    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+                        <div id="tab_redes_<?php echo $i; ?>"></div>
+                        <div class="row mt-5">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
+                                <!-- <div id='loading_submit' class="loading medium" style='display:none;'></div> -->
+                            </div>
+                        </div>
+                        <input type="hidden" name="action" value="atualiza_<?php echo relaciona(explode(";", $todas_redes)[$i - 2]); ?>">
+                    </form>
                 </div>
             <?php endfor; ?>
         </div>
@@ -109,10 +99,70 @@ function avaliador_view()
 
 
 
-function ajaxCarregaAvaliador()
+function ajaxCarregaInstituicao()
 {
-    // candidato_view();
+    $usuario_id = ( isset( $_POST['usuario_id'] ) ) ? $_POST['usuario_id'] : '';
+    require_once(CFCORE_PATH . 'classes/admin.php');
+    $entradas = array();
 
+
+    $data = Caldera_Forms_Admin::get_entries(FORM_ID_GERAL, 1, 9999999);
+    $ativos = $data['active'];
+
+    if ($ativos > 0) {
+        $todasEntradas = $data['entries'];
+
+        foreach ($todasEntradas as $umaEntrada) {
+            $user_id = $umaEntrada['user']['ID'];
+
+            if ($user_id == $usuario_id) {
+
+                $entrada = $umaEntrada['_entry_id'];
+                $form = Caldera_Forms_Forms::get_form($form_id);
+                $entradas[FORM_ID_GERAL] = new Caldera_Forms_Entry($form, $entrada);
+                $entradas["date"] = $umaEntrada['_date'];
+                break;
+            }
+        }
+    }
+    $date = date('M d, Y', strtotime($entradas["date"]));
+    render_geral_data($entradas[FORM_ID_GERAL]);
     die();
 }
-add_action('wp_ajax_carrega_avaliador', 'ajaxCarregaAvaliador');
+add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
+
+function ajaxCarregaRede()
+{
+    $usuario_id = ( isset( $_POST['usuario_id'] ) ) ? $_POST['usuario_id'] : '';
+    $rede = ( isset( $_POST['rede'] ) ) ? $_POST['rede'] : '';
+    require_once(CFCORE_PATH . 'classes/admin.php');
+    $entradas = array();
+
+
+    $form_id = relaciona($rede)[1];
+
+    $data = Caldera_Forms_Admin::get_entries($form_id, 1, 9999999);
+    $ativos = $data['active'];
+
+    if ($ativos > 0) {
+        $todasEntradas = $data['entries'];
+
+        foreach ($todasEntradas as $umaEntrada) {
+            $user_id = $umaEntrada['user']['ID'];
+
+            if ($user_id == $usuario_id) {
+
+                $entrada = $umaEntrada['_entry_id'];
+                $form = Caldera_Forms_Forms::get_form($form_id);
+                $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
+                $entradas["date"] = $umaEntrada['_date'];
+                break;
+            }
+        }
+    }
+    $date = date('M d, Y', strtotime($entradas["date"]));
+
+    cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]]);
+    die();
+}
+add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
