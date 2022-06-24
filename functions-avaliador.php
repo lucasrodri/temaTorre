@@ -63,7 +63,7 @@ function avaliador_view()
     <div id="edit-form-div" class="br-tab mt-5" style="display: none;">
         <nav class="tab-nav font-tab-torre">
             <ul>
-                <li class="tab-item active">
+                <li class="tab-item active" id="tab-item-1">
                     <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
                 </li>
                 <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
@@ -79,7 +79,7 @@ function avaliador_view()
                 <div id="tab_instituicao"></div>
             </div>
             <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
-                <div class="tab-panel" id="panel-<?php echo $i; ?>" style="display: none;">
+                <div class="tab-panel" id="panel-<?php echo $i; ?>">
                     <div id="tab_redes_<?php echo $i; ?>"></div>
                 </div>
             <?php endfor; ?>
