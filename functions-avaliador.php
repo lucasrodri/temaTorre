@@ -8,7 +8,6 @@ function avaliador_view()
 {
     require_once(CFCORE_PATH . 'classes/admin.php');
 
-
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     $usuario_login = $current_user->user_login;
@@ -75,21 +74,13 @@ function avaliador_view()
             </ul>
         </nav>
         <div class="tab-content mt-4">
+            <div id='loading_carregar' class="loading medium" style='display:none;'></div>
             <div class="tab-panel active" id="panel-1">
                 <div id="tab_instituicao"></div>
             </div>
             <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
                 <div class="tab-panel" id="panel-<?php echo $i; ?>" style="display: none;">
-                    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-                        <div id="tab_redes_<?php echo $i; ?>"></div>
-                        <div class="row mt-5">
-                            <div class="col-md-12 text-center">
-                                <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
-                                <!-- <div id='loading_submit' class="loading medium" style='display:none;'></div> -->
-                            </div>
-                        </div>
-                        <input type="hidden" name="action" value="atualiza_<?php echo relaciona(explode(";", $todas_redes)[$i - 2]); ?>">
-                    </form>
+                    <div id="tab_redes_<?php echo $i; ?>"></div>
                 </div>
             <?php endfor; ?>
         </div>
@@ -101,7 +92,7 @@ function avaliador_view()
 
 function ajaxCarregaInstituicao()
 {
-    $usuario_id = ( isset( $_POST['usuario_id'] ) ) ? $_POST['usuario_id'] : '';
+    $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
     require_once(CFCORE_PATH . 'classes/admin.php');
     $entradas = array();
 
@@ -133,11 +124,10 @@ add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
 
 function ajaxCarregaRede()
 {
-    $usuario_id = ( isset( $_POST['usuario_id'] ) ) ? $_POST['usuario_id'] : '';
-    $rede = ( isset( $_POST['rede'] ) ) ? $_POST['rede'] : '';
+    $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
     require_once(CFCORE_PATH . 'classes/admin.php');
     $entradas = array();
-
 
     $form_id = relaciona($rede)[1];
 

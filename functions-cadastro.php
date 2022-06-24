@@ -332,7 +332,6 @@ function cadastro_form_render()
                                     </div>
                                     <div class="col-md-6 align-button-left">
                                         <input id="btn_enviar" type="submit" class="br-button primary" value="Concluir" name="enviar">
-                                        <!-- <div id='loading_submit' class="loading medium" style='display:none;'></div> -->
                                     </div>
                                 </div>
                             </div>
