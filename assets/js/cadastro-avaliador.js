@@ -4,16 +4,17 @@ function voltarListaEntradas(){
     document.getElementById('entrada-voltar-btn').style.display = 'none';
 }
 
-async function carrega_avaliador(user_id, redes) {
+async function carrega_avaliador(user_id, redes, nomeInstituicao='') {
 
-    console.log("recebi user_id " + user_id);
-    console.log("recebi redes " + redes);
+    //console.log("recebi user_id " + user_id);
+    //console.log("recebi redes " + redes);
 
     // mostrar div do conteúdo do form
     document.getElementById('lista-entradas-div').style.display = 'none';
     document.getElementById('entrada-form-div').style.display = 'inline';
     document.getElementById('entrada-voltar-btn').style.display = 'inline';
 
+    document.getElementById('span-header-accordion').innerHTML = 'Instituição: ' + nomeInstituicao;
 
     // Preciso desse for em todos os tab-item para apága-los ao chamar de novo
     for (var i = 0; i < 6; i++) {
@@ -64,8 +65,8 @@ async function carrega_avaliador(user_id, redes) {
     for (var i = 0; i < redesArray.length - 1; i++) {
         redesPainel[i] = relaciona_painel(redesArray[i]);
     }
-    console.log({ redesPainel });
-    console.log({ redesArray });
+    //console.log({ redesPainel });
+    //console.log({ redesArray });
 
 
     for (var j = 0; j < redesPainel.length; j++) {
@@ -74,10 +75,10 @@ async function carrega_avaliador(user_id, redes) {
         document.getElementById('tab-item-' + painel).style.display = 'inline';
         //document.getElementById('panel-' + painel).style.display = 'inline';
 
-        console.log('mostra tab-item-' + painel);
+        //console.log('mostra tab-item-' + painel);
         //console.log('mostra panel-item-' + painel);
 
-        console.log('renderizando ' + redesArray[j] + " do user " + user_id);
+        //console.log('renderizando ' + redesArray[j] + " do user " + user_id);
 
         await chama_carrega_rede(painel, redesArray[j], user_id);
 
@@ -88,8 +89,8 @@ async function carrega_avaliador(user_id, redes) {
 function chama_carrega_rede(painel, redeArray, user_id) {
 
     jQuery(function ($) {
-        console.log("Carrega " + painel);
-        console.log(redeArray);
+        //console.log("Carrega " + painel);
+        //console.log(redeArray);
         $.ajax({
             type: "POST",
             url: my_ajax_object.ajax_url,
@@ -103,7 +104,7 @@ function chama_carrega_rede(painel, redeArray, user_id) {
                 $('#tab_redes_' + painel).html('');
             },
             success: function (html) {
-                console.log("Sucesso " + painel);
+                //console.log("Sucesso " + painel);
                 $('#tab_redes_' + painel).html(html);
 
             },

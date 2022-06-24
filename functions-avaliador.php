@@ -49,7 +49,7 @@ function avaliador_view()
             <tbody>
                 <?php foreach ($entradas as $key => $entrada) : ?>
                     <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
-                    <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>');">
+                    <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>');">
                         <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
                         <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
                         <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_4899711')); ?></td>
@@ -62,7 +62,7 @@ function avaliador_view()
 
     <div id="entrada-form-div" class="br-accordion" id="accordion1" style="display: none;">
         <div class="item">
-            <button class="header" type="button" aria-controls="id9"><span class="icon"><i class="fas fa-angle-down" aria-hidden="true"></i></span><span class="title">Instituição selecionada</span></button>
+            <button class="header" type="button" aria-controls="id9"><span class="icon"><i class="fas fa-angle-down" aria-hidden="true"></i></span><span id='span-header-accordion' class="title">Instituição selecionada</span></button>
         </div>
         <div class="content" id="id9">
 
@@ -83,10 +83,16 @@ function avaliador_view()
                     <div id='loading_carregar' class="loading medium" style='display:none;'></div>
                     <div class="tab-panel active" id="panel-1">
                         <div id="tab_instituicao"></div>
+
+                        <?php campos_avaliador_redes(); ?>
+
                     </div>
                     <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
                         <div class="tab-panel" id="panel-<?php echo $i; ?>">
                             <div id="tab_redes_<?php echo $i; ?>"></div>
+                            
+                            <?php campos_avaliador_redes(); ?>
+
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -96,14 +102,13 @@ function avaliador_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12" style="display: none;">
-            <button class="br-button primary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
+            <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
             </button>
         </div>
     </div>
 
 <?php
 }
-
 
 
 function ajaxCarregaInstituicao()
@@ -172,3 +177,28 @@ function ajaxCarregaRede()
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
+
+function campos_avaliador_redes()
+{
+?>
+    <h3>Avaliação da rede</h3>
+
+    <div class="br-textarea mb-3">
+        <label for="historicoParecer">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+        <textarea class="textarea-start-size" id="historicoParecer" name="historicoParecer" placeholder="Veja o histórico" maxlength="800" onchange="changeError(name)" required></textarea>
+
+    </div>
+
+    <div class="br-textarea mb-3">
+        <label for="parecerAvaliador">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+        <textarea class="textarea-start-size" id="parecerAvaliador" name="parecerAvaliador" placeholder="Escreva o parecer sobre a instituição e as redes" maxlength="800" onchange="changeError(name)" required></textarea>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <input type="submit" class="br-button primary" value="Enviar" name="enviar">
+        </div>
+    </div>
+    <input type="hidden" name="action" value="atualiza">
+<?php
+}
