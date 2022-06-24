@@ -16,6 +16,9 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao='') {
 
     document.getElementById('span-header-accordion').innerHTML = 'Instituição: ' + nomeInstituicao;
 
+    document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
+    document.getElementById('hidden-avaliador-input').value = 'atualiza_avaliador_' + user_id;
+
     // Preciso desse for em todos os tab-item para apága-los ao chamar de novo
     for (var i = 0; i < 6; i++) {
         if (document.getElementById('tab-item-' + (i + 2))) {

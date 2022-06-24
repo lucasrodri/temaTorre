@@ -59,49 +59,54 @@ function avaliador_view()
         </table>
     </div>
 
+    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+        <div id="entrada-form-div" class="br-accordion" id="accordion1" style="display: none;">
+            <div class="item">
+                <button class="header" type="button" aria-controls="id9"><span class="icon"><i class="fas fa-angle-down" aria-hidden="true"></i></span><span id='span-header-accordion' class="title">Instituição selecionada</span></button>
+            </div>
+            <div class="content" id="id9">
 
-    <div id="entrada-form-div" class="br-accordion" id="accordion1" style="display: none;">
-        <div class="item">
-            <button class="header" type="button" aria-controls="id9"><span class="icon"><i class="fas fa-angle-down" aria-hidden="true"></i></span><span id='span-header-accordion' class="title">Instituição selecionada</span></button>
-        </div>
-        <div class="content" id="id9">
-
-            <div class="br-tab mt-5">
-                <nav class="tab-nav font-tab-torre">
-                    <ul>
-                        <li class="tab-item active" id="tab-item-1">
-                            <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
-                        </li>
-                        <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
-                            <li class="tab-item" id="tab-item-<?php echo $i; ?>" style="display: none;">
-                                <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $todas_redes)[$i - 2])[2] ?></span></button>
+                <div class="br-tab mt-5">
+                    <nav class="tab-nav font-tab-torre">
+                        <ul>
+                            <li class="tab-item active" id="tab-item-1">
+                                <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
                             </li>
-                        <?php endfor; ?>
-                    </ul>
-                </nav>
-                <div class="tab-content mt-4">
-                    <div id='loading_carregar' class="loading medium" style='display:none;'></div>
-                    <div class="tab-panel active" id="panel-1">
-                        <div id="tab_instituicao"></div>
+                            <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                                <li class="tab-item" id="tab-item-<?php echo $i; ?>" style="display: none;">
+                                    <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $todas_redes)[$i - 2])[2] ?></span></button>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
+                    <div class="tab-content mt-4">
+                        <div id='loading_carregar' class="loading medium" style='display:none;'></div>
+                        <div class="tab-panel active" id="panel-1">
+                            <div id="tab_instituicao"></div>
 
-                        <?php campos_avaliador_redes(); ?>
-
-                    </div>
-                    <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
-                        <div class="tab-panel" id="panel-<?php echo $i; ?>">
-                            <div id="tab_redes_<?php echo $i; ?>"></div>
-                            
                             <?php campos_avaliador_redes(); ?>
 
                         </div>
-                    <?php endfor; ?>
+                        <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                            <div class="tab-panel" id="panel-<?php echo $i; ?>">
+                                <div id="tab_redes_<?php echo $i; ?>"></div>
+
+                                <?php campos_avaliador_redes(explode(";", $todas_redes)[$i - 2]); ?>
+
+                            </div>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center">
+                    <input id="action-avaliador-input" type="submit" class="br-button primary" value="Finalizar Avaliação desta Instituição" name="enviar">
+                    <input id="hidden-avaliador-input" type="hidden" name="action" value="atualiza_avaliador">
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
     <div class="row mt-5">
-        <div id="entrada-voltar-btn" class="col-md-12" style="display: none;">
+        <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
             <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
             </button>
         </div>
@@ -178,27 +183,34 @@ function ajaxCarregaRede()
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
 
-function campos_avaliador_redes()
+function campos_avaliador_redes($rede = "geral")
 {
+    if ($rede == "geral") {
+        echo "<h3>Avaliação da Instituição</h3>";
+        $placeholder = "Escreva o parecer sobre os dados da Instituição";
+    } else {
+        echo "<h3>Avaliação da rede de " . relaciona($rede)[2] . "</h3>";
+        $placeholder = "Escreva o parecer sobre os dados da Rede de" . relaciona($rede)[2];
+    }
 ?>
-    <h3>Avaliação da rede</h3>
 
     <div class="br-textarea mb-3">
         <label for="historicoParecer">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="textarea-start-size" id="historicoParecer" name="historicoParecer" placeholder="Veja o histórico" maxlength="800" onchange="changeError(name)" required></textarea>
+        <textarea class="textarea-start-size" id="historicoParecer_<?php echo relaciona($rede)[0] ?>" name="historicoParecer_<?php echo relaciona($rede)[0] ?>" placeholder="Veja o histórico" maxlength="800" onchange="changeError(name)" required></textarea>
 
     </div>
 
     <div class="br-textarea mb-3">
         <label for="parecerAvaliador">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="textarea-start-size" id="parecerAvaliador" name="parecerAvaliador" placeholder="Escreva o parecer sobre a instituição e as redes" maxlength="800" onchange="changeError(name)" required></textarea>
+        <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo relaciona($rede)[0] ?>" name="parecerAvaliador_<?php echo relaciona($rede)[0] ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" required></textarea>
     </div>
 
-    <div class="row mt-5">
-        <div class="col-md-12 text-center">
-            <input type="submit" class="br-button primary" value="Enviar" name="enviar">
-        </div>
+    <div class="br-switch medium mt-2 mb-5">
+        <input id="switch-label-02" name="parecerAvaliadorCheck_<?php echo relaciona($rede)[0] ?>" type="checkbox" />
+        <label for="switch-label-02">Insira a situação<span class="field_required" style="color:#ee0000;">*</span></label>
+        <div class="switch-data" data-enabled="Homologado" data-disabled="Pendente"></div>
     </div>
-    <input type="hidden" name="action" value="atualiza">
+
+
 <?php
 }

@@ -344,6 +344,8 @@ function relaciona($s)
             return array("rede-de-inovacao", FORM_ID_INOVACAO, "Inovação");
         case "check_tecnologia":
             return array("rede-de-tecnologia", FORM_ID_TECNOLOGIA, "Tecnologias Aplicadas");
+        case "geral":
+            return array("instituicao", FORM_ID_GERAL, "Instituição");
     }
 }
 
