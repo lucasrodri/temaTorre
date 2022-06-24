@@ -1,10 +1,19 @@
+function voltarListaEntradas(){
+    document.getElementById('lista-entradas-div').style.display = 'inline';
+    document.getElementById('entrada-form-div').style.display = 'none';
+    document.getElementById('entrada-voltar-btn').style.display = 'none';
+}
+
 async function carrega_avaliador(user_id, redes) {
 
     console.log("recebi user_id " + user_id);
     console.log("recebi redes " + redes);
 
     // mostrar div do conteúdo do form
-    document.getElementById('edit-form-div').style.display = 'inline';
+    document.getElementById('lista-entradas-div').style.display = 'none';
+    document.getElementById('entrada-form-div').style.display = 'inline';
+    document.getElementById('entrada-voltar-btn').style.display = 'inline';
+
 
     // Preciso desse for em todos os tab-item para apága-los ao chamar de novo
     for (var i = 0; i < 6; i++) {

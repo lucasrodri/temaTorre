@@ -31,8 +31,7 @@ function avaliador_view()
     }
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
 ?>
-
-    <div class="br-table mb-5">
+    <div class="br-table mb-5" id="lista-entradas-div">
         <div class="table-header"></div>
         <table>
             <colgroup>
@@ -60,31 +59,48 @@ function avaliador_view()
         </table>
     </div>
 
-    <div id="edit-form-div" class="br-tab mt-5" style="display: none;">
-        <nav class="tab-nav font-tab-torre">
-            <ul>
-                <li class="tab-item active" id="tab-item-1">
-                    <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
-                </li>
-                <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
-                    <li class="tab-item" id="tab-item-<?php echo $i; ?>" style="display: none;">
-                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $todas_redes)[$i - 2])[2] ?></span></button>
-                    </li>
-                <?php endfor; ?>
-            </ul>
-        </nav>
-        <div class="tab-content mt-4">
-            <div id='loading_carregar' class="loading medium" style='display:none;'></div>
-            <div class="tab-panel active" id="panel-1">
-                <div id="tab_instituicao"></div>
-            </div>
-            <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
-                <div class="tab-panel" id="panel-<?php echo $i; ?>">
-                    <div id="tab_redes_<?php echo $i; ?>"></div>
+
+    <div id="entrada-form-div" class="br-accordion" id="accordion1" style="display: none;">
+        <div class="item">
+            <button class="header" type="button" aria-controls="id9"><span class="icon"><i class="fas fa-angle-down" aria-hidden="true"></i></span><span class="title">Instituição selecionada</span></button>
+        </div>
+        <div class="content" id="id9">
+
+            <div class="br-tab mt-5">
+                <nav class="tab-nav font-tab-torre">
+                    <ul>
+                        <li class="tab-item active" id="tab-item-1">
+                            <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
+                        </li>
+                        <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                            <li class="tab-item" id="tab-item-<?php echo $i; ?>" style="display: none;">
+                                <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $todas_redes)[$i - 2])[2] ?></span></button>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+                <div class="tab-content mt-4">
+                    <div id='loading_carregar' class="loading medium" style='display:none;'></div>
+                    <div class="tab-panel active" id="panel-1">
+                        <div id="tab_instituicao"></div>
+                    </div>
+                    <?php for ($i = 2; $i < count(explode(";", $todas_redes)) + 1; $i++) : ?>
+                        <div class="tab-panel" id="panel-<?php echo $i; ?>">
+                            <div id="tab_redes_<?php echo $i; ?>"></div>
+                        </div>
+                    <?php endfor; ?>
                 </div>
-            <?php endfor; ?>
+            </div>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div id="entrada-voltar-btn" class="col-md-12" style="display: none;">
+            <button class="br-button primary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
+            </button>
+        </div>
+    </div>
+
 <?php
 }
 
