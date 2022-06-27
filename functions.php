@@ -1404,3 +1404,4 @@ include "functions-avaliador.php";
 include "functions-cadastro.php";
 include "functions-candidato.php";
 include "functions-email.php";
+include "functions-redirection.php";

@@ -8,8 +8,8 @@ add_shortcode('shortcode_candidato_view', 'candidato_view');
 
 function candidato_view()
 {
-
     require_once(CFCORE_PATH . 'classes/admin.php');
+    
     $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
@@ -278,13 +278,10 @@ function render_geral_data($entrada)
         </div>
         <div class="row mt-5">
             <?php if (valida($entrada, 'fld_4899711') == "avaliacao") : ?>
-                <!-- if só para não mostrar esse botão na apresentaçao -->
-                <?php if (!current_user_can('administrator')) : ?>
                     <div class="col-md-12 text-center">
                         <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
                     </div>
                     <input type="hidden" name="action" value="desistir_candidato">
-                <?php endif; ?>
             <?php else : ?>
                 <div class="col-md-12 text-center">
                     <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
