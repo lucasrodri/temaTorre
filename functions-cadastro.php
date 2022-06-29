@@ -266,7 +266,6 @@ function cadastro_form_render()
                         <div class="wizard-panel">
                             <div class="wizard-panel-content">
                                 <div class="h3">Logo e Guia de Uso de Marca</div>
-                                <!-- <div class="text my-text-wizard" tabindex="0">Conteúdo aqui</div> -->
                                 <div class="mt-3 mb-1 upload-inputs">
                                     <div class="br-upload">
                                         <label class="upload-label" for="logo_instituicao"><span>Logo<span class="field_required" style="color:#ee0000;">*</span></span></label>

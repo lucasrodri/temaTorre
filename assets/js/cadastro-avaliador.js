@@ -1,10 +1,10 @@
-function voltarListaEntradas(){
+function voltarListaEntradas() {
     document.getElementById('lista-entradas-div').style.display = 'inline';
     document.getElementById('entrada-form-div').style.display = 'none';
     document.getElementById('entrada-voltar-btn').style.display = 'none';
 }
 
-async function carrega_avaliador(user_id, redes, nomeInstituicao='') {
+async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
 
     //console.log("recebi user_id " + user_id);
     //console.log("recebi redes " + redes);

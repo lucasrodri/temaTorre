@@ -9,7 +9,7 @@ add_shortcode('shortcode_candidato_view', 'candidato_view');
 function candidato_view()
 {
     require_once(CFCORE_PATH . 'classes/admin.php');
-    
+
     $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
@@ -40,8 +40,12 @@ function candidato_view()
             }
         }
     }
+
     $date = date('M d, Y', strtotime($entradas["date"]));
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
+    $statusGeral = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
+    //$statusGeral = 'pendente';
+    $arrayRedes = explode(";", $redes);
 ?>
     <div class="br-table mb-3">
         <div class="table-header"></div>
@@ -70,10 +74,36 @@ function candidato_view()
         </table>
         <!-- Rodapé -->
     </div>
-    <div id="edit-form-div-button" class="row mt-5 mb-5">
+    <div class="row mt-5 mb-5">
+
+        <div class="col-md-12">
+            <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_4416984')) > 1) : ?>
+                <div class="br-textarea mb-3">
+                    <label for="historicoParecer">Histórico do parecer</label>
+                    <textarea value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>"></textarea>
+                </div>
+            <?php endif; ?>
+
+            <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_8529353')) > 1) : ?>
+                <div class="br-textarea mb-3">
+                    <label for="parecerAvaliador">Veja o parecer do Avaliador</label>
+                    <textarea value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>"></textarea>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <div class="col-md-12 align-button-right mr-4">
             <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
-            <button class="br-button success mr-sm-3" type="button" onclick="edit_candidato()">Edite Seu Formulário
+            <button id="carrega-form-btn" class="br-button success mr-sm-3" type="button" onclick="carrega_candidato()">
+                <?php if ($statusGeral == "pendente") : ?>
+                    Edite seu formulário
+                <?php else : ?>
+                    Veja seu formulário
+                <?php endif; ?>
+            </button>
+
+            <button id="esconde-form-btn" class="br-button secondary" type="button" onclick="esconderFormulario();" style="display: none;">
+                Fechar formulário
             </button>
         </div>
     </div>
@@ -84,9 +114,9 @@ function candidato_view()
                 <li class="tab-item active">
                     <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
                 </li>
-                <?php for ($i = 2; $i < count(explode(";", $redes)) + 1; $i++) : ?>
+                <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                     <li class="tab-item">
-                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona(explode(";", $redes)[$i - 2])[2] ?></span></button>
+                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona($arrayRedes[$i - 2])[2] ?></span></button>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -95,16 +125,21 @@ function candidato_view()
             <div class="tab-panel active" id="panel-1">
                 <?php render_geral_data($entradas[FORM_ID_GERAL]); ?>
             </div>
-            <?php for ($i = 2; $i < count(explode(";", $redes)) + 1; $i++) : ?>
+            <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                 <div class="tab-panel" id="panel-<?php echo $i; ?>">
                     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-                        <?php cadastro_redes_render(relaciona(explode(";", $redes)[$i - 2])[0], $entradas[relaciona(explode(";", $redes)[$i - 2])[1]]); ?>
-                        <div class="row mt-5">
-                            <div class="col-md-12 text-center">
-                                <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
+                        <?php cadastro_redes_render(relaciona($arrayRedes[$i - 2])[0], $entradas[relaciona($arrayRedes[$i - 2])[1]]); ?>
+
+                        <!-- não acho que terá esse if no futuro... usaremos um único botão de Atualizar Dados -->
+                        <?php if ($statusGeral == "pendente") : ?>
+                            <div class="row mt-5">
+                                <div class="col-md-12 text-center">
+                                    <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
+                                    <input type="hidden" name="action" value="atualiza_<?php echo relaciona($arrayRedes[$i - 2][0]); ?>">
+                                </div>
                             </div>
-                        </div>
-                        <input type="hidden" name="action" value="atualiza_<?php echo relaciona(explode(";", $redes)[$i - 2]); ?>">
+                        <?php endif; ?>
+
                     </form>
                 </div>
             <?php endfor; ?>
@@ -116,6 +151,14 @@ function candidato_view()
 
 function render_geral_data($entrada)
 {
+    $statusGeral = valida($entrada, 'fld_4899711');
+    //$statusGeral = 'pendente';
+
+    // se o status for avaliacao ou homologado, não permite edição
+    $disabled =  (($statusGeral == "avaliacao") || ($statusGeral == "homologado")) ?
+        'disabled'
+        : '';
+
 ?>
     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
         <p id="radio_function" style="display: none;"></p>
@@ -123,36 +166,36 @@ function render_geral_data($entrada)
         <div class="mb-3">
             <div class="br-input">
                 <label for="nomeDaInstituicao">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_266564'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="nomeDaInstituicao" name="nomeDaInstituicao" type="text" placeholder="Nome da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_266564'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
 
         <div class="br-textarea mb-3">
             <label for="descricaoDaInstituicao">Descrição da instituição<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_6461522'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>><?php echo valida($entrada, 'fld_6461522'); ?></textarea>
+            <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_6461522'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_6461522'); ?></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
 
         <div class="mb-3 radio-master">
             <p class="label mb-3">Natureza jurídica da instituição<span class="field_required" style="color:#ee0000;">*</span></p>
             <div class="br-radio">
-                <input id="natureza_op_1" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública federal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública federal")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="natureza_op_1" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública federal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública federal")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="natureza_op_1">Instituição pública federal</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_2" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública estadual" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública estadual")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="natureza_op_2" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública estadual" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública estadual")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="natureza_op_2">Instituição pública estadual</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública municipal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública municipal")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="natureza_op_3" type="radio" name="natureza_op" class="natureza_op" value="Instituição pública municipal" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição pública municipal")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="natureza_op_3">Instituição pública municipal</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada com fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada com fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="natureza_op_4" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada com fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada com fins lucrativos")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="natureza_op_4">Instituição privada com fins lucrativos</label>
             </div>
             <div class="br-radio">
-                <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada sem fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada sem fins lucrativos")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="natureza_op_5" type="radio" name="natureza_op" class="natureza_op" value="Instituição privada sem fins lucrativos" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_5902421'), "Instituição privada sem fins lucrativos")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="natureza_op_5">Instituição privada sem fins lucrativos</label>
                 <br>
             </div>
@@ -161,23 +204,23 @@ function render_geral_data($entrada)
         <div class="mb-3 radio-slave" <?php if (valida($entrada, 'fld_7125239') == "") echo 'style="display:none;"' ?>>
             <p class="label mb-3">Porte da instituição privada<span class="field_required" style="color:#ee0000;">*</span></p>
             <div class="br-radio">
-                <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="porte_op_1" type="radio" name="porte_op" class="porte_op" value="Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="porte_op_1">Porte I – Microempresa e Empresa de Pequeno Porte (EPP): Receita Operacional Bruta anual ou anualizada de até R$ 4,8 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="porte_op_2" type="radio" name="porte_op" class="porte_op" value="Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="porte_op_2">Porte II – Pequena Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 4,8 milhões e igual ou inferior a R$ 16,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="porte_op_3" type="radio" name="porte_op" class="porte_op" value="Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="porte_op_3">Porte III – Média Empresa I: Receita Operacional Bruta anual ou anualizada superior a R$ 16,0 milhões e igual ou inferior a R$ 90,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="porte_op_4" type="radio" name="porte_op" class="porte_op" value="Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="porte_op_4">Porte IV – Média Empresa II: Receita Operacional Bruta anual ou anualizada superior a R$ 90,0 milhões e igual ou inferior a R$ 300,0 milhões</label>
             </div>
             <div class="br-radio">
-                <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões")) echo "checked"; ?> <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="porte_op_5" type="radio" name="porte_op" class="porte_op" value="Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões" onchange="changeErrorRadio(name)" <?php if (contem(valida($entrada, 'fld_7125239'), "Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões")) echo "checked"; ?> <?php echo $disabled ?> />
                 <label for="porte_op_5">Porte V – Grande Empresa: Receita Operacional Bruta anual ou anualizada superior a R$ 300,0 milhões</label>
                 <br>
             </div>
@@ -186,20 +229,20 @@ function render_geral_data($entrada)
         <div class="mt-3 mb-3">
             <div class="br-input">
                 <label for="cnpjDaInstituicao">CNPJ<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_3000518'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="cnpjDaInstituicao" name="cnpjDaInstituicao" type="text" placeholder="99.999.999/9999-99" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_3000518'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
 
         <div class="br-textarea mb-3">
             <label for="CNAEDaInstituicao">CNAE<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="CNAEDaInstituicao" name="CNAEDaInstituicao" placeholder="Escreva sobre o CNAE de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_2471360'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?>><?php echo valida($entrada, 'fld_2471360'); ?></textarea>
+            <textarea class="textarea-start-size" id="CNAEDaInstituicao" name="CNAEDaInstituicao" placeholder="Escreva sobre o CNAE de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_2471360'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_2471360'); ?></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
 
         <div class="mt-3 mb-3">
             <div class="br-input">
                 <label for="urlDaInstituicao">Página da internet<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1962476'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="urlDaInstituicao" name="urlDaInstituicao" type="url" placeholder="http://minhainstituicao.com.br" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1962476'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
 
@@ -208,37 +251,36 @@ function render_geral_data($entrada)
         <div class="mb-3">
             <div class="br-input">
                 <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_3971477'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_3971477'); ?>" <?php echo $disabled ?> />
             </div>
 
             <div class="br-input">
                 <label for="complementoDaInstituicao">Complemento</label>
-                <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_937636'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_937636'); ?>" <?php echo $disabled ?> />
             </div>
 
             <div class="br-input">
                 <label for="estadoDaInstituicao">Estado</label>
-                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_1588802'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_1588802'); ?>" <?php echo $disabled ?> />
             </div>
 
             <div class="br-input">
                 <label for="cidadeDaInstituicao">Cidade</label>
-                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_2343542'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_2343542'); ?>" <?php echo $disabled ?> />
             </div>
 
             <div class="br-input">
                 <label for="cepDaInstituicao">CEP<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1936573'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="cepDaInstituicao" name="cepDaInstituicao" type="text" maxlength="9" pattern="\d{2}[.\s]?\d{3}[-.\s]?\d{3}" placeholder="CEP da Instituição" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_1936573'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
 
 
         <!-- Marca e Uploads -->
         <div class="h3">Logo e Guia de Uso de Marca</div>
-        <!-- <div class="text my-text-wizard" tabindex="0">Conteúdo aqui</div> -->
         <div class="mt-3 mb-3">
             <div class="br-input">
-                <label for="urlDaInstituicao">Logo<span class="field_required" style="color:#ee0000;">*</span></label><br>
+                <label for="logo_instituicao">Logo<span class="field_required" style="color:#ee0000;">*</span></label><br>
 
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="br-card">
@@ -252,7 +294,7 @@ function render_geral_data($entrada)
         </div>
         <div class="mt-3 mb-3">
             <div class="br-input">
-                <label for="urlDaInstituicao">Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></label><br>
+                <label for="guia_instituicao">Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></label><br>
                 <a href="<?php echo valida($entrada, 'fld_9588438') ?>" target="_blank"><?php echo valida($entrada, 'fld_9588438') ?></a>
                 <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p>
             </div>
@@ -266,23 +308,24 @@ function render_geral_data($entrada)
         <div class="mb-3">
             <div class="br-input">
                 <label for="nomeDoCandidato">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="nomeDoCandidato" name="nomeDoCandidato" type="text" placeholder="Nome completo" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_1333267'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="nomeDoCandidato" name="nomeDoCandidato" type="text" placeholder="Nome completo" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_1333267'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
 
         <div class="mb-3">
             <div class="br-input">
                 <label for="emailDoCandidato">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-                <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" <?php if (valida($entrada, 'fld_4899711') == "avaliacao") echo "disabled"; ?> />
+                <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" <?php echo $disabled ?> />
             </div>
         </div>
+
         <div class="row mt-5">
-            <?php if (valida($entrada, 'fld_4899711') == "avaliacao") : ?>
-                    <div class="col-md-12 text-center">
-                        <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
-                    </div>
-                    <input type="hidden" name="action" value="desistir_candidato">
-            <?php else : ?>
+            <?php if ($statusGeral == "avaliacao") : ?>
+                <div class="col-md-12 text-center">
+                    <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
+                </div>
+                <input type="hidden" name="action" value="desistir_candidato">
+            <?php elseif ($statusGeral == "pendente") : ?>
                 <div class="col-md-12 text-center">
                     <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
                 </div>
