@@ -80,14 +80,14 @@ function candidato_view()
             <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_4416984')) > 1) : ?>
                 <div class="br-textarea mb-3">
                     <label for="historicoParecer">Histórico do parecer</label>
-                    <textarea value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>"></textarea>
+                    <textarea name="historicoParecer" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>" disabled></textarea>
                 </div>
             <?php endif; ?>
 
             <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_8529353')) > 1) : ?>
                 <div class="br-textarea mb-3">
                     <label for="parecerAvaliador">Veja o parecer do Avaliador</label>
-                    <textarea value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>"></textarea>
+                    <textarea name="parecerAvaliador" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>" disabled></textarea>
                 </div>
             <?php endif; ?>
         </div>
@@ -332,6 +332,18 @@ function render_geral_data($entrada)
                 <input type="hidden" name="action" value="atualiza_candidato">
             <?php endif; ?>
         </div>
+
+        <?php if ($statusGeral == "pendente") : ?>
+            <div class="row mt-5">
+                <?php if (strlen(valida($entrada, 'fld_223413')) > 1) : ?>
+                    <div class="br-textarea mb-3">
+                        <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
+                        <textarea name="recursoInstituicao" value="<?php echo valida($entrada, 'fld_223413'); ?>"></textarea>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <!-- TODO incluir botão para mostrar recurso -->
+        <?php endif; ?>
     </form>
 <?php
 }
