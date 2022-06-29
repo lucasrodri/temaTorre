@@ -27,7 +27,7 @@ function usuario_tem_role($user, $role)
     /*
 	* Função que retorna true caso o usuário tenha o papel (role) informado
 	*/
-    $roles = $user->roles;
+
     return in_array($role, (array) $user->roles);
 }
 
@@ -75,7 +75,7 @@ function pre_process_shortcode()
                 // se o usuário logado já for candidato, deve checar se é o id correto
                 if (!is_user_logged_in()) {
                     wp_redirect(wp_login_url());
-                } 
+                }
                 // else removido temporariamente enquanto página está em desenvolvimento
                 // else if (!usuario_tem_role($current_user, 'candidato')) {
                 //     wp_redirect(home_url());
@@ -86,3 +86,18 @@ function pre_process_shortcode()
     }
 }
 add_action('template_redirect', 'pre_process_shortcode', 1);
+
+
+// Remover barra do adming para candidato
+function remove_admin_bar()
+{
+    // if (!current_user_can('administrator') && !is_admin()) {
+    //     show_admin_bar(false);
+    // }
+    $current_user = wp_get_current_user();
+
+    if (usuario_tem_role($current_user, 'candidato') && is_user_logged_in()) {
+        show_admin_bar(false);
+    }
+}
+add_action('after_setup_theme', 'remove_admin_bar');
