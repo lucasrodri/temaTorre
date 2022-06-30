@@ -14,7 +14,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 11;
+    $usuario_id = 32;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -43,8 +43,14 @@ function candidato_view()
 
     $date = date('M d, Y', strtotime($entradas["date"]));
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
-    $statusGeral = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
-    //$statusGeral = 'pendente';
+
+    /**
+     * "fld_9748069" "status_geral_instituicao 
+     * "fld_4899711" "status_instituicao"
+     */
+
+    $statusFormInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
+    //$statusFormInstituicao = 'pendente';
     $arrayRedes = explode(";", $redes);
 ?>
     <div class="br-table mb-3">
@@ -67,7 +73,7 @@ function candidato_view()
                     <td data-th="Data"><?php echo $date; ?></td>
                     <td data-th="Nome"><?php echo valida($entradas[FORM_ID_GERAL], 'fld_266564'); ?></td>
                     <td data-th="Status">
-                        <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_4899711')); ?>
+                        <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
                     </td>
                 </tr>
             </tbody>
@@ -95,7 +101,7 @@ function candidato_view()
         <div class="col-md-12 align-button-right mr-4">
             <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
             <button id="carrega-form-btn" class="br-button success mr-sm-3" type="button" onclick="carrega_candidato()">
-                <?php if ($statusGeral == "pendente") : ?>
+                <?php if ($statusFormInstituicao == "pendente") : ?>
                     Edite seu formulário
                 <?php else : ?>
                     Veja seu formulário
@@ -128,14 +134,19 @@ function candidato_view()
             <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                 <div class="tab-panel" id="panel-<?php echo $i; ?>">
                     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-                        <?php cadastro_redes_render(relaciona($arrayRedes[$i - 2])[0], $entradas[relaciona($arrayRedes[$i - 2])[1]]); ?>
+                        <?php
+                        $nomeRede = relaciona($arrayRedes[$i - 2])[0];
+                        $entrada = $entradas[relaciona($arrayRedes[$i - 2])[1]];
+                        $statusRede = valida($entrada, 'fld_3707629');
+                        ?>
 
-                        <!-- não acho que terá esse if no futuro... usaremos um único botão de Atualizar Dados -->
-                        <?php if ($statusGeral == "pendente") : ?>
+                        <?php cadastro_redes_render($nomeRede, $entrada); ?>
+
+                        <?php if ($statusRede == "pendente") : ?>
                             <div class="row mt-5">
                                 <div class="col-md-12 text-center">
                                     <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
-                                    <input type="hidden" name="action" value="atualiza_<?php echo relaciona($arrayRedes[$i - 2][0]); ?>">
+                                    <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -151,11 +162,11 @@ function candidato_view()
 
 function render_geral_data($entrada)
 {
-    $statusGeral = valida($entrada, 'fld_4899711');
-    //$statusGeral = 'pendente';
+    $statusFormInstituicao = valida($entrada, 'fld_4899711');
+    //$statusFormInstituicao = 'pendente';
 
     // se o status for avaliacao ou homologado, não permite edição
-    $disabled =  (($statusGeral == "avaliacao") || ($statusGeral == "homologado")) ?
+    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado")) ?
         'disabled'
         : '';
 
@@ -320,12 +331,12 @@ function render_geral_data($entrada)
         </div>
 
         <div class="row mt-5">
-            <?php if ($statusGeral == "avaliacao") : ?>
+            <?php if ($statusFormInstituicao == "avaliacao") : ?>
                 <div class="col-md-12 text-center">
                     <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
                 </div>
                 <input type="hidden" name="action" value="desistir_candidato">
-            <?php elseif ($statusGeral == "pendente") : ?>
+            <?php elseif ($statusFormInstituicao == "pendente") : ?>
                 <div class="col-md-12 text-center">
                     <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
                 </div>
@@ -333,16 +344,19 @@ function render_geral_data($entrada)
             <?php endif; ?>
         </div>
 
-        <?php if ($statusGeral == "pendente") : ?>
-            <div class="row mt-5">
-                <?php if (strlen(valida($entrada, 'fld_223413')) > 1) : ?>
-                    <div class="br-textarea mb-3">
-                        <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
-                        <textarea name="recursoInstituicao" value="<?php echo valida($entrada, 'fld_223413'); ?>"></textarea>
-                    </div>
-                <?php endif; ?>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+            <button id="recurso-btn" class="br-button secondary" type="button" onclick="botaoRecurso();">
+                Entrar com recurso?
+            </button>
+
+            <?php //if (strlen(valida($entrada, 'fld_223413')) > 1) : 
+            ?>
+            <div id="recurso-div" class="br-textarea mb-3" style="display:none">
+                <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
+                <textarea name="recursoInstituicao" value="<?php echo valida($entrada, 'fld_223413'); ?>"></textarea>
             </div>
-            <!-- TODO incluir botão para mostrar recurso -->
+            <?php //endif; 
+            ?>
         <?php endif; ?>
     </form>
 <?php

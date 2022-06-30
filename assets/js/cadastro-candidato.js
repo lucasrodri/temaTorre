@@ -10,3 +10,12 @@ function esconderFormulario() {
   document.getElementById('edit-form-div').style.display = 'none';
   document.getElementById('esconde-form-btn').style.display = 'none';
 }
+
+
+function botaoRecurso() {
+  var div = document.getElementById("recurso-div");
+  var botao = document.getElementById("recurso-btn");
+
+  div.style.display = "inline";
+  botao.style.display = "none";
+}
