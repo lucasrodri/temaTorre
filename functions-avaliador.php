@@ -200,31 +200,35 @@ function campos_avaliador_redes($rede = "geral")
         $placeholder = "Escreva o parecer sobre os dados da Rede de" . relaciona($rede)[2];
     }
 ?>
-    <div class="br-textarea mb-3">
-        <label for="historicoParecer">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" disabled></textarea>
-    </div>
+    <div id="div_<?php echo $rede ?>">
 
-    <div class="br-textarea mb-3">
-        <label for="parecerAvaliador">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocus="mostrarResumo()" required></textarea>
-    </div>
+        <div class="br-textarea mb-3">
+            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" disabled></textarea>
+        </div>
 
-    <!-- <div class="br-switch medium mt-2 mb-5">
+        <div class="br-textarea mb-3">
+            <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocusout="mostrarResumo()" required></textarea>
+            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        </div>
+
+        <!-- <div class="br-switch medium mt-2 mb-5">
         <input id="switch-label-02" name="parecerAvaliadorCheck_<?php //echo $rede ?>" type="checkbox" />
         <label for="switch-label-02">Insira a situação<span class="field_required" style="color:#ee0000;">*</span></label>
         <div class="switch-data" data-enabled="Homologado" data-disabled="Pendente"></div>
     </div> -->
 
-    <div class="mb-3 radio-avaliador">
-        <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
-        <div class="br-radio">
-            <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadio(name)" onfocus="mostrarResumo()" />
-            <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
-        </div>
-        <div class="br-radio">
-            <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadio(name)" onfocus="mostrarResumo()" />
-            <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
+        <div class="mb-3 radio-avaliador">
+            <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
+            <div class="br-radio">
+                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadio(name)" onfocusout="mostrarResumo()" />
+                <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
+            </div>
+            <div class="br-radio">
+                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadio(name)" onfocusout="mostrarResumo()" />
+                <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
+            </div>
         </div>
     </div>
 

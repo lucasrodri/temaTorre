@@ -134,7 +134,8 @@ function relaciona_painel($s) {
     }
 }
 
-function mostrarResumo(){
+function mostrarResumo() {
+    return;
     var divResumo = document.getElementById('resumo-avaliador');
 
     if (divResumo.style.display == 'none') {
@@ -143,6 +144,27 @@ function mostrarResumo(){
 
     // procurar nos status e pareceres para mostrar qui
     divResumo.innerHTML = '';
-    
-    console.log('cliquei aqui');
+    //console.log('cliquei aqui');
+    var divs = ['div_geral', 'div_check_suporte', 'div_check_formacao', 'div_check_pesquisa', 'div_check_inovacao', 'div_check_tecnologia'];
+
+    for (var i = 0; i < 6; i++) {
+        console.log('dentro da div ' + divs[i])
+        var div = document.getElementById(divs[i]);
+        var elements = div.querySelectorAll('input, textarea');
+        //console.log({elements});
+
+        for (el of elements) {
+            if (el.name.includes('parecer')) {
+                if (el.value !== '') {
+                    divResumo.innerHTML += el.name + ' preenchido <i class="fas fa-check"></i> <br>';
+                }
+            }
+            if (el.type == 'radio') {
+                if (el.checked) {
+                    divResumo.innerHTML += el.name + ' checked <br>';
+                }
+            }
+
+        }
+    }
 }
