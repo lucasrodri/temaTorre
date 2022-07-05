@@ -92,7 +92,7 @@ function avaliador_view()
                             <div class="tab-panel" id="panel-<?php echo $i; ?>">
                                 <div id="tab_redes_<?php echo $i; ?>"></div>
 
-                                <?php campos_avaliador_redes($arrayRedes[$i - 2], $i); ?>
+                                <?php campos_avaliador_redes($arrayRedes[$i - 2]); ?>
 
                             </div>
                         <?php endfor; ?>
@@ -218,6 +218,16 @@ function campos_avaliador_redes($rede = "geral")
         <label for="switch-label-02">Insira a situação<span class="field_required" style="color:#ee0000;">*</span></label>
         <div class="switch-data" data-enabled="Homologado" data-disabled="Pendente"></div>
     </div> -->
+
+        <!-- enviar id/name no shortcode -->
+        <?php
+        if ($rede != "geral") {
+            echo '<div class="mb-3">';
+            echo '<p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>';
+            echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $rede . '" select_id="escolha_tags_' . $rede . '"]'); 
+            echo '</div>';
+        }
+        ?>
 
         <div class="mb-3 radio-avaliador">
             <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
