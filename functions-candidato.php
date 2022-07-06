@@ -45,7 +45,7 @@ function candidato_view()
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
 
     /**
-     * "fld_9748069" "status_geral_instituicao 
+     * "fld_9748069" "status_geral_instituicao -> status de todos os forms
      * "fld_4899711" "status_instituicao"
      */
 

@@ -24,6 +24,7 @@ function avaliador_view()
             $user_id = $umaEntrada['user']['ID'];
             $entrada = $umaEntrada['_entry_id'];
             $form = Caldera_Forms_Forms::get_form($form_id);
+            // adicionar check da situação da rede geral fld_9748069
             $entradas[$user_id] = array();
             $entradas[$user_id][] = new Caldera_Forms_Entry($form, $entrada);
             $entradas[$user_id][] = $umaEntrada['_date'];
@@ -101,7 +102,12 @@ function avaliador_view()
 
                 <div class="col-md-12 text-center">
                     <div id="resumo-avaliador" style="display:none;"></div>
-                    <input id="action-avaliador-input" type="submit" class="br-button primary" value="Finalizar Avaliação desta Instituição" name="enviar">
+
+                    <div class="div-botao-avaliador">
+                        <input id="action-avaliador-input" type="submit" class="br-button primary" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
+                        <span id="span-avaliador-input" class="feedback warning" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i>Atenção: existem campos não preenchidos!</span>
+                    </div>
+
                     <input type="hidden" name="avalia_usuario" value=<?php echo $user_id ?>>
                     <input id="hidden-avaliador-input" type="hidden" name="action" value="atualiza_avaliador">
                 </div>
@@ -195,9 +201,11 @@ function campos_avaliador_redes($rede = "geral")
     if ($rede == "geral") {
         echo "<h3>Avaliação da Instituição</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Instituição";
+        $required = 'required';
     } else {
         echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Rede de" . relaciona($rede)[2];
+        $required = '';
     }
 ?>
     <div id="div_<?php echo $rede ?>">
@@ -209,22 +217,15 @@ function campos_avaliador_redes($rede = "geral")
 
         <div class="br-textarea mb-3">
             <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocusout="mostrarResumo()" required></textarea>
+            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocusout="validacaoAvaliador()" <?php echo $required ?>></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
 
-        <!-- <div class="br-switch medium mt-2 mb-5">
-        <input id="switch-label-02" name="parecerAvaliadorCheck_<?php //echo $rede ?>" type="checkbox" />
-        <label for="switch-label-02">Insira a situação<span class="field_required" style="color:#ee0000;">*</span></label>
-        <div class="switch-data" data-enabled="Homologado" data-disabled="Pendente"></div>
-    </div> -->
-
-        <!-- enviar id/name no shortcode -->
         <?php
         if ($rede != "geral") {
             echo '<div class="mb-3">';
             echo '<p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>';
-            echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $rede . '" select_id="escolha_tags_' . $rede . '"]'); 
+            echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $rede . '" select_id="escolha_tags_' . $rede . '"]');
             echo '</div>';
         }
         ?>
@@ -232,16 +233,53 @@ function campos_avaliador_redes($rede = "geral")
         <div class="mb-3 radio-avaliador">
             <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
             <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadio(name)" onfocusout="mostrarResumo()" />
+                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadio(name)" onfocusout="validacaoAvaliador()" />
                 <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
             </div>
             <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadio(name)" onfocusout="mostrarResumo()" />
+                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadio(name)" onfocusout="validacaoAvaliador()" />
                 <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
+                <br>
             </div>
         </div>
     </div>
 
     <!-- TODO: mostrar um resumo das avaliações e pareceres escritos por rede com JS -->
 <?php
+}
+
+
+function avaliador_action_form()
+{
+    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
+    else $nomeDaInstituicao = "";
+    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
+    else $descricaoDaInstituicao = "";
+    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
+    else $natureza_op = "";
+    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
+    else $porte_op = "";
+
+    /*
+    //caso pendente
+    o form geral
+    os forms das redes
+    marcado como ajustes 
+    status é pendente
+
+    //caso homologado
+    status => homologado
+    assinar o termo
+
+    //caso publicado <---- como fazer os posts
+    // vamos criar uma nova função de visualização function avaliador_view_publico() -> form apenas para os homologados
+    */
+}
+
+
+function avaliador_view_homologado()
+{
+
+    //cópia do avaliador_view() mas só mostra homologados
+    return;
 }

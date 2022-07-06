@@ -667,9 +667,6 @@ function cadastro_action_form()
         //funcao para criar a entrada no Caldera (Form geral)
         insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
 
-        //REMOVER ESSE RETURN QUANDO TERMINAR AS FUNCOES ABAIXO
-        //return;
-
         //funcao para dá entrada no Caldera (Form especifico)
         // esse explode gera uma iteração a mais por conta do último ";"
         foreach (explode(";", $redes) as $key => $value) {

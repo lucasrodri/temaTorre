@@ -361,11 +361,11 @@
   font-size: 15px;
 }
 
-.menu-body-border{
+.menu-body-border {
   border-bottom: 1px solid var(--menu-divider);
 }
 
-.align-header-menu{
+.align-header-menu {
   align-items: center !important;
 }
 
@@ -380,29 +380,35 @@
   margin-right: 44%;
 }
 
-.align-button-right button, 
-.align-button-right input{
+.align-button-right button,
+.align-button-right input {
   float: right !important;
 }
 
-.align-button-left button, 
-.align-button-right input{
+.align-button-left button,
+.align-button-right input {
   float: left !important;
   margin-left: 0px !important;
 }
 
-.textarea-start-size{
+.textarea-start-size {
   height: 160px;
 }
 
-.noHover{
+.noHover {
   pointer-events: none;
 }
 
-.font-tab-torre button{
+.font-tab-torre button {
   font-size: 12pt !important;
 }
 
-.max-width-torre{
+.max-width-torre {
   max-width: 100% !important;
+}
+
+.div-botao-avaliador {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
