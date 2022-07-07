@@ -118,8 +118,9 @@ function avaliador_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
-            <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
-            </button>
+            <a href="/avaliador/" class="br-button secondary">Voltar para lista de Instituições</a>
+            <!-- <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
+            </button> -->
         </div>
     </div>
 

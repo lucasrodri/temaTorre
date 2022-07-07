@@ -203,8 +203,12 @@ function validacaoAvaliador() {
     }
 }
 
-
+/*
+Função para limpar o Form.
+Sem uso no momento, decidimos utilizar uma tag <a> para voltar a seleção de instituicoes para avaliacao
+*/
 function limparFormAvaliador() {
+    return;
     var divs = ['div_geral', 'div_check_suporte', 'div_check_formacao', 'div_check_pesquisa', 'div_check_inovacao', 'div_check_tecnologia'];
 
     for (var i = 0; i < 6; i++) {
@@ -215,10 +219,10 @@ function limparFormAvaliador() {
             // limpar valor
             el.value = '';
 
-            if (el.type == 'select-multiple') {
-                // limpar entradas do select2
-                $(el).val(null).empty();
-            }
+            // if (el.type == 'select-multiple') {
+            //     // limpar entradas do select2
+            //     $(el).val(null).empty();
+            // }
 
             if (el.type == 'radio') {
                 el.checked = false;
