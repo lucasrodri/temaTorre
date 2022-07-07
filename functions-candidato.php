@@ -35,6 +35,7 @@ function candidato_view()
                     $form = Caldera_Forms_Forms::get_form($form_id);
                     $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
                     $entradas["date"] = $umaEntrada['_date'];
+                    //TODO levar em consideração versionamento
                     break;
                 }
             }
@@ -138,6 +139,7 @@ function candidato_view()
                         $nomeRede = relaciona($arrayRedes[$i - 2])[0];
                         $entrada = $entradas[relaciona($arrayRedes[$i - 2])[1]];
                         $statusRede = valida($entrada, 'fld_3707629');
+                        //$statusRede = 'pendente';
                         ?>
 
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
@@ -163,6 +165,7 @@ function candidato_view()
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
+    //$statusFormInstituicao = 'pendente';
 ?>
     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
 
@@ -180,6 +183,8 @@ function render_geral_form($entrada)
                 </div>
                 <input type="hidden" name="action" value="atualiza_candidato">
             <?php endif; ?>
+
+            <input type="hidden" name="entrada" value="<?php $entrada ?>">
         </div>
 
     </form>
@@ -444,4 +449,150 @@ function render_status($status)
             echo '<button class="br-button danger small mt-3 mt-sm-0 noHover" type="button">Ajustes Necessários</button>';
             break;
     }
+}
+
+
+function candidato_action_form()
+{
+    /*
+	* Função action para uso do formulário de candidato (envio quando penden).
+	* Função chamada pelo formulário "cadastro_form_usuario"
+	*/
+
+    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
+    else $nomeDaInstituicao = "";
+    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
+    else $descricaoDaInstituicao = "";
+    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
+    else $natureza_op = "";
+    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
+    else $porte_op = "";
+
+    if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
+        $porte_op = "";
+    }
+
+    if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
+    else $cnpjDaInstituicao = "";
+    if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
+    else $CNAEDaInstituicao = "";
+    if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
+    else $urlDaInstituicao = "";
+
+    if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
+    else $enderecoDaInstituicao = "";
+    if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
+    else $complementoDaInstituicao = "";
+    if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
+    else $estadoDaInstituicao = "";
+    if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
+    else $cidadeDaInstituicao = "";
+    if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
+    else $cepDaInstituicao = "";
+
+    //Arquivos
+    //doc1
+    if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
+        $doc1Unidade = $_FILES['logo_instituicao'];
+    }
+    //doc2
+    if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
+        $doc2Unidade = $_FILES['guia_instituicao'];
+    }
+    
+    //pegar redes
+
+    //Nome e email do candidato
+    if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
+    else $nomeDoCandidato = "";
+    if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
+    else $emailDoCandidato = "";
+
+    //----------------------------submit
+    if (isset($_POST["enviar"])) {
+        
+        $entrada = '';
+        $redes = '';$statusGeral = ''; $status = ''; $parecer = ''; $historico = '';
+
+        // Tratamento dos arquivos
+        if (!is_null($doc1Unidade)) {
+            $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
+        }
+        if (!is_null($doc2Unidade)) {
+            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
+        }
+
+        //funcao para criar a entrada no Caldera (Form geral)
+        update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $statusGeral, $status, $parecer, $historico);
+
+
+        envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato);
+
+        // redirecionar para a página de sucesso
+        wp_redirect(esc_url(home_url('/sucesso')));
+        //wp_redirect(get_permalink( 13832 ));
+        exit;
+    } //end do if de enviar
+}
+add_action('admin_post_nopriv_atualiza_candidato', 'candidato_action_form');
+add_action('admin_post_atualiza_candidato', 'candidato_action_form');
+
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $statusGeral = "avaliacao",  $status = "avaliacao", $parecer, $historico)
+{
+    /*
+	* Função para atualizar uma nova entrada em um Caldera Forms
+    * Usado para o form Geral
+	*/
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_266564', $entrada, $nomeDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_6461522', $entrada, $descricaoDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_5902421', $entrada, $natureza_op);
+    Caldera_Forms_Entry_Update::update_field_value('fld_7125239', $entrada, $porte_op);
+    Caldera_Forms_Entry_Update::update_field_value('fld_3000518', $entrada, $cnpjDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_2471360', $entrada, $CNAEDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_1962476', $entrada, $urlDaInstituicao);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_3971477', $entrada, $enderecoDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_937636',  $entrada, $complementoDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_1588802', $entrada, $estadoDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_2343542', $entrada, $cidadeDaInstituicao);
+    Caldera_Forms_Entry_Update::update_field_value('fld_1936573', $entrada, $cepDaInstituicao);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entrada, $redes);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_5438248', $entrada, $doc1UnidadeUrl);
+    Caldera_Forms_Entry_Update::update_field_value('fld_9588438', $entrada, $doc2UnidadeUrl);
+    Caldera_Forms_Entry_Update::update_field_value('fld_1333267', $entrada, $nomeDoCandidato);
+    Caldera_Forms_Entry_Update::update_field_value('fld_7868662', $entrada, $emailDoCandidato);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada, $statusGeral);
+    Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada, $status);
+    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada, $historico);
+    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecer);
+}
+
+function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao", $versao = 0)
+{
+    /*
+	* Função para atualizar uma nova entrada em um Caldera Forms
+    * Usado para os forms específicos de cada rede 
+	*/
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_605717', $entrada, $dados_redes["urlServico"]);
+    Caldera_Forms_Entry_Update::update_field_value('fld_4486725', $entrada, $dados_redes["produtoServicos"]);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_8777940', $entrada, $dados_redes["classificacoes"]);
+    Caldera_Forms_Entry_Update::update_field_value('fld_6678080', $entrada, $dados_redes["outroClassificacao"]);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_4665383', $entrada, $dados_redes["publicos"]);
+    Caldera_Forms_Entry_Update::update_field_value('fld_2391778', $entrada, $dados_redes["abrangencias"]);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_6140408', $entrada, $dados_redes["nomeCompleto"]);
+    Caldera_Forms_Entry_Update::update_field_value('fld_7130000', $entrada, $dados_redes["emailRepresentante"]);
+    Caldera_Forms_Entry_Update::update_field_value('fld_5051662', $entrada, $dados_redes["telefoneRepresentante"]);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada, $status);
+
+    //$versaoOld = valida($entrada, 'fld_2402818');
+    Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
 }
