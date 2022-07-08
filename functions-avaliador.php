@@ -336,17 +336,19 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
     foreach ($arrayRedes as $rede) {
-        //Campo: campo_extra2
-        Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]); 
-        //Campo: campo_extra1
-        Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]); 
-        //Campo: status_*
-        Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
+        if ($situacaoAvaliador_rede[$rede] != "") {
+            //Campo: campo_extra2
+            Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]); 
+            //Campo: campo_extra1
+            Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]); 
+            //Campo: status_*
+            Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
+        }
     }
 
     //Situacao Geral:
     //casos de status: [avaliacao, pendente, homologado, publicado]
-    
+    $situacaoGeral = "homologado";
     if ($situacaoAvaliador_geral == "pendente") {
         $situacaoGeral = "pendente";
     }
