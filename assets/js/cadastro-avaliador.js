@@ -30,7 +30,7 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
     }
 
     // limpar as entradas já preenchidas
-    limparFormAvaliador();
+    //limparFormAvaliador();
 
     // Removo o active das outras abas
     for (var i = 2; i <= 6; i++) {

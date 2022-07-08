@@ -23,7 +23,7 @@ function avaliador_view()
         foreach ($todasEntradas as $umaEntrada) {
             $user_id = $umaEntrada['user']['ID'];
             $entrada = $umaEntrada['_entry_id'];
-            $form = Caldera_Forms_Forms::get_form($form_id);
+            $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
             // adicionar check da situação da rede geral fld_9748069
             $entradas[$user_id] = array();
             $entradas[$user_id][] = new Caldera_Forms_Entry($form, $entrada);
@@ -33,33 +33,39 @@ function avaliador_view()
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
 ?>
-    <div class="br-table mb-5" id="lista-entradas-div">
-        <div class="table-header"></div>
-        <table>
-            <colgroup>
-                <col class="col-2">
-                <col class="col-7">
-                <col class="col-3">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th scope="col">Data de submissão</th>
-                    <th scope="col">Nome da Instituição</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($entradas as $key => $entrada) : ?>
-                    <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
-                    <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>');">
-                        <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
-                        <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
-                        <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_9748069')); ?></td>
+    <?php if (!$entradas) : ?>
+        <div class="br-table mb-5" id="lista-entradas-div">
+            <p>Não há cadastros para serem avaliados.</p>
+        </div>
+    <?php else: ?>
+        <div class="br-table mb-5" id="lista-entradas-div">
+            <div class="table-header"></div>
+            <table>
+                <colgroup>
+                    <col class="col-2">
+                    <col class="col-7">
+                    <col class="col-3">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Data de submissão</th>
+                        <th scope="col">Nome da Instituição</th>
+                        <th scope="col">Status</th>
                     </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($entradas as $key => $entrada) : ?>
+                        <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
+                        <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>');">
+                            <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
+                            <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
+                            <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_9748069')); ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif ?>
 
     <form class="cardAvaliador" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
         <div id="entrada-form-div" class="br-accordion" id="accordion1" style="display: none;">
@@ -107,9 +113,7 @@ function avaliador_view()
                         <input id="action-avaliador-input" type="submit" class="br-button primary" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
                         <span id="span-avaliador-input" class="feedback warning" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i>Atenção: existem campos não preenchidos!</span>
                     </div>
-
-                    <input type="hidden" name="avalia_usuario" value=<?php echo $user_id ?>>
-                    <input id="hidden-avaliador-input" type="hidden" name="action" value="atualiza_avaliador">
+                    <input id="hidden-avaliador-input" type="hidden" name="action" value="avaliador_action">
                 </div>
 
             </div>
@@ -147,7 +151,7 @@ function ajaxCarregaInstituicao()
             if ($user_id == $usuario_id) {
 
                 $entrada = $umaEntrada['_entry_id'];
-                $form = Caldera_Forms_Forms::get_form($form_id);
+                $form = Caldera_Forms_Forms::get_form($FORM_ID_GERAL);
                 $entradas[FORM_ID_GERAL] = new Caldera_Forms_Entry($form, $entrada);
                 $entradas["date"] = $umaEntrada['_date'];
                 break;
@@ -158,6 +162,7 @@ function ajaxCarregaInstituicao()
 
     // função alterada para não retornar um form
     render_geral_data($entradas[FORM_ID_GERAL]);
+    echo '<input type="hidden" name="entrada_geral" value="'.$entrada.'">';
     die();
 }
 add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
@@ -193,6 +198,7 @@ function ajaxCarregaRede()
     //$date = date('M d, Y', strtotime($entradas["date"]));
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]]);
+    echo '<input type="hidden" name="entrada_'.$rede.'" value="'.$entrada.'">';
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
@@ -252,15 +258,52 @@ function campos_avaliador_redes($rede = "geral")
 
 function avaliador_action_form()
 {
-    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
-    else $nomeDaInstituicao = "";
-    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
-    else $descricaoDaInstituicao = "";
-    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
-    else $natureza_op = "";
-    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
-    else $porte_op = "";
+    $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
+    $arrayRedes = explode(";", $todas_redes);
+    $historicoParecer_rede = array();
+    $parecerAvaliador_rede = array();
+    $situacaoAvaliador_rede = array();
+    $entrada_rede = array();
+    //Campos do Geral
+    if (isset($_POST['historicoParecer_geral'])) $historicoParecer_geral = ($_POST['historicoParecer_geral']);
+    else $historicoParecer_geral = "";
+    if (isset($_POST['parecerAvaliador_geral'])) $parecerAvaliador_geral = ($_POST['parecerAvaliador_geral']);
+    else $parecerAvaliador_geral = "";
+    if (isset($_POST['situacaoAvaliador_geral'])) $situacaoAvaliador_geral = ($_POST['situacaoAvaliador_geral']);
+    else $situacaoAvaliador_geral = "";
+    //entry_id da instituicao
+    if (isset($_POST['entrada_geral'])) $entrada_geral = ($_POST['entrada_geral']);
+    else $entrada_geral = "";
+    //Campos das redes
+    foreach ($arrayRedes as $rede) {
+        if (isset($_POST['historicoParecer_'.$rede])) $historicoParecer_rede[$rede] = ($_POST['historicoParecer_'.$rede]);
+        else $historicoParecer_rede[$rede] = "";
+        if (isset($_POST['parecerAvaliador_'.$rede])) $parecerAvaliador_rede[$rede] = ($_POST['parecerAvaliador_'.$rede]);
+        else $parecerAvaliador_rede[$rede] = "";
+        if (isset($_POST['situacaoAvaliador_'.$rede])) $situacaoAvaliador_rede[$rede] = ($_POST['situacaoAvaliador_'.$rede]);
+        else $situacaoAvaliador_rede[$rede] = "";   
+        //entry_id de cada rede
+        if (isset($_POST['entrada_'.$rede])) $entrada_rede[$rede] = ($_POST['entrada_'.$rede]);
+        else $entrada_rede[$rede] = "";     
+    }
+    //Adicionando o parecer ao histórico:
+    date_default_timezone_set('America/Sao_Paulo');
+    $date = date('d/m/Y h:i:sa', time());
+    $historicoParecer_geral = $historicoParecer_geral."Avaliação em ".$date.":<br>".$parecerAvaliador_geral.":<br><br>";
+    
+    //casos de status: [avaliacao, pendente, homologado, publicado]
 
+    //----------------------------submit
+    if (isset($_POST["enviar"])) {
+        //update
+        update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede);
+        //enviar email
+
+
+        // redirecionar para a página de avaliacao
+        wp_redirect(esc_url(home_url('/avaliador')));
+        exit;
+    }
     /*
     //caso pendente
     o form geral
@@ -276,7 +319,46 @@ function avaliador_action_form()
     // vamos criar uma nova função de visualização function avaliador_view_publico() -> form apenas para os homologados
     */
 }
+add_action('admin_post_nopriv_avaliador_action', 'avaliador_action_form');
+add_action('admin_post_avaliador_action', 'avaliador_action_form');
 
+function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede) {
+    
+    //Form Geral
+    //Campo: historico_parecer_instituicao
+    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada_geral, $historicoParecer_geral); 
+    //Campo: parecer_instituicao
+    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada_geral, $parecerAvaliador_geral); 
+    //Campo: status_instituicao
+    Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada_geral, $situacaoAvaliador_geral); 
+
+    //Form Redes
+    $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
+    $arrayRedes = explode(";", $todas_redes);
+    foreach ($arrayRedes as $rede) {
+        //Campo: campo_extra2
+        Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]); 
+        //Campo: campo_extra1
+        Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]); 
+        //Campo: status_*
+        Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
+    }
+
+    //Situacao Geral:
+    //casos de status: [avaliacao, pendente, homologado, publicado]
+    
+    if ($situacaoAvaliador_geral == "pendente") {
+        $situacaoGeral = "pendente";
+    }
+    foreach ($arrayRedes as $rede) {
+        if ($situacaoAvaliador_rede[$rede] == "pendente") {
+            $situacaoGeral = "pendente";
+        }
+    }
+    //Campo: status_geral_instituicao
+    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada_geral, $situacaoGeral); 
+
+}
 
 function avaliador_view_homologado()
 {
