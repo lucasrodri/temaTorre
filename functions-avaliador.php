@@ -34,7 +34,7 @@ function avaliador_view()
     $arrayRedes = explode(";", $todas_redes);
 ?>
     <?php if (!$entradas) : ?>
-        <div class="br-table mb-5" id="lista-entradas-div">
+        <div class="mb-5" id="lista-entradas-div">
             <p>Não há cadastros para serem avaliados.</p>
         </div>
     <?php else : ?>
@@ -96,10 +96,10 @@ function avaliador_view()
                             <div class="tab-panel" id="panel-<?php echo $i; ?>">
                                 <div id="tab_redes_<?php echo $i; ?>"></div>
                                 <div class="mb-3">
-                                <p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>
-                                <?php
+                                    <p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>
+                                    <?php
                                     echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $arrayRedes[$i - 2] . '" select_id="escolha_tags_' . $arrayRedes[$i - 2] . '"]');
-                                ?>
+                                    ?>
                                 </div>
                             </div>
                         <?php endfor; ?>
@@ -110,7 +110,7 @@ function avaliador_view()
                     <div id="resumo-avaliador" style="display:none;"></div>
 
                     <div class="div-botao-avaliador">
-                        <input id="action-avaliador-input" type="submit" class="br-button primary mt-3 mb-3" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
+                        <input id="action-avaliador-input" type="submit" class="br-button primary mt-5 mb-3" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
                         <span id="span-avaliador-input" class="feedback warning" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i>Atenção: existem campos não preenchidos!</span>
                     </div>
                     <input id="hidden-avaliador-input" type="hidden" name="action" value="avaliador_action">
@@ -212,13 +212,11 @@ function campos_avaliador_redes($entry, $rede = "geral")
         $placeholder = "Escreva o parecer sobre os dados da Instituição";
         $required = 'required';
         $fld_historico = "fld_4416984";
-        $fld_parecer = "fld_8529353";
     } else {
         echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Rede de " . relaciona($rede)[2];
         $required = '';
-        $fld_historico = "fld_5960872";
-        $fld_parecer = "fld_6135036";
+        $fld_historico = "fld_6135036";
     }
 ?>
     <div id="div_<?php echo $rede ?>">
@@ -233,15 +231,6 @@ function campos_avaliador_redes($entry, $rede = "geral")
             <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocusout="validacaoAvaliador()" <?php echo $required ?>></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
-
-        <?php
-        if ($rede != "geral") {
-            echo '<div class="mb-3">';
-            echo '<p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>';
-            echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $rede . '" select_id="escolha_tags_' . $rede . '"]');
-            echo '</div>';
-        }
-        ?>
 
         <div class="mb-3 radio-avaliador">
             <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
@@ -363,12 +352,12 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
 
     foreach ($arrayRedes as $rede) {
         if ($situacaoAvaliador_rede[$rede] != "") {
+            //Campo: status_*
+            Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
             //Campo: campo_extra2
             Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]);
             //Campo: campo_extra1
             Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]);
-            //Campo: status_*
-            Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
         }
     }
 

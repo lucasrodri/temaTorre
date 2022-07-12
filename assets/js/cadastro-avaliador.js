@@ -207,36 +207,36 @@ function validacaoAvaliador() {
 Função para limpar o Form.
 Sem uso no momento, decidimos utilizar uma tag <a> para voltar a seleção de instituicoes para avaliacao
 */
-function limparFormAvaliador() {
-    return;
-    var divs = ['div_geral', 'div_check_suporte', 'div_check_formacao', 'div_check_pesquisa', 'div_check_inovacao', 'div_check_tecnologia'];
+// function limparFormAvaliador() {
+//     return;
+//     var divs = ['div_geral', 'div_check_suporte', 'div_check_formacao', 'div_check_pesquisa', 'div_check_inovacao', 'div_check_tecnologia'];
 
-    for (var i = 0; i < 6; i++) {
-        var div = document.getElementById(divs[i]);
-        var elements = div.querySelectorAll('input, select, textarea');
+//     for (var i = 0; i < 6; i++) {
+//         var div = document.getElementById(divs[i]);
+//         var elements = div.querySelectorAll('input, select, textarea');
 
-        for (el of elements) {
-            // limpar valor
-            el.value = '';
+//         for (el of elements) {
+//             // limpar valor
+//             el.value = '';
 
-            // if (el.type == 'select-multiple') {
-            //     // limpar entradas do select2
-            //     $(el).val(null).empty();
-            // }
+//             // if (el.type == 'select-multiple') {
+//             //     // limpar entradas do select2
+//             //     $(el).val(null).empty();
+//             // }
 
-            if (el.type == 'radio') {
-                el.checked = false;
-            }
+//             if (el.type == 'radio') {
+//                 el.checked = false;
+//             }
 
-            el.parentElement.removeAttribute("valid");
-            el.parentElement.classList.remove("success");
-        }
-    }
+//             el.parentElement.removeAttribute("valid");
+//             el.parentElement.classList.remove("success");
+//         }
+//     }
 
-    // Limpar div de resumo
-    document.getElementById('resumo-avaliador').innerHTML = '';
-    // Desabilitar o botão por precaução
-    document.getElementById('action-avaliador-input').setAttribute("disabled", "");
-    // Mostrar aviso de preenchimento
-    document.getElementById('span-avaliador-input').style.display = 'inline';
-}
+//     // Limpar div de resumo
+//     document.getElementById('resumo-avaliador').innerHTML = '';
+//     // Desabilitar o botão por precaução
+//     document.getElementById('action-avaliador-input').setAttribute("disabled", "");
+//     // Mostrar aviso de preenchimento
+//     document.getElementById('span-avaliador-input').style.display = 'inline';
+// }

@@ -799,6 +799,19 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4416984', $historico));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8529353', $parecer));
 
+    //Demais campos que devem ser vazios
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_223413', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_299311', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2149513', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2825435', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3254731', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_743549', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8552094', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8508314', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1580472', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4545101', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2307552', ""));
+
     //Save entry in database.
     $entryId = $entry->save();
     //Make entry active
@@ -839,6 +852,19 @@ function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id
 
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3707629', $status));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2402818', $versao));
+
+    //Demais campos que devem ser vazios
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7938112', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5960872', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6135036', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2025685', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4663810', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2676148', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9425460', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8860363', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3338049', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1735092', ""));
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_1852070', ""));
 
     //Save entry in database.
     $entryId = $entry->save();
