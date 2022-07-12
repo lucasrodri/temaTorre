@@ -35,7 +35,7 @@ function avaliador_view()
 ?>
     <?php if (!$entradas) : ?>
         <div class="mb-5" id="lista-entradas-div">
-            <p>Não há cadastros para serem avaliados.</p>
+            <p>Não há candidaturas para avaliação.</p>
         </div>
     <?php else : ?>
         <div class="br-table mb-5" id="lista-entradas-div">
@@ -263,35 +263,38 @@ function avaliador_action_form()
     $entrada_rede = array();
 
     //Campos do Geral
-    if (isset($_POST['historicoParecer_geral'])) $historicoParecer_geral = ($_POST['historicoParecer_geral']);
+    if (isset($_POST['historicoParecer_geral'])) $historicoParecer_geral = (trim($_POST['historicoParecer_geral']));
     else $historicoParecer_geral = "";
-    if (isset($_POST['parecerAvaliador_geral'])) $parecerAvaliador_geral = ($_POST['parecerAvaliador_geral']);
+    if (isset($_POST['parecerAvaliador_geral'])) $parecerAvaliador_geral = (trim($_POST['parecerAvaliador_geral']));
     else $parecerAvaliador_geral = "";
-    if (isset($_POST['situacaoAvaliador_geral'])) $situacaoAvaliador_geral = ($_POST['situacaoAvaliador_geral']);
+    if (isset($_POST['situacaoAvaliador_geral'])) $situacaoAvaliador_geral = (trim($_POST['situacaoAvaliador_geral']));
     else $situacaoAvaliador_geral = "";
 
     //entry_id da instituicao
     if (isset($_POST['entrada_geral'])) $entrada_geral = ($_POST['entrada_geral']);
     else $entrada_geral = "";
 
+    //Adicionando o parecer ao histórico:
+    date_default_timezone_set('America/Sao_Paulo');
+    $date = date('d/m/Y h:i:sa', time());
+    $historicoParecer_geral = $historicoParecer_geral . "Avaliação em " . $date . ":\n" . $parecerAvaliador_geral . ":\n\n";
+
     //Campos das redes
     foreach ($arrayRedes as $rede) {
-        if (isset($_POST['historicoParecer_' . $rede])) $historicoParecer_rede[$rede] = ($_POST['historicoParecer_' . $rede]);
+        if (isset($_POST['historicoParecer_' . $rede])) $historicoParecer_rede[$rede] = (trim($_POST['historicoParecer_' . $rede]));
         else $historicoParecer_rede[$rede] = "";
-        if (isset($_POST['parecerAvaliador_' . $rede])) $parecerAvaliador_rede[$rede] = ($_POST['parecerAvaliador_' . $rede]);
+        if (isset($_POST['parecerAvaliador_' . $rede])) $parecerAvaliador_rede[$rede] = (trim($_POST['parecerAvaliador_' . $rede]));
         else $parecerAvaliador_rede[$rede] = "";
-        if (isset($_POST['situacaoAvaliador_' . $rede])) $situacaoAvaliador_rede[$rede] = ($_POST['situacaoAvaliador_' . $rede]);
+        if (isset($_POST['situacaoAvaliador_' . $rede])) $situacaoAvaliador_rede[$rede] = (trim($_POST['situacaoAvaliador_' . $rede]));
         else $situacaoAvaliador_rede[$rede] = "";
 
         //entry_id de cada rede
         if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
         else $entrada_rede[$rede] = "";
-    }
 
-    //Adicionando o parecer ao histórico:
-    date_default_timezone_set('America/Sao_Paulo');
-    $date = date('d/m/Y h:i:sa', time());
-    $historicoParecer_geral = $historicoParecer_geral . "Avaliação em " . $date . ":<br>" . $parecerAvaliador_geral . ":<br><br>";
+        //Adicionando o parecer ao histórico:
+        $historicoParecer_rede[$rede] = $historicoParecer_rede[$rede] . "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede] . ":\n\n";
+    }
 
     //casos de status: [avaliacao, pendente, homologado, publicado]
 

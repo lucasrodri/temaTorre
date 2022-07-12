@@ -14,7 +14,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 13;
+    $usuario_id = 36;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -82,22 +82,6 @@ function candidato_view()
         <!-- Rodapé -->
     </div>
     <div class="row mt-5 mb-5">
-
-        <div class="col-md-12">
-            <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_4416984')) > 1) : ?>
-                <div class="br-textarea mb-3">
-                    <label for="historicoParecer">Histórico do parecer</label>
-                    <textarea name="historicoParecer" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>" disabled><?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?></textarea>
-                </div>
-            <?php endif; ?>
-
-            <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_8529353')) > 1) : ?>
-                <div class="br-textarea mb-3">
-                    <label for="parecerAvaliador">Veja o parecer do Avaliador</label>
-                    <textarea name="parecerAvaliador" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>" disabled><?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?></textarea>
-                </div>
-            <?php endif; ?>
-        </div>
 
         <div class="col-md-12 align-button-right mr-4">
             <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
@@ -169,6 +153,22 @@ function render_geral_form($entrada)
     //$statusFormInstituicao = 'pendente';
 ?>
     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+
+        <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
+        <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
+            <div class="col-md-12">
+
+                <div class="br-textarea mb-3">
+                    <label for="historicoParecer">Histórico do parecer</label>
+                    <textarea class="textarea-start-size" name="historicoParecer" value="<?php echo valida($entrada, 'fld_4416984'); ?>" disabled><?php echo valida($entrada, 'fld_4416984'); ?></textarea>
+                </div>
+                <div class="br-textarea mb-3">
+                    <label for="parecerAvaliador">Parecer do Avaliador</label>
+                    <textarea class="textarea-start-size" name="parecerAvaliador" value="<?php echo valida($entrada, 'fld_8529353'); ?>" disabled><?php echo valida($entrada, 'fld_8529353'); ?></textarea>
+                </div>
+
+            </div>
+        <?php endif; ?>
 
         <?php render_geral_data($entrada) ?>
 
@@ -395,23 +395,21 @@ function render_geral_data($entrada)
 function render_rede_avaliacao_data($rede_nome, $entrada)
 {
 ?>
-    <div class="col-md-12">
-        <?php if (strlen(valida($entrada, 'fld_6135036')) > 1) : ?>
+    <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
+    <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
+        <div class="col-md-12">
             <div class="br-textarea mb-3">
                 <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico do parecer da rede</label>
-                <textarea name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
+                <textarea class="textarea-start-size" name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
             </div>
-        <?php endif; ?>
 
-        <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
             <div class="br-textarea mb-3">
-                <label for="parecerAvaliador_<?php echo $rede_nome; ?>">Veja o parecer do Avaliador</label>
-                <textarea name="parecerAvaliador_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_5960872'); ?>" disabled><?php echo valida($entrada, 'fld_5960872'); ?></textarea>
+                <label for="parecerAvaliador_<?php echo $rede_nome; ?>">Parecer do Avaliador</label>
+                <textarea class="textarea-start-size" name="parecerAvaliador_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_5960872'); ?>" disabled><?php echo valida($entrada, 'fld_5960872'); ?></textarea>
             </div>
-        <?php endif; ?>
-
-        <!-- Acrescentar tags!!!! -->
-    </div>
+            <!-- Acrescentar tags se for homologado!!!! -->
+        </div>
+    <?php endif; ?>
 <?php
 }
 
