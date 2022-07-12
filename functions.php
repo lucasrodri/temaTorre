@@ -1303,6 +1303,7 @@ function ajaxCarregaCategorias() {
    die();
 }
 add_action('wp_ajax_carrega_categorias','ajaxCarregaCategorias');
+add_action('wp_ajax_nopriv_carrega_categorias','ajaxCarregaCategorias');
 
 
 function buscaAvancadaAction() {

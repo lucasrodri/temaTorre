@@ -87,14 +87,14 @@ function candidato_view()
             <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_4416984')) > 1) : ?>
                 <div class="br-textarea mb-3">
                     <label for="historicoParecer">Histórico do parecer</label>
-                    <textarea name="historicoParecer" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>" disabled></textarea>
+                    <textarea name="historicoParecer" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?>" disabled><?php echo valida($entradas[FORM_ID_GERAL], 'fld_4416984'); ?></textarea>
                 </div>
             <?php endif; ?>
 
             <?php if (strlen(valida($entradas[FORM_ID_GERAL], 'fld_8529353')) > 1) : ?>
                 <div class="br-textarea mb-3">
                     <label for="parecerAvaliador">Veja o parecer do Avaliador</label>
-                    <textarea name="parecerAvaliador" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>" disabled></textarea>
+                    <textarea name="parecerAvaliador" value="<?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?>" disabled><?php echo valida($entradas[FORM_ID_GERAL], 'fld_8529353'); ?></textarea>
                 </div>
             <?php endif; ?>
         </div>
@@ -142,6 +142,7 @@ function candidato_view()
                         //$statusRede = 'pendente';
                         ?>
 
+                        <?php render_rede_avaliacao_data($rede_nome, $entrada); ?>
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
 
                         <?php if ($statusRede == "pendente") : ?>
@@ -366,20 +367,51 @@ function render_geral_data($entrada)
         </div>
     </div>
 
-    <?php if ($statusFormInstituicao == "pendente") : ?>
+    <!-- Se estiver pendente e não tiver enviado recurso ainda -->
+    <?php if (($statusFormInstituicao == "pendente") && (strlen(valida($entrada, 'fld_223413')) < 1)) : ?>
         <button id="recurso-btn" class="br-button secondary" type="button" onclick="botaoRecurso();">
             Entrar com recurso?
         </button>
 
-        <?php //if (strlen(valida($entrada, 'fld_223413')) > 1) : 
-        ?>
         <div id="recurso-div" class="br-textarea mb-3" style="display:none">
             <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
-            <textarea name="recursoInstituicao" value="<?php echo valida($entrada, 'fld_223413'); ?>"></textarea>
+            <textarea class="textarea-start-size" name="recursoInstituicao"></textarea>
+            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
-        <?php //endif; 
-        ?>
     <?php endif; ?>
+
+    <!-- Se já tiver apresentado recurso -->
+    <?php if (strlen(valida($entrada, 'fld_223413')) > 1) : ?>
+        <div class="br-textarea mb-3">
+            <label for="recursoInstituicao">Recurso para o avaliador</label>
+            <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Recurso" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
+            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        </div>
+    <?php endif; ?>
+<?php
+}
+
+
+function render_rede_avaliacao_data($rede_nome, $entrada)
+{
+?>
+    <div class="col-md-12">
+        <?php if (strlen(valida($entrada, 'fld_6135036')) > 1) : ?>
+            <div class="br-textarea mb-3">
+                <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico do parecer da rede</label>
+                <textarea name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
+            </div>
+        <?php endif; ?>
+
+        <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
+            <div class="br-textarea mb-3">
+                <label for="parecerAvaliador_<?php echo $rede_nome; ?>">Veja o parecer do Avaliador</label>
+                <textarea name="parecerAvaliador_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_5960872'); ?>" disabled><?php echo valida($entrada, 'fld_5960872'); ?></textarea>
+            </div>
+        <?php endif; ?>
+
+        <!-- Acrescentar tags!!!! -->
+    </div>
 <?php
 }
 
@@ -451,7 +483,7 @@ function render_status($status)
     }
 }
 
-
+// Função possivelmente não usada, já que será feito por ajax
 function candidato_action_form()
 {
     /*
@@ -499,7 +531,7 @@ function candidato_action_form()
     if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
         $doc2Unidade = $_FILES['guia_instituicao'];
     }
-    
+
     //pegar redes
 
     //Nome e email do candidato
@@ -510,7 +542,7 @@ function candidato_action_form()
 
     //----------------------------submit
     if (isset($_POST["enviar"])) {
-        
+
         $entrada = '';
         $redes = '';$statusGeral = ''; $status = ''; $parecer = ''; $historico = '';
 
@@ -537,7 +569,7 @@ function candidato_action_form()
 add_action('admin_post_nopriv_atualiza_candidato', 'candidato_action_form');
 add_action('admin_post_atualiza_candidato', 'candidato_action_form');
 
-function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $statusGeral = "avaliacao",  $status = "avaliacao", $parecer, $historico)
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -565,10 +597,10 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_1333267', $entrada, $nomeDoCandidato);
     Caldera_Forms_Entry_Update::update_field_value('fld_7868662', $entrada, $emailDoCandidato);
 
-    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada, $statusGeral);
+    // Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada, $statusGeral);
     Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada, $status);
-    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada, $historico);
-    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecer);
+    // Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada, $historico);
+    // Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecer);
 }
 
 function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao", $versao = 0)
@@ -596,3 +628,11 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $statu
     //$versaoOld = valida($entrada, 'fld_2402818');
     Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
 }
+
+
+function atualiza_rede_candidato_ajax()
+{
+    return;
+}
+add_action('wp_ajax_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');
+add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');

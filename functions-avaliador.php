@@ -37,7 +37,7 @@ function avaliador_view()
         <div class="br-table mb-5" id="lista-entradas-div">
             <p>Não há cadastros para serem avaliados.</p>
         </div>
-    <?php else: ?>
+    <?php else : ?>
         <div class="br-table mb-5" id="lista-entradas-div">
             <div class="table-header"></div>
             <table>
@@ -162,7 +162,7 @@ function ajaxCarregaInstituicao()
 
     // função alterada para não retornar um form
     render_geral_data($entradas[FORM_ID_GERAL]);
-    echo '<input type="hidden" name="entrada_geral" value="'.$entrada.'">';
+    echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
     die();
 }
 add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
@@ -198,7 +198,7 @@ function ajaxCarregaRede()
     //$date = date('M d, Y', strtotime($entradas["date"]));
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]]);
-    echo '<input type="hidden" name="entrada_'.$rede.'" value="'.$entrada.'">';
+    echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
@@ -211,7 +211,7 @@ function campos_avaliador_redes($rede = "geral")
         $required = 'required';
     } else {
         echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
-        $placeholder = "Escreva o parecer sobre os dados da Rede de" . relaciona($rede)[2];
+        $placeholder = "Escreva o parecer sobre os dados da Rede de " . relaciona($rede)[2];
         $required = '';
     }
 ?>
@@ -260,10 +260,13 @@ function avaliador_action_form()
 {
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
+
     $historicoParecer_rede = array();
     $parecerAvaliador_rede = array();
     $situacaoAvaliador_rede = array();
+    //!!!! falta salvar as tagas de cada rede !!!!!!!!!
     $entrada_rede = array();
+
     //Campos do Geral
     if (isset($_POST['historicoParecer_geral'])) $historicoParecer_geral = ($_POST['historicoParecer_geral']);
     else $historicoParecer_geral = "";
@@ -271,34 +274,50 @@ function avaliador_action_form()
     else $parecerAvaliador_geral = "";
     if (isset($_POST['situacaoAvaliador_geral'])) $situacaoAvaliador_geral = ($_POST['situacaoAvaliador_geral']);
     else $situacaoAvaliador_geral = "";
+
     //entry_id da instituicao
     if (isset($_POST['entrada_geral'])) $entrada_geral = ($_POST['entrada_geral']);
     else $entrada_geral = "";
+
     //Campos das redes
     foreach ($arrayRedes as $rede) {
-        if (isset($_POST['historicoParecer_'.$rede])) $historicoParecer_rede[$rede] = ($_POST['historicoParecer_'.$rede]);
+        if (isset($_POST['historicoParecer_' . $rede])) $historicoParecer_rede[$rede] = ($_POST['historicoParecer_' . $rede]);
         else $historicoParecer_rede[$rede] = "";
-        if (isset($_POST['parecerAvaliador_'.$rede])) $parecerAvaliador_rede[$rede] = ($_POST['parecerAvaliador_'.$rede]);
+        if (isset($_POST['parecerAvaliador_' . $rede])) $parecerAvaliador_rede[$rede] = ($_POST['parecerAvaliador_' . $rede]);
         else $parecerAvaliador_rede[$rede] = "";
-        if (isset($_POST['situacaoAvaliador_'.$rede])) $situacaoAvaliador_rede[$rede] = ($_POST['situacaoAvaliador_'.$rede]);
-        else $situacaoAvaliador_rede[$rede] = "";   
+        if (isset($_POST['situacaoAvaliador_' . $rede])) $situacaoAvaliador_rede[$rede] = ($_POST['situacaoAvaliador_' . $rede]);
+        else $situacaoAvaliador_rede[$rede] = "";
+
         //entry_id de cada rede
-        if (isset($_POST['entrada_'.$rede])) $entrada_rede[$rede] = ($_POST['entrada_'.$rede]);
-        else $entrada_rede[$rede] = "";     
+        if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
+        else $entrada_rede[$rede] = "";
     }
+
     //Adicionando o parecer ao histórico:
     date_default_timezone_set('America/Sao_Paulo');
     $date = date('d/m/Y h:i:sa', time());
-    $historicoParecer_geral = $historicoParecer_geral."Avaliação em ".$date.":<br>".$parecerAvaliador_geral.":<br><br>";
-    
+    $historicoParecer_geral = $historicoParecer_geral . "Avaliação em " . $date . ":<br>" . $parecerAvaliador_geral . ":<br><br>";
+
     //casos de status: [avaliacao, pendente, homologado, publicado]
 
     //----------------------------submit
     if (isset($_POST["enviar"])) {
         //update
         update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede);
-        //enviar email
 
+        //enviar email: validar situação geral
+        $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+        $entry = new Caldera_Forms_Entry($form, $entrada_geral);
+
+        $statusGeral = valida($entry, 'fld_9748069');
+        $nomeDaInstituicao  = valida($entry, 'fld_266564');
+        $emailDoCandidato  = valida($entry, 'fld_7868662');
+
+        // if ($statusGeral == 'pendente') {
+        //     envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
+        // } else if ($statusGeral == 'homologado') {
+        //     envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
+        // }
 
         // redirecionar para a página de avaliacao
         wp_redirect(esc_url(home_url('/avaliador')));
@@ -322,25 +341,26 @@ function avaliador_action_form()
 add_action('admin_post_nopriv_avaliador_action', 'avaliador_action_form');
 add_action('admin_post_avaliador_action', 'avaliador_action_form');
 
-function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede) {
-    
+function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede)
+{
     //Form Geral
     //Campo: historico_parecer_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada_geral, $historicoParecer_geral); 
+    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada_geral, $historicoParecer_geral);
     //Campo: parecer_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada_geral, $parecerAvaliador_geral); 
+    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada_geral, $parecerAvaliador_geral);
     //Campo: status_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada_geral, $situacaoAvaliador_geral); 
+    Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada_geral, $situacaoAvaliador_geral);
 
     //Form Redes
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
+
     foreach ($arrayRedes as $rede) {
         if ($situacaoAvaliador_rede[$rede] != "") {
             //Campo: campo_extra2
-            Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]); 
+            Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]);
             //Campo: campo_extra1
-            Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]); 
+            Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede[$rede], $parecerAvaliador_rede[$rede]);
             //Campo: status_*
             Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
         }
@@ -352,14 +372,15 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
     if ($situacaoAvaliador_geral == "pendente") {
         $situacaoGeral = "pendente";
     }
+
     foreach ($arrayRedes as $rede) {
         if ($situacaoAvaliador_rede[$rede] == "pendente") {
             $situacaoGeral = "pendente";
         }
     }
-    //Campo: status_geral_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada_geral, $situacaoGeral); 
 
+    //Campo: status_geral_instituicao
+    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada_geral, $situacaoGeral);
 }
 
 function avaliador_view_homologado()

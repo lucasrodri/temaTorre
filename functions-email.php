@@ -7,7 +7,7 @@
 function enderecos_email($emailDoCandidato)
 {
   //$to = $emailDoCandidato . ", torre@mcti.gov.br"; //adicionar outros e-mails
-  $to = $emailDoCandidato;
+  $to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
   return $to;
 }
 
@@ -17,10 +17,10 @@ function enderecos_email($emailDoCandidato)
 //envia_email('desistir', $nomeDaInstituicao, $emailDoCandidato)
 //envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato)
 //envia_email('editar',   $nomeDaInstituicao, $emailDoCandidato)
-//envia_email('aprovado', $nomeDaInstituicao, $emailDoCandidato, $parecer)
+//envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, $parecer)
 //envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecer)
 //envia_email('apagar',   $nomeDaInstituicao, $emailDoCandidato, $parecer)
-
+//envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato)
 
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '')
 {
@@ -51,9 +51,9 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
       $message = msg_editar($nomeDaInstituicao);
       break;
 
-    case 'aprovado':
+    case 'homologado':
       $subject = 'Seu processo de candidatura à Torre MCTI foi homologado';
-      $message = msg_aprovado($nomeDaInstituicao, $parecer);
+      $message = msg_homologado($nomeDaInstituicao, $parecer);
       break;
 
     case 'pendente':
@@ -64,6 +64,11 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
     case 'apagar':
       $subject = 'Seu processo de candidatura à Torre MCTI foi apagado';
       $message = msg_apagar($nomeDaInstituicao, $parecer);
+      break;
+
+    case 'publicado':
+      $subject = 'Sua candidatura à Torre MCTI foi publicada';
+      $message = msg_publicado($nomeDaInstituicao);
       break;
 
     default:
@@ -130,7 +135,7 @@ function msg_editar($nomeDaInstituicao)
 * Mensagens enviadas pelo Avaliador
 */
 
-function msg_aprovado($nomeDaInstituicao, $parecer)
+function msg_homologado($nomeDaInstituicao, $parecer)
 {
   /*
 	* Chamada pela função ???? do carregaform.php
@@ -159,6 +164,17 @@ function msg_apagar($nomeDaInstituicao, $parecer)
 	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Informamos que seu processo de candidatura &agrave; Torre MCTI foi removido por um de nossos Avaliadores.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">O parecer de sua candidatura &eacute; o seguinte:<br />' . $parecer . '</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Esperamos que tenha interesse em se candidatar novamente no futuro.</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
+
+  return $message;
+}
+
+function msg_publicado($nomeDaInstituicao)
+{
+  /*
+	* Chamada pela função ???? do carregaform.php
+	*/
+
+  $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Ficamos felizes em dizer que sua candidatura &agrave; Torre MCTI foi publicada.</p><p style="text-align: left;">Voc&ecirc; pode acompanhar as publica&ccedil;&otilde;es na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
   return $message;
 }

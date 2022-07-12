@@ -385,7 +385,6 @@ function cadastro_redes_render($rede_nome, $entrada = "")
         <?php } ?>
     </div>
 
-
     <div class="mb-3">
         <div class="br-input" style="display:none;">
             <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -419,7 +418,6 @@ function cadastro_redes_render($rede_nome, $entrada = "")
 
 
     <div class="h5"> Representante da instituição na <?php echo $title; ?></div>
-
 
     <div class="mb-3">
         <div class="br-input">
