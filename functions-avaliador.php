@@ -91,16 +91,16 @@ function avaliador_view()
                         <div id='loading_carregar' class="loading medium" style='display:none;'></div>
                         <div class="tab-panel active" id="panel-1">
                             <div id="tab_instituicao"></div>
-
-                            <?php campos_avaliador_redes(); ?>
-
                         </div>
                         <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                             <div class="tab-panel" id="panel-<?php echo $i; ?>">
                                 <div id="tab_redes_<?php echo $i; ?>"></div>
-
-                                <?php campos_avaliador_redes($arrayRedes[$i - 2]); ?>
-
+                                <div class="mb-3">
+                                <p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>
+                                <?php
+                                    echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $arrayRedes[$i - 2] . '" select_id="escolha_tags_' . $arrayRedes[$i - 2] . '"]');
+                                ?>
+                                </div>
                             </div>
                         <?php endfor; ?>
                     </div>
@@ -110,7 +110,7 @@ function avaliador_view()
                     <div id="resumo-avaliador" style="display:none;"></div>
 
                     <div class="div-botao-avaliador">
-                        <input id="action-avaliador-input" type="submit" class="br-button primary" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
+                        <input id="action-avaliador-input" type="submit" class="br-button primary mt-3 mb-3" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
                         <span id="span-avaliador-input" class="feedback warning" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i>Atenção: existem campos não preenchidos!</span>
                     </div>
                     <input id="hidden-avaliador-input" type="hidden" name="action" value="avaliador_action">
@@ -163,6 +163,7 @@ function ajaxCarregaInstituicao()
     // função alterada para não retornar um form
     render_geral_data($entradas[FORM_ID_GERAL]);
     echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
+    campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     die();
 }
 add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
@@ -199,27 +200,32 @@ function ajaxCarregaRede()
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]]);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
+    campos_avaliador_redes($entradas[relaciona($rede)[1]], $rede);
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
 
-function campos_avaliador_redes($rede = "geral")
+function campos_avaliador_redes($entry, $rede = "geral")
 {
     if ($rede == "geral") {
         echo "<h3>Avaliação da Instituição</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Instituição";
         $required = 'required';
+        $fld_historico = "fld_4416984";
+        $fld_parecer = "fld_8529353";
     } else {
         echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Rede de " . relaciona($rede)[2];
         $required = '';
+        $fld_historico = "fld_5960872";
+        $fld_parecer = "fld_6135036";
     }
 ?>
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">
             <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" disabled></textarea>
+            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" disabled value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 
         <div class="br-textarea mb-3">

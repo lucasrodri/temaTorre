@@ -174,7 +174,7 @@ function validacaoAvaliador() {
             valid[i] = false;
         } else {
             //divResumo.innerHTML += '<i class="fas fa-check"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido <br>';
-            divResumo.innerHTML += '<span class="feedback success" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido</span><br>';
+            divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido</span><br>';
             valid[i] = true;
         }
 
@@ -185,7 +185,7 @@ function validacaoAvaliador() {
             valid[i] = false;
         } else {
             //divResumo.innerHTML += '<i class="fas fa-check"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada <br>';
-            divResumo.innerHTML += '<span class="feedback success" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
+            divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
             valid[i] = true;
         }
     }
