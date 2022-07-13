@@ -223,7 +223,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
 
         <div class="br-textarea mb-3">
             <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" disabled value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
+            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 
         <div class="br-textarea mb-3">
@@ -277,7 +277,12 @@ function avaliador_action_form()
     //Adicionando o parecer ao histórico:
     date_default_timezone_set('America/Sao_Paulo');
     $date = date('d/m/Y h:i:sa', time());
-    $historicoParecer_geral = $historicoParecer_geral . "Avaliação em " . $date . ":\n" . $parecerAvaliador_geral . ":\n\n";
+
+    // se já houver alguma coisa, acrescenta um \n
+    if (strlen($historicoParecer_geral) > 1)
+        $historicoParecer_geral .= "\n\n";
+
+    $historicoParecer_geral .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_geral;
 
     //Campos das redes
     foreach ($arrayRedes as $rede) {
@@ -292,8 +297,12 @@ function avaliador_action_form()
         if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
         else $entrada_rede[$rede] = "";
 
+        // se já houver alguma coisa, acrescenta um \n
+        if (strlen($historicoParecer_rede[$rede]) > 1)
+            $historicoParecer_rede[$rede] .= "\n\n";
+
         //Adicionando o parecer ao histórico:
-        $historicoParecer_rede[$rede] = $historicoParecer_rede[$rede] . "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede] . ":\n\n";
+        $historicoParecer_rede[$rede] .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede];
     }
 
     //casos de status: [avaliacao, pendente, homologado, publicado]

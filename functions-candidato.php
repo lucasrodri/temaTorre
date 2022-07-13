@@ -18,6 +18,7 @@ function candidato_view()
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
+    $entradas_id = array();
 
     foreach ($form_ids as $form_id) {
         $data = Caldera_Forms_Admin::get_entries($form_id, 1, 9999999);
@@ -32,6 +33,7 @@ function candidato_view()
                 if ($user_id == $usuario_id) {
 
                     $entrada = $umaEntrada['_entry_id'];
+                    $entradas_id[$form_id] = $entrada; //novo array para guardar as entry_id
                     $form = Caldera_Forms_Forms::get_form($form_id);
                     $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
                     $entradas["date"] = $umaEntrada['_date'];
@@ -113,32 +115,41 @@ function candidato_view()
             </ul>
         </nav>
         <div class="tab-content mt-4">
+            <div id='loading_carregar' class="loading medium" style='display:none;'></div>
             <div class="tab-panel active" id="panel-1">
-                <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
+                <div id="tab_instituicao">
+                    <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
+
+                    <input type="hidden" name="entrada_geral" value="<?php echo $entradas_id[FORM_ID_GERAL]; ?>">
+                </div>
             </div>
             <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                 <div class="tab-panel" id="panel-<?php echo $i; ?>">
-                    <form class="cardCandidato" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-                        <?php
-                        $nomeRede = relaciona($arrayRedes[$i - 2])[0];
-                        $entrada = $entradas[relaciona($arrayRedes[$i - 2])[1]];
-                        $statusRede = valida($entrada, 'fld_3707629');
-                        //$statusRede = 'pendente';
-                        ?>
+                    <?php
+                    $nomeRede = relaciona($arrayRedes[$i - 2])[0];
+                    $form_id = relaciona($arrayRedes[$i - 2])[1];
+                    $entrada = $entradas[$form_id];
+                    $statusRede = valida($entrada, 'fld_3707629');
+                    //$statusRede = 'pendente';
+                    ?>
 
-                        <?php render_rede_avaliacao_data($rede_nome, $entrada); ?>
+                    <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
+
+                    <div id="tab_redes_<?php echo $i; ?>">
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
+
+                        <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
 
                         <?php if ($statusRede == "pendente") : ?>
                             <div class="row mt-5">
                                 <div class="col-md-12 text-center">
-                                    <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
+                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados Jquery</button>
+                                    <!-- <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar"> -->
                                     <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
                         <?php endif; ?>
-
-                    </form>
+                    </div>
                 </div>
             <?php endfor; ?>
         </div>
@@ -152,43 +163,41 @@ function render_geral_form($entrada)
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
 ?>
-    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
 
-        <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
-        <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
-            <div class="col-md-12">
+    <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
+    <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
+        <div class="col-md-12">
 
-                <div class="br-textarea mb-3">
-                    <label for="historicoParecer">Histórico do parecer</label>
-                    <textarea class="textarea-start-size" name="historicoParecer" value="<?php echo valida($entrada, 'fld_4416984'); ?>" disabled><?php echo valida($entrada, 'fld_4416984'); ?></textarea>
-                </div>
-                <div class="br-textarea mb-3">
-                    <label for="parecerAvaliador">Parecer do Avaliador</label>
-                    <textarea class="textarea-start-size" name="parecerAvaliador" value="<?php echo valida($entrada, 'fld_8529353'); ?>" disabled><?php echo valida($entrada, 'fld_8529353'); ?></textarea>
-                </div>
-
+            <div class="br-textarea mb-3">
+                <label for="historicoParecer">Histórico do parecer</label>
+                <textarea class="textarea-start-size" name="historicoParecer" value="<?php echo valida($entrada, 'fld_4416984'); ?>" disabled><?php echo valida($entrada, 'fld_4416984'); ?></textarea>
             </div>
+            <div class="br-textarea mb-3">
+                <label for="parecerAvaliador">Parecer do Avaliador</label>
+                <textarea class="textarea-start-size" name="parecerAvaliador" value="<?php echo valida($entrada, 'fld_8529353'); ?>" disabled><?php echo valida($entrada, 'fld_8529353'); ?></textarea>
+            </div>
+
+        </div>
+    <?php endif; ?>
+
+    <?php render_geral_data($entrada) ?>
+
+    <div class="row mt-5">
+        <?php if ($statusFormInstituicao == "avaliacao") : ?>
+            <div class="col-md-12 text-center">
+                <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
+            </div>
+            <input type="hidden" name="action" value="desistir_candidato">
+        <?php elseif ($statusFormInstituicao == "pendente") : ?>
+            <div class="col-md-12 text-center">
+                <button class="br-button primary" type="button" onclick="atualizaRedeCandidato();">Atualizar Dados Jquery</button>
+                <!-- <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar"> -->
+            </div>
+            <input type="hidden" name="action" value="atualiza_candidato">
         <?php endif; ?>
 
-        <?php render_geral_data($entrada) ?>
-
-        <div class="row mt-5">
-            <?php if ($statusFormInstituicao == "avaliacao") : ?>
-                <div class="col-md-12 text-center">
-                    <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
-                </div>
-                <input type="hidden" name="action" value="desistir_candidato">
-            <?php elseif ($statusFormInstituicao == "pendente") : ?>
-                <div class="col-md-12 text-center">
-                    <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar">
-                </div>
-                <input type="hidden" name="action" value="atualiza_candidato">
-            <?php endif; ?>
-
-            <input type="hidden" name="entrada" value="<?php $entrada ?>">
-        </div>
-
-    </form>
+        <input type="hidden" name="entrada" value="<?php $entrada ?>">
+    </div>
 <?php
 }
 
@@ -392,9 +401,37 @@ function render_geral_data($entrada)
 }
 
 
-function render_rede_avaliacao_data($rede_nome, $entrada)
+function candidato_avaliacao_redes_render($rede_nome, $entrada)
 {
 ?>
+    <!-- condição falsa só pra guardar esse código -->
+    <?php if (false) : ?>
+        <div class="collapse-example">
+            <div class="br-list" role="list" data-sub="data-sub">
+                <div class="align-items-center br-item" role="listitem" tabindex="0" data-toggle="collapse" data-target="c-l1">
+                    <div class="content">
+                        <div class="flex-fill">Histórico do parecer da rede</div><i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="br-list" id="c-l1" role="list" hidden="hidden" data-sub="data-sub">
+                    <div class="br-textarea mb-3">
+                        <textarea class="textarea-start-size" name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
+                    </div>
+                </div>
+                <div class="align-items-center br-item" role="listitem" tabindex="0" data-toggle="collapse" data-target="c-l2">
+                    <div class="content">
+                        <div class="flex-fill">Parecer da rede</div><i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="br-list" id="c-l2" role="list" hidden="hidden" data-sub="data-sub">
+                    <div class="br-textarea mb-3">
+                        <textarea class="textarea-start-size" name="parecerAvaliador_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_5960872'); ?>" disabled><?php echo valida($entrada, 'fld_5960872'); ?></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
         <div class="col-md-12">
@@ -481,92 +518,6 @@ function render_status($status)
     }
 }
 
-// Função possivelmente não usada, já que será feito por ajax
-function candidato_action_form()
-{
-    /*
-	* Função action para uso do formulário de candidato (envio quando penden).
-	* Função chamada pelo formulário "cadastro_form_usuario"
-	*/
-
-    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
-    else $nomeDaInstituicao = "";
-    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
-    else $descricaoDaInstituicao = "";
-    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
-    else $natureza_op = "";
-    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
-    else $porte_op = "";
-
-    if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
-        $porte_op = "";
-    }
-
-    if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
-    else $cnpjDaInstituicao = "";
-    if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
-    else $CNAEDaInstituicao = "";
-    if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
-    else $urlDaInstituicao = "";
-
-    if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
-    else $enderecoDaInstituicao = "";
-    if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
-    else $complementoDaInstituicao = "";
-    if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
-    else $estadoDaInstituicao = "";
-    if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
-    else $cidadeDaInstituicao = "";
-    if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
-    else $cepDaInstituicao = "";
-
-    //Arquivos
-    //doc1
-    if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
-        $doc1Unidade = $_FILES['logo_instituicao'];
-    }
-    //doc2
-    if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
-        $doc2Unidade = $_FILES['guia_instituicao'];
-    }
-
-    //pegar redes
-
-    //Nome e email do candidato
-    if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
-    else $nomeDoCandidato = "";
-    if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
-    else $emailDoCandidato = "";
-
-    //----------------------------submit
-    if (isset($_POST["enviar"])) {
-
-        $entrada = '';
-        $redes = '';$statusGeral = ''; $status = ''; $parecer = ''; $historico = '';
-
-        // Tratamento dos arquivos
-        if (!is_null($doc1Unidade)) {
-            $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
-        }
-        if (!is_null($doc2Unidade)) {
-            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
-        }
-
-        //funcao para criar a entrada no Caldera (Form geral)
-        update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $statusGeral, $status, $parecer, $historico);
-
-
-        envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato);
-
-        // redirecionar para a página de sucesso
-        wp_redirect(esc_url(home_url('/sucesso')));
-        //wp_redirect(get_permalink( 13832 ));
-        exit;
-    } //end do if de enviar
-}
-add_action('admin_post_nopriv_atualiza_candidato', 'candidato_action_form');
-add_action('admin_post_atualiza_candidato', 'candidato_action_form');
-
 function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $status = "avaliacao")
 {
     /*
@@ -601,7 +552,7 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     // Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecer);
 }
 
-function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao", $versao = 0)
+function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -624,13 +575,83 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $statu
     Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada, $status);
 
     //$versaoOld = valida($entrada, 'fld_2402818');
-    Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
+    //Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
 }
 
 
 function atualiza_rede_candidato_ajax()
 {
-    return;
+    // $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    $entrada = (isset($_POST['entrada'])) ? $_POST['entrada'] : '';
+    $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
+    $elements = (isset($_POST['elements'])) ? $_POST['elements'] : '';
+
+    // var_dump($elements);
+
+    //crio o array apenas para a rede que eu quero
+    $dados_redes = array(relaciona($rede)[0] => array());
+
+    foreach ($dados_redes as $key => $value) {
+        $opcoes = get_options($key)[1];
+        $publico = get_options($key)[2];
+        $abrangencia = get_options($key)[3];
+
+        if (isset($elements['urlServico-' . $key])) $dados_redes[$key]["urlServico"] = ($elements['urlServico-' . $key]);
+        else $dados_redes[$key]["urlServico"] = "";
+        if (isset($elements['produtoServicos-' . $key])) $dados_redes[$key]["produtoServicos"] = ($elements['produtoServicos-' . $key]);
+        else $dados_redes[$key]["produtoServicos"] = "";
+
+        //Pegando os checks das classificacoes
+        $classificacoes = "";
+        foreach ($opcoes as $i => $v) {
+            if (isset($elements['check_classificacao_' . $i . '_' . $key])) $classificacoes .= $elements['check_classificacao_' . $i . '_' . $key] . ";";
+        }
+        $dados_redes[$key]['classificacoes'] = $classificacoes;
+
+        if (isset($elements['outroClassificacao_' . $key])) $dados_redes[$key]["outroClassificacao"] = ($elements['outroClassificacao_' . $key]);
+        else $dados_redes[$key]["outroClassificacao"] = "";
+
+
+        if (!str_contains($classificacoes, 'Outro;')) {
+            $dados_redes[$key]["outroClassificacao"] = '';
+        }
+
+        //Pegando os checks do publico alvo
+        $publicos = "";
+        foreach ($publico as $i => $v) {
+            if (isset($elements['check_publico_' . $i . '_' . $key])) $publicos .= $elements['check_publico_' . $i . '_' . $key] . ";";
+        }
+        $dados_redes[$key]['publicos'] = $publicos;
+
+        //Pegando os checks da abrangencia
+        $abrangencias = "";
+        foreach ($abrangencia as $i => $v) {
+            if (isset($elements['check_abrangencia_' . $i . '_' . $key])) $abrangencias .= $elements['check_abrangencia_' . $i . '_' . $key] . ";";
+        }
+        $dados_redes[$key]['abrangencias'] = $abrangencias;
+
+        //dados do representante
+        if (isset($elements['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($elements['nomeCompleto_' . $key]);
+        else $dados_redes[$key]["nomeCompleto"] = "";
+        if (isset($elements['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($elements['emailRepresentante_' . $key]);
+        else $dados_redes[$key]["emailRepresentante"] = "";
+        if (isset($elements['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($elements['telefoneRepresentante_' . $key]);
+        else $dados_redes[$key]["telefoneRepresentante"] = "";
+    }
+
+    // faz o update dos dados no caldera
+    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "avaliacao");
+
+    // envia email de update
+
+    $form_id = relaciona($rede)[1];
+    $form = Caldera_Forms_Forms::get_form($form_id);
+    $entry =  new Caldera_Forms_Entry($form, $entrada);
+
+    // renderiza novamente para o candidato
+    cadastro_redes_render(relaciona($rede)[0], $entry);
+
+    die();
 }
 add_action('wp_ajax_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');
 add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');

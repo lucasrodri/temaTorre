@@ -358,6 +358,10 @@ function cadastro_redes_render($rede_nome, $entrada = "")
         'disabled'
         : '';
 
+    $styleOutro = (strlen(valida($entrada, 'fld_6678080')) > 1) ?
+        ''
+        : 'display:none;';
+
 ?>
     <div class="h4"><?php echo $title; ?>
         <?php if ($entrada != "") render_status($statusRede); ?>
@@ -386,7 +390,7 @@ function cadastro_redes_render($rede_nome, $entrada = "")
     </div>
 
     <div class="mb-3">
-        <div class="br-input" style="display:none;">
+        <div class="br-input" style="<?php echo $styleOutro ?>">
             <label for="outroClassificacao_<?php echo $rede_nome; ?>">Outro<span class="field_required" style="color:#ee0000;">*</span></label>
             <input id="outroClassificacao_<?php echo $rede_nome; ?>" name="outroClassificacao_<?php echo $rede_nome; ?>" type="text" placeholder="Outra classificação" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_6678080'); ?>" <?php echo $disabled; ?> />
         </div>
