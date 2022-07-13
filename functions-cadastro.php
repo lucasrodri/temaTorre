@@ -1012,6 +1012,11 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
             echo gera_select_cidade($item->codigo_uf, $codigoEstadoSelecionado, $cidadeSelecionada);
         }
     }
+
+    // Caso tenha um estado selecionado ao carregar, seta a variável global selectAberto
+    if ($codigoEstadoSelecionado) {
+        echo '<script type="text/javascript"> setarSelectAberto('.$codigoEstadoSelecionado.'); </script>';
+    }
 }
 
 function gera_select_cidade($codigoEstado, $codigoEstadoSelecionado = '', $cidadeSelecionada = '')

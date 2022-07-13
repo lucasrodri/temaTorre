@@ -414,7 +414,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
             <div class="br-list" role="list" data-sub="data-sub">
                 <div class="align-items-center br-item" role="listitem" tabindex="0" data-toggle="collapse" data-target="c-l1">
                     <div class="content">
-                        <div class="flex-fill">Histórico do parecer da rede</div><i class="fas fa-angle-down" aria-hidden="true"></i>
+                        <div class="flex-fill"><label>Histórico do parecer da rede</label></div><i class="fas fa-angle-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="br-list" id="c-l1" role="list" hidden="hidden" data-sub="data-sub">
@@ -424,7 +424,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
                 </div>
                 <div class="align-items-center br-item" role="listitem" tabindex="0" data-toggle="collapse" data-target="c-l2">
                     <div class="content">
-                        <div class="flex-fill">Parecer da rede</div><i class="fas fa-angle-down" aria-hidden="true"></i>
+                        <div class="flex-fill"><label>Parecer da rede</label></div><i class="fas fa-angle-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="br-list" id="c-l2" role="list" hidden="hidden" data-sub="data-sub">

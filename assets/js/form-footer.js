@@ -277,7 +277,7 @@ jQuery(document).ready(function ($) {
  * Controle do carregaCidade para a seleção de estados
  */
 
-var selectAberto = 0;
+// selectAberto movido para geral-js
 
 function carregaCidade(id) {
 

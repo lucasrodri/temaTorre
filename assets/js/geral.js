@@ -117,3 +117,13 @@ function mouseOut() {
     card[i].style.visibility = "hidden";
   }
 }
+
+/**
+ * Variável e função usadas no processo de Adesão/Candidatua
+ * Select aberto é usado no processo de candidatura para mostrar o select aberto das cidades
+ */
+var selectAberto = 0;
+
+function setarSelectAberto(id) {
+  selectAberto = id;
+}
