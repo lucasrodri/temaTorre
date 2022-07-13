@@ -983,62 +983,6 @@ function carrega_estados()
     echo '</div>';
 }
 
-function carrega_cidade()
-{
-    // Função que não funcionou, DSGOV não consegue fazer o select se ele for gerado depois que a página carregou 
-
-    /*
-	* Função que gera um select html com as cidades do estado escolhido
-	*
-	* Função chamada pelo Javascript JS
-	*/
-
-    $id = (isset($_POST['id'])) ? $_POST['id'] : '';
-
-    if (empty($id))
-        return;
-
-    $estadoUnidade = $_POST["id"];
-
-    global $wpdb;
-    $sql = "SELECT codigo_ibge, nome FROM wp_tematorre_municipios WHERE codigo_uf=\"" . $estadoUnidade . "\" order by nome;";
-    //$cidades = $wpdb->get_col($sql);
-    $cidades = $wpdb->get_results($sql);
-
-    // echo '<div class="br-list" tabindex="0">';
-    //check if array is empty
-
-    // echo '<div class="br-select">';
-    // echo '<div class="br-input">';
-    // echo '<label for="cidadeDaInstituicao">Cidade</label>';
-    // echo '<input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" required />';
-    // echo '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
-    // echo '</button>';
-    // echo '</div>';
-    // echo '<div class="br-list" tabindex="0">';
-
-    if (!empty($cidades)) {
-        $count = 1;
-
-        foreach ($cidades as $item) {
-            echo '<div class="br-item" tabindex="-1">';
-            echo '<div class="br-radio">';
-            echo '<input id="meuid' . $count . '" type="radio" name="cidades-simples" value="' . $item->nome . '" />';
-            echo '<label for="meuid' . $count . '">' . $item->nome . '</label>';
-            echo '</div></div>';
-
-            $count += 1;
-        }
-    } else {
-        echo '<option value="">Cidade não disponível</option>';
-    }
-
-    // echo '</div>'; //br-list
-    // echo '</div>'; //br-select
-    die();
-}
-//add_action('wp_ajax_carrega_cidade', 'carrega_cidade');
-
 function retorna_nome_uf($codigoEstado)
 {
     // Função para retornar o nome do estado a partir do cópdigp
@@ -1053,7 +997,7 @@ function retorna_nome_uf($codigoEstado)
     return;
 }
 
-function carrega_selects_cidades()
+function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSelecionada = '')
 {
     // Função que carrega o select de cidades para cada estado enquanto a página carrega
 
@@ -1065,12 +1009,12 @@ function carrega_selects_cidades()
     //check if array is empty
     if (!empty($estados)) {
         foreach ($estados as $item) {
-            echo gera_select_cidade($item->codigo_uf);
+            echo gera_select_cidade($item->codigo_uf, $codigoEstadoSelecionado, $cidadeSelecionada);
         }
     }
 }
 
-function gera_select_cidade($codigoEstado)
+function gera_select_cidade($codigoEstado, $codigoEstadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
     $sql = "SELECT codigo_ibge, nome FROM wp_tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
@@ -1078,11 +1022,20 @@ function gera_select_cidade($codigoEstado)
 
     $estadoUnidade = retorna_nome_uf($codigoEstado);
 
+    $checked = "";
+    $style = "display: none;";
+    $disabled = "disabled";
+
+    if ($codigoEstado == $codigoEstadoSelecionado) {
+        $style = "";
+        $disabled = "";
+    }
+
     $select = '';
-    $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select max-width-torre" style="display: none;">';
+    $select .= '<div id="selectEstado' . $codigoEstado . '" class="br-select max-width-torre" style="' . $style . '">';
     $select .=  '<div class="br-input">';
     $select .=  '<label for="cidadeDaInstituicao' . $codigoEstado . '">Cidades de ' . $estadoUnidade . '<span class="field_required" style="color:#ee0000;">*</span></label>';
-    $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" disabled />';
+    $select .=  '<input id="cidadeDaInstituicao' . $codigoEstado . '" name="cidadeDaInstituicao' . $codigoEstado . '" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" ' . $disabled . ' />';
     $select .=  '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
     $select .=  '</button>';
     $select .=  '</div>';
@@ -1090,9 +1043,16 @@ function gera_select_cidade($codigoEstado)
 
     if (!empty($cidades)) {
         foreach ($cidades as $item) {
+
+            if ($item->nome == $cidadeSelecionada) {
+                $checked = "checked";
+            } else {
+                $checked = "";
+            }
+
             $select .=  '<div class="br-item" tabindex="-1">';
             $select .=  '<div class="br-radio">';
-            $select .=  '<input id="' . $item->codigo_ibge . '" type="radio" name="cidades-simples" value="' . $item->nome . '" onchange="setarValorCidade(value)" />';
+            $select .=  '<input id="' . $item->codigo_ibge . '" type="radio" name="cidades-simples" value="' . $item->nome . '" onchange="setarValorCidade(value)" ' . $checked . '/>';
             $select .=  '<label for="' . $item->codigo_ibge . '">' . $item->nome . '</label>';
             $select .=  '</div></div>';
         }

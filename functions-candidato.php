@@ -303,9 +303,23 @@ function render_geral_data($entrada)
         </div>
     </div>
 
-
     <h4>Endereço</h4>
     <div class="mb-3">
+        <!--se for pendente, o usuário pode editar: mostra selects  -->
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+            <?php echo carrega_estado_cidade_selecionado(valida($entrada, 'fld_1588802'), valida($entrada, 'fld_2343542')) ?>
+        <?php else : ?>
+            <div class="br-input">
+                <label for="estadoDaInstituicao">Estado</label>
+                <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_1588802'); ?>" <?php echo $disabled ?> />
+            </div>
+
+            <div class="br-input">
+                <label for="cidadeDaInstituicao">Cidade</label>
+                <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_2343542'); ?>" <?php echo $disabled ?> />
+            </div>
+        <?php endif; ?>
+
         <div class="br-input">
             <label for="enderecoDaInstituicao">Endereço<span class="field_required" style="color:#ee0000;">*</span></label>
             <input id="enderecoDaInstituicao" name="enderecoDaInstituicao" type="text" placeholder="Endereço da Instituição" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_3971477'); ?>" <?php echo $disabled ?> />
@@ -314,16 +328,6 @@ function render_geral_data($entrada)
         <div class="br-input">
             <label for="complementoDaInstituicao">Complemento</label>
             <input id="complementoDaInstituicao" name="complementoDaInstituicao" type="text" placeholder="Complemento do endereço da Instituição" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_937636'); ?>" <?php echo $disabled ?> />
-        </div>
-
-        <div class="br-input">
-            <label for="estadoDaInstituicao">Estado</label>
-            <input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_1588802'); ?>" <?php echo $disabled ?> />
-        </div>
-
-        <div class="br-input">
-            <label for="cidadeDaInstituicao">Cidade</label>
-            <input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="text" placeholder="Selecione a cidade" onfocus="changeError(name)" required value="<?php echo valida($entrada, 'fld_2343542'); ?>" <?php echo $disabled ?> />
         </div>
 
         <div class="br-input">
@@ -655,3 +659,59 @@ function atualiza_rede_candidato_ajax()
 }
 add_action('wp_ajax_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');
 add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_ajax');
+
+
+function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelecionada = '')
+{
+    global $wpdb;
+    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    $estados = $wpdb->get_results($sql);
+
+    $checked = "";
+    $codigoEstadoSelecionado = "";
+
+    echo '<div class="row">';
+    echo '<div class="col-md-6">';
+    echo '<div class="br-select max-width-torre">';
+    echo '<div class="br-input">';
+    echo '<label for="estadoDaInstituicao">Estado<span class="field_required" style="color:#ee0000;">*</span></label>';
+    echo '<input id="estadoDaInstituicao" name="estadoDaInstituicao" type="text" placeholder="Selecione o estado" onfocus="changeError(name)" required />';
+    echo '<button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>';
+    echo '</button>';
+    echo '</div>';
+
+    echo '<div class="br-list" tabindex="0">';
+
+    if (!empty($estados)) {
+        foreach ($estados as $item) {
+
+            if ($item->nome == $estadoSelecionado) {
+                $checked = "checked";
+                $codigoEstadoSelecionado = $item->codigo_uf;
+            } else {
+                $checked = "";
+            }
+
+            echo '<div class="br-item" tabindex="-1">';
+            echo '<div class="br-radio">';
+            echo '<input id="' . $item->codigo_uf . '" type="radio" name="estados-simples" onchange="carregaCidade(id)" value="' . $item->nome . '" ' . $checked . '/>';
+            echo '<label for="' . $item->codigo_uf . '">' . $item->nome . '</label>';
+            echo '</div></div>';
+        }
+    } else {
+        echo '<option value="">Estado não disponível</option>';
+    }
+    echo '</div>';
+    echo '</div>'; // div br-select
+    echo '</div>'; // div col-md-6
+
+    echo '<div class="col-md-6">';
+    echo carrega_selects_cidades($codigoEstadoSelecionado, $cidadeSelecionada);
+
+    //Esse input que realmente guarda o valor da cidadeDaInstituicao
+    echo '<div class="br-input">';
+    echo '<input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />';
+    echo '</div>';
+    echo '</div>'; // div col-md-6
+    echo '</div>'; // div row
+}
