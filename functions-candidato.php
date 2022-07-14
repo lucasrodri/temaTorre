@@ -14,7 +14,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 36;
+    $usuario_id = 19;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();

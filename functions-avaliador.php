@@ -223,7 +223,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
 
         <div class="br-textarea mb-3">
             <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
+            <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 
         <div class="br-textarea mb-3">
@@ -259,6 +259,7 @@ function avaliador_action_form()
     $historicoParecer_rede = array();
     $parecerAvaliador_rede = array();
     $situacaoAvaliador_rede = array();
+    $tags_rede = array();
     //!!!! falta salvar as tagas de cada rede !!!!!!!!!
     $entrada_rede = array();
 
@@ -293,6 +294,16 @@ function avaliador_action_form()
         if (isset($_POST['situacaoAvaliador_' . $rede])) $situacaoAvaliador_rede[$rede] = (trim($_POST['situacaoAvaliador_' . $rede]));
         else $situacaoAvaliador_rede[$rede] = "";
 
+        //Pegando as Tags
+        if (isset($_POST['escolha_tags_' . $rede])) {
+            $optionArray = $_POST['escolha_tags_' . $rede];
+            $tags_rede[$rede] = "";
+            for ($i = 0; $i < count($optionArray); $i++) {
+                $tags_rede[$rede] .= $optionArray[$i] . ";";
+            }
+        } else {
+            $tags_rede[$rede] = "";
+        }
         //entry_id de cada rede
         if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
         else $entrada_rede[$rede] = "";
@@ -310,7 +321,7 @@ function avaliador_action_form()
     //----------------------------submit
     if (isset($_POST["enviar"])) {
         //update
-        update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede);
+        update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $tags_rede, $entrada_rede);
 
         //enviar email: validar situação geral
         $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
@@ -348,7 +359,7 @@ function avaliador_action_form()
 add_action('admin_post_nopriv_avaliador_action', 'avaliador_action_form');
 add_action('admin_post_avaliador_action', 'avaliador_action_form');
 
-function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $entrada_rede)
+function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $tags_rede, $entrada_rede)
 {
     //Form Geral
     //Campo: historico_parecer_instituicao
@@ -366,6 +377,8 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
         if ($situacaoAvaliador_rede[$rede] != "") {
             //Campo: status_*
             Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede[$rede], $situacaoAvaliador_rede[$rede]);
+            //Campo: tags_rede_*
+            Caldera_Forms_Entry_Update::update_field_value('fld_7938112', $entrada_rede[$rede], $tags_rede[$rede]);
             //Campo: campo_extra2
             Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede[$rede], $historicoParecer_rede[$rede]);
             //Campo: campo_extra1
