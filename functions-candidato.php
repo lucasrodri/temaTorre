@@ -340,8 +340,8 @@ function render_geral_data($entrada)
     <!-- Marca e Uploads -->
     <div class="h3">Logo e Guia de Uso de Marca</div>
     <div class="mt-3 mb-3">
-        <div class="br-input">
-            <label for="logo_instituicao">Logo<span class="field_required" style="color:#ee0000;">*</span></label><br>
+        <div id="logo_instituicao_old" class="br-input">
+            <label>Logo<span class="field_required" style="color:#ee0000;">*</span></label><br>
 
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="br-card">
@@ -350,21 +350,51 @@ function render_geral_data($entrada)
             </div>
 
             <a href="<?php echo valida($entrada, 'fld_5438248') ?>" target="_blank"><?php echo valida($entrada, 'fld_5438248') ?></a>
-            <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p>
+            <!-- <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p> -->
         </div>
+
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+
+            <button type="button" class="br-button secondary" id="anexo_logo_instituicao" name="anexo_logo_instituicao" onclick="apagarAnexo(name)">Apagar logo</button>
+
+            <div id="logo_instituicao_new" class="br-upload" style="display:none;">
+
+                <label class="upload-label" for="logo_instituicao"><span>Logo<span class="field_required" style="color:#ee0000;">*</span></span></label>
+                <input class="upload-input" id="logo_instituicao" name="logo_instituicao" type="file" accept=".jpg,.png,.jpeg" onchange="changeError(name)" />
+                <div class="upload-list"></div>
+            </div>
+            <p id="logo_instituicao_texto" class="text-base mt-1" style="display:none;">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p>
+
+        <?php endif; ?>
     </div>
     <div class="mt-3 mb-3">
-        <div class="br-input">
-            <label for="guia_instituicao">Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></label><br>
+
+        <div id="guia_instituicao_old" class="br-input">
+            <label>Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></label><br>
             <a href="<?php echo valida($entrada, 'fld_9588438') ?>" target="_blank"><?php echo valida($entrada, 'fld_9588438') ?></a>
-            <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p>
+            <!-- <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p> -->
         </div>
+
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+
+            <button type="button" class="br-button secondary" id="anexo_guia_instituicao" name="anexo_guia_instituicao" onclick="apagarAnexo(name)">Apagar documento</button>
+
+            <div id="guia_instituicao_new" class="br-upload" style="display:none;">
+                <label class="upload-label" for="guia_instituicao"><span>Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></span></label>
+                <input class="upload-input" id="guia_instituicao" name="guia_instituicao" type="file" accept=".pdf" onchange="changeError(name)" />
+                <div class="upload-list"></div>
+            </div>
+
+            <p id="guia_instituicao_texto" class="text-base mt-1" style="display:none;">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p>
+
+        <?php endif; ?>
+
     </div>
 
 
     <!-- Dados de contato -->
     <h4>Dados de contato</h4>
-    <p>Informe os dados de contato para receber a cópia dos dados registrados no cadastro das informações da instituição para publicação na Torre MCTI</p>
+    <!-- <p>Informe os dados de contato para receber a cópia dos dados registrados no cadastro das informações da instituição para publicação na Torre MCTI</p> -->
 
     <div class="mb-3">
         <div class="br-input">
@@ -376,7 +406,8 @@ function render_geral_data($entrada)
     <div class="mb-3">
         <div class="br-input">
             <label for="emailDoCandidato">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" <?php echo $disabled ?> />
+            <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" disabled />
+            <!-- deixando esse campo desabilitado para edição, se quiser mudar é necessário um novo cadastro -->
         </div>
     </div>
 

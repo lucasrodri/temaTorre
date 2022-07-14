@@ -97,3 +97,25 @@ function atualizaRedeCandidato(painel, redeArray, entrada) {
     });
   });
 }
+
+function apagarAnexo(name) {
+  if (confirm("Você está prestes a apagar o anexo! Essa ação não pode ser desfeita. Quer continuar?")) {
+
+    //remover nome "anexo"
+    var item = name.slice(6);
+    
+    //esconder div antiga
+    var divAntiga = document.getElementById(item + '_old');
+    divAntiga.style.display = "none";
+
+    // mostrar div nova
+    var divNova = document.getElementById(item + '_new');
+    var pDivNova = document.getElementById(item + '_texto');
+
+    divNova.style.display = "";
+    pDivNova.style.display = "";
+
+    // esconder o botão de apagar
+    document.getElementById(name).style.display = "none";
+  }
+}

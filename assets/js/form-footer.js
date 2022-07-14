@@ -212,39 +212,41 @@ jQuery(document).ready(function ($) {
    * Validação do Email do Candidato no passo 5
    * Seta o disabled do botão de envio caso o email esteja inválido ou já exista na base
    */
-  $("#emailDoCandidato").focusout(function () {
-    //console.log('chamando focusout')
+  if (document.getElementById('cadastro_wizard')) {
+    $("#emailDoCandidato").focusout(function () {
+      //console.log('chamando focusout')
 
-    element = $('#emailDoCandidato')[0];
-    email = $('#emailDoCandidato').val(); //email
+      element = $('#emailDoCandidato')[0];
+      email = $('#emailDoCandidato').val(); //email
 
-    if (IsEmail(email)) {
+      if (IsEmail(email)) {
 
-      $.ajax({
-        type: "POST",
-        dataType: 'json',
-        url: my_ajax_object.ajax_url,
-        data: {
-          email: email,
-          action: 'email_exists_check',
-        }
-      })
-        .done(function (data) {
-          if (data === true) {
-            // mostra aviso de erro
-            $(element.parentElement).append('<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Esse e-mail já existe na base</span>');
-            $("#btn_enviar")[0].setAttribute("disabled", "true");
-          } else {
-            $("#btn_enviar")[0].removeAttribute("disabled");
+        $.ajax({
+          type: "POST",
+          dataType: 'json',
+          url: my_ajax_object.ajax_url,
+          data: {
+            email: email,
+            action: 'email_exists_check',
           }
-        });
+        })
+          .done(function (data) {
+            if (data === true) {
+              // mostra aviso de erro
+              $(element.parentElement).append('<span id="' + element.name + '_label" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Esse e-mail já existe na base</span>');
+              $("#btn_enviar")[0].setAttribute("disabled", "true");
+            } else {
+              $("#btn_enviar")[0].removeAttribute("disabled");
+            }
+          });
 
-    } else {
-      console.log('E-mail inválido');
-      $("#btn_enviar")[0].setAttribute("disabled", "true");
-    }
+      } else {
+        console.log('E-mail inválido');
+        $("#btn_enviar")[0].setAttribute("disabled", "true");
+      }
 
-  });
+    });
+  }
 
   /**
    * Inclusão de loading ao submeter

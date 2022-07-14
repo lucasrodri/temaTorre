@@ -4,15 +4,89 @@
 * Mensagens e funções de email
 */
 
-function enderecos_email($emailDoCandidato)
+// exemplos para avaliador
+//envia_email_avaliador('cadastro',   // novo cadastro de candidato -> formulário para avaliar
+//envia_email_avaliador('desistir',   // aviso de desistência de candidatura -> ??
+//envia_email_avaliador('reenviar',   // reenvio de cadastro de candidato -> formulário para avaliar
+//envia_email_avaliador('editar',     // edição de cadastro de candidato -> formulário para avaliar
+//envia_email_avaliador('homologado', // status de avaliação  -> ??
+//envia_email_avaliador('pendente',   // status de avaliação  -> ??
+//envia_email_avaliador('apagar',     // ação do avaliador de apagar -> ??
+//envia_email_avaliador('publicado',  // status de avaliação  -> ??
+
+function envia_email_avaliador($etapa, $nomeDaInstituicao, $emailDoCandidato)
 {
-  //$to = $emailDoCandidato . ", torre@mcti.gov.br"; //adicionar outros e-mails
-  $to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
-  return $to;
+
+  // $to = "torre@mcti.gov.br, "; //adicionar outros e-mails
+  $to = "bcasamo+torre@gmail.com";
+
+  $subject = '';
+  $message = '';
+
+  switch ($etapa) {
+    case 'cadastro':
+      $subject = 'Cadastro Torre MCTI';
+      $message = msg_candidatura_avaliar($nomeDaInstituicao);
+      break;
+
+    // case 'desistir':
+    //   $subject = 'Desistência de cadastro Torre MCTI';
+    //   $message = msg_desistir($nomeDaInstituicao);
+    //   break;
+
+    case 'reenviar':
+      $subject = 'Atualização de cadastro Torre MCTI';
+      $message = msg_candidatura_avaliar($nomeDaInstituicao);
+      break;
+
+    case 'editar':
+      $subject = 'Requisição de atualização de cadastro Torre MCTI';
+      $message = msg_candidatura_avaliar($nomeDaInstituicao);
+      break;
+
+    case 'homologado':
+      $subject = 'Avaliação enviada';
+      $message = msg_avaliacao_enviada($nomeDaInstituicao, 'Homologado');
+      break;
+
+    case 'pendente':
+      $subject = 'Avaliação enviada';
+      $message = msg_avaliacao_enviada($nomeDaInstituicao, 'Ajustes Necessários');
+      break;
+
+    // case 'apagar':
+    //   $subject = 'Remoção de cadastro Torre MCTI';
+    //   $message = msg_apagar($nomeDaInstituicao, $parecer);
+    //   break;
+
+    case 'publicado':
+      $subject = 'Avaliação enviada';
+      $message = msg_avaliacao_enviada($nomeDaInstituicao, 'Publicado');
+      break;
+
+    default:
+      # code...
+      break;
+  }
+
+  $headers = array('Content-Type: text/html; charset=UTF-8');
+
+  wp_mail($to, $subject, $message, $headers);
 }
 
+function msg_candidatura_avaliar($nomeDaInstituicao)
+{
+  $message = '<p style="text-align: left;">Ol&aacute; Avaliador(es),</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A candidatura da institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ' est&aacute; &agrave; espera de avalia&ccedil;&atilde;o.</p><p style="text-align: left;">Voc&ecirc; pode encontr&aacute;-la na p&aacute;gina de <a href="https://torre.mcti.gov.br/avaliador/" target="_blank" rel="noopener">Avalia&ccedil;&atilde;o</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aten&ccedil;&atilde;o: essa &eacute; uma mensagem autom&aacute;tica do sistema de candidatura da Torre MCTI.</p>';
+  return $message;
+}
 
-// exemplo no cadastro
+function msg_avaliacao_enviada($nomeDaInstituicao, $status)
+{
+  $message = '<p style="text-align: left;">Ol&aacute; Avaliador(es),</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A candidatura da institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ' foi avaliada com o status ' . $status . ' .</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aten&ccedil;&atilde;o: essa &eacute; uma mensagem autom&aacute;tica do sistema de candidatura da Torre MCTI.</p>';
+  return $message;
+}
+
+// exemplos para candidato
 //envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
 //envia_email('desistir', $nomeDaInstituicao, $emailDoCandidato)
 //envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato)
@@ -25,7 +99,7 @@ function enderecos_email($emailDoCandidato)
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '')
 {
 
-  $to = enderecos_email($emailDoCandidato);
+  $to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
 
   $subject = '';
   $message = '';
