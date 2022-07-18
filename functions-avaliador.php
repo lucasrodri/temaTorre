@@ -110,7 +110,7 @@ function avaliador_view()
                     <div id="resumo-avaliador" style="display:none;"></div>
 
                     <div class="div-botao-avaliador">
-                        <input id="action-avaliador-input" type="submit" class="br-button primary mt-5 mb-3" value="Finalizar Avaliação desta Instituição" name="enviar" disabled>
+                        <input id="action-avaliador-input" type="submit" class="br-button primary mt-5 mb-3" value="Finalizar Avaliação desta Instituição" name="enviar" onClick="return confirm('Você tem certeza que quer enviar o processamento dessa candidatura? Essa ação não poderá ser desfeita.')" disabled>
                         <span id="span-avaliador-input" class="feedback warning" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i>Atenção: existem campos não preenchidos!</span>
                     </div>
                     <input id="hidden-avaliador-input" type="hidden" name="action" value="avaliador_action">
@@ -221,6 +221,14 @@ function campos_avaliador_redes($entry, $rede = "geral")
 ?>
     <div id="div_<?php echo $rede ?>">
 
+        <!-- se tiver recurso mostra botao -->
+        <?php if (strlen(valida($entry, 'fld_223413')) > 1) : ?>
+            <div class="br-textarea mb-3">
+                <label>Resposta ao recurso</label>
+                <button class="br-button secondary" type="button" onclick="confirm('Deseja enviar email para ajuda?');">Enviar email para ajuda</button>
+            </div>
+        <?php endif; ?>
+
         <div class="br-textarea mb-3">
             <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
             <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
@@ -260,7 +268,6 @@ function avaliador_action_form()
     $parecerAvaliador_rede = array();
     $situacaoAvaliador_rede = array();
     $tags_rede = array();
-    //!!!! falta salvar as tagas de cada rede !!!!!!!!!
     $entrada_rede = array();
 
     //Campos do Geral
@@ -304,6 +311,7 @@ function avaliador_action_form()
         } else {
             $tags_rede[$rede] = "";
         }
+
         //entry_id de cada rede
         if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
         else $entrada_rede[$rede] = "";

@@ -14,7 +14,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 19;
+    $usuario_id = 37;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -75,7 +75,8 @@ function candidato_view()
                 <tr class="noHover">
                     <td data-th="Data"><?php echo $date; ?></td>
                     <td data-th="Nome"><?php echo valida($entradas[FORM_ID_GERAL], 'fld_266564'); ?></td>
-                    <td data-th="Status">
+                    <td data-th="Status" id="tdStatus">
+                        <div id='loading_carregar_status' class="loading small" style='display:none;'></div>
                         <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
                     </td>
                 </tr>
@@ -117,11 +118,9 @@ function candidato_view()
         <div class="tab-content mt-4">
             <div id='loading_carregar' class="loading medium" style='display:none;'></div>
             <div class="tab-panel active" id="panel-1">
-                <div id="tab_instituicao">
-                    <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
+                <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
 
-                    <input type="hidden" name="entrada_geral" value="<?php echo $entradas_id[FORM_ID_GERAL]; ?>">
-                </div>
+                <input type="hidden" id="entrada_geral" name="entrada_geral" value="<?php echo $entradas_id[FORM_ID_GERAL]; ?>">
             </div>
             <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                 <div class="tab-panel" id="panel-<?php echo $i; ?>">
@@ -143,7 +142,7 @@ function candidato_view()
                         <?php if ($statusRede == "pendente") : ?>
                             <div class="row mt-5">
                                 <div class="col-md-12 text-center">
-                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados Jquery</button>
+                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
                                     <!-- <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar"> -->
                                     <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
@@ -180,23 +179,24 @@ function render_geral_form($entrada)
         </div>
     <?php endif; ?>
 
-    <?php render_geral_data($entrada) ?>
+    <div id="tab_instituicao">
+        <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+            <?php render_geral_data($entrada) ?>
 
-    <div class="row mt-5">
-        <?php if ($statusFormInstituicao == "avaliacao") : ?>
-            <div class="col-md-12 text-center">
-                <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
+            <div class="row mt-5">
+                <?php if ($statusFormInstituicao == "avaliacao") : ?>
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
+                    </div>
+                    <input type="hidden" name="action" value="desistir_candidato">
+                <?php elseif ($statusFormInstituicao == "pendente") : ?>
+                    <div class="col-md-12 text-center">
+                        <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
+                    </div>
+                    <input type="hidden" name="action" value="atualiza_geral_candidato">
+                <?php endif; ?>
             </div>
-            <input type="hidden" name="action" value="desistir_candidato">
-        <?php elseif ($statusFormInstituicao == "pendente") : ?>
-            <div class="col-md-12 text-center">
-                <button class="br-button primary" type="button" onclick="atualizaRedeCandidato();">Atualizar Dados Jquery</button>
-                <!-- <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar"> -->
-            </div>
-            <input type="hidden" name="action" value="atualiza_candidato">
-        <?php endif; ?>
-
-        <input type="hidden" name="entrada" value="<?php $entrada ?>">
+        </form>
     </div>
 <?php
 }
@@ -230,7 +230,9 @@ function render_geral_data($entrada)
     <div class="br-textarea mb-3">
         <label for="descricaoDaInstituicao">Descrição da instituição<span class="field_required" style="color:#ee0000;">*</span></label>
         <textarea class="textarea-start-size" id="descricaoDaInstituicao" name="descricaoDaInstituicao" placeholder="Escreva a descrição de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_6461522'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_6461522'); ?></textarea>
-        <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        <?php endif; ?>
     </div>
 
     <div class="mb-3 radio-master">
@@ -293,7 +295,9 @@ function render_geral_data($entrada)
     <div class="br-textarea mb-3">
         <label for="CNAEDaInstituicao">CNAE<span class="field_required" style="color:#ee0000;">*</span></label>
         <textarea class="textarea-start-size" id="CNAEDaInstituicao" name="CNAEDaInstituicao" placeholder="Escreva sobre o CNAE de sua instituição" maxlength="800" onchange="changeError(name)" required value="<?php echo valida($entrada, 'fld_2471360'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_2471360'); ?></textarea>
-        <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
+            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+        <?php endif; ?>
     </div>
 
     <div class="mt-3 mb-3">
@@ -350,6 +354,7 @@ function render_geral_data($entrada)
             </div>
 
             <a href="<?php echo valida($entrada, 'fld_5438248') ?>" target="_blank"><?php echo valida($entrada, 'fld_5438248') ?></a>
+            <input type="hidden" id="doc1" name="doc1" value="<?php echo valida($entrada, 'fld_5438248'); ?>">
             <!-- <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p> -->
         </div>
 
@@ -372,6 +377,7 @@ function render_geral_data($entrada)
         <div id="guia_instituicao_old" class="br-input">
             <label>Guia de Uso da Marca<span class="field_required" style="color:#ee0000;">*</span></label><br>
             <a href="<?php echo valida($entrada, 'fld_9588438') ?>" target="_blank"><?php echo valida($entrada, 'fld_9588438') ?></a>
+            <input type="hidden" id="doc2" name="doc2" value="<?php echo valida($entrada, 'fld_9588438'); ?>">
             <!-- <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p> -->
         </div>
 
@@ -406,7 +412,7 @@ function render_geral_data($entrada)
     <div class="mb-3">
         <div class="br-input">
             <label for="emailDoCandidato">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
-            <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" disabled />
+            <input class="disabled" id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required value="<?php echo valida($entrada, 'fld_7868662'); ?>" readonly />
             <!-- deixando esse campo desabilitado para edição, se quiser mudar é necessário um novo cadastro -->
         </div>
     </div>
@@ -419,17 +425,24 @@ function render_geral_data($entrada)
 
         <div id="recurso-div" class="br-textarea mb-3" style="display:none">
             <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
-            <textarea class="textarea-start-size" name="recursoInstituicao"></textarea>
-            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <textarea class="textarea-start-size" name="recursoInstituicao" placeholder="Recurso para enviar ao Avaliador" maxlength="800"></textarea>
+            <?php if ($statusFormInstituicao == "pendente") : ?>
+                <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
     <!-- Se já tiver apresentado recurso -->
     <?php if (strlen(valida($entrada, 'fld_223413')) > 1) : ?>
+
+        <h4>Recurso</h4>
+
         <div class="br-textarea mb-3">
             <label for="recursoInstituicao">Recurso para o avaliador</label>
-            <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Recurso" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
-            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Recurso para enviar ao Avaliador" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
+            <?php if ($statusFormInstituicao == "pendente") : ?>
+                <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 <?php
@@ -553,7 +566,8 @@ function render_status($status)
     }
 }
 
-function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $status = "avaliacao")
+
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -574,17 +588,17 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_2343542', $entrada, $cidadeDaInstituicao);
     Caldera_Forms_Entry_Update::update_field_value('fld_1936573', $entrada, $cepDaInstituicao);
 
-    Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entrada, $redes);
+    // Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entrada, $redes);
 
     Caldera_Forms_Entry_Update::update_field_value('fld_5438248', $entrada, $doc1UnidadeUrl);
     Caldera_Forms_Entry_Update::update_field_value('fld_9588438', $entrada, $doc2UnidadeUrl);
-    Caldera_Forms_Entry_Update::update_field_value('fld_1333267', $entrada, $nomeDoCandidato);
-    Caldera_Forms_Entry_Update::update_field_value('fld_7868662', $entrada, $emailDoCandidato);
 
-    // Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada, $statusGeral);
+    Caldera_Forms_Entry_Update::update_field_value('fld_1333267', $entrada, $nomeDoCandidato);
+    //Caldera_Forms_Entry_Update::update_field_value('fld_7868662', $entrada, $emailDoCandidato);
+
     Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada, $status);
-    // Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada, $historico);
-    // Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecer);
+
+    Caldera_Forms_Entry_Update::update_field_value('fld_223413', $entrada, $recursoInstituicao);
 }
 
 function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao")
@@ -613,6 +627,100 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $statu
     //Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
 }
 
+function atualiza_geral_candidato_ajax()
+{
+    // $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    $entrada = (isset($_POST['entrada'])) ? $_POST['entrada'] : '';
+
+    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
+    else $nomeDaInstituicao = "";
+    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
+    else $descricaoDaInstituicao = "";
+    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
+    else $natureza_op = "";
+    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
+    else $porte_op = "";
+
+    if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
+        $porte_op = "";
+    }
+
+    if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
+    else $cnpjDaInstituicao = "";
+    if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
+    else $CNAEDaInstituicao = "";
+    if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
+    else $urlDaInstituicao = "";
+
+    if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
+    else $enderecoDaInstituicao = "";
+    if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
+    else $complementoDaInstituicao = "";
+    if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
+    else $estadoDaInstituicao = "";
+    if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
+    else $cidadeDaInstituicao = "";
+    if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
+    else $cepDaInstituicao = "";
+
+    //Arquivos
+
+    //pego o valor para mandar apagar
+    if (isset($_POST['doc1'])) $doc1UnidadeUrl = ($_POST['doc1']);
+    else $doc1UnidadeUrl = "";
+    if (isset($_POST['doc2'])) $doc2UnidadeUrl = ($_POST['doc2']);
+    else $doc2UnidadeUrl = "";
+
+    //doc1
+    if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
+        $doc1Unidade = $_FILES['logo_instituicao'];
+    }
+    //doc2
+    if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
+        $doc2Unidade = $_FILES['guia_instituicao'];
+    }
+
+    //Nome e email do candidato
+    if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
+    else $nomeDoCandidato = "";
+    if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
+    else $emailDoCandidato = "";
+
+    if (!is_null($doc1Unidade)) {
+        $id = attachment_url_to_postid($doc1UnidadeUrl);
+        wp_delete_attachment($id);
+        $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
+    }
+    if (!is_null($doc2Unidade)) {
+        $id = attachment_url_to_postid($doc2UnidadeUrl);
+        wp_delete_attachment($id);
+        $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
+    }
+
+    if (isset($_POST['recursoInstituicao'])) $recursoInstituicao = ($_POST['recursoInstituicao']);
+    else $recursoInstituicao = "";
+
+    //if ($recursoInstituicao) {
+    //TODO envia_email de recurso (mensagem para candidato)
+    //TODO envia_email de recurso para avaliador??
+    //}
+
+    //funcao para criar a entrada no Caldera (Form geral)
+    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, "avaliacao");
+
+    //TODO envia email de update
+
+    $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+    $entry =  new Caldera_Forms_Entry($form, $entrada);
+
+    // renderiza novamente para o candidato
+    render_geral_data($entry);
+
+    die();
+}
+add_action('wp_ajax_atualiza_geral_candidato', 'atualiza_geral_candidato_ajax');
+add_action('wp_ajax_nopriv_atualiza_geral_candidato', 'atualiza_geral_candidato_ajax');
+
 
 function atualiza_rede_candidato_ajax()
 {
@@ -620,8 +728,6 @@ function atualiza_rede_candidato_ajax()
     $entrada = (isset($_POST['entrada'])) ? $_POST['entrada'] : '';
     $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
     $elements = (isset($_POST['elements'])) ? $_POST['elements'] : '';
-
-    // var_dump($elements);
 
     //crio o array apenas para a rede que eu quero
     $dados_redes = array(relaciona($rede)[0] => array());
@@ -677,7 +783,7 @@ function atualiza_rede_candidato_ajax()
     // faz o update dos dados no caldera
     update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "avaliacao");
 
-    // envia email de update
+    //TODO envia email de update
 
     $form_id = relaciona($rede)[1];
     $form = Caldera_Forms_Forms::get_form($form_id);
@@ -741,8 +847,70 @@ function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelec
 
     //Esse input que realmente guarda o valor da cidadeDaInstituicao
     echo '<div class="br-input">';
-    echo '<input id="cidadeDaInstituicao" name="cidadeDaInstituicao" type="hidden" />';
+    echo '<input id="cidadeDaInstituicao" name="cidadeDaInstituicao" value="' . $cidadeSelecionada . '" type="hidden" />';
     echo '</div>';
     echo '</div>'; // div col-md-6
     echo '</div>'; // div row
 }
+
+
+function atualiza_status_geral_ajax()
+{
+
+    $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
+    $current_user = wp_get_current_user();
+    $usuario_id = $current_user->ID;
+
+    // para teste estou usando um usuário meu aqui
+    $usuario_id = 37;
+
+    $entradas = array();
+    $entradas_id = array();
+
+    foreach ($form_ids as $form_id) {
+        $data = Caldera_Forms_Admin::get_entries($form_id, 1, 9999999);
+        $ativos = $data['active'];
+
+        if ($ativos > 0) {
+            $todasEntradas = $data['entries'];
+
+            foreach ($todasEntradas as $umaEntrada) {
+                $user_id = $umaEntrada['user']['ID'];
+
+                if ($user_id == $usuario_id) {
+                    $entrada = $umaEntrada['_entry_id'];
+                    $entradas_id[$form_id] = $entrada; //novo array para guardar as entry_id
+                    $form = Caldera_Forms_Forms::get_form($form_id);
+                    $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
+                    break;
+                }
+            }
+        }
+    }
+
+    $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
+    $arrayRedes = explode(";", $redes);
+
+    // pega status aba instituição
+    $situacaoGeral = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
+    // echo '$situacaoGeral '.$situacaoGeral.'<br>';
+
+    foreach ($arrayRedes as $rede) {
+        $statusRede = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
+        // echo '$statusRede '.$statusRede.'<br>';
+
+        if ($statusRede == "pendente") {
+            $situacaoGeral = "pendente";
+        }
+    }
+
+    // Chama o update no campo geral
+    Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entradas_id[FORM_ID_GERAL], $situacaoGeral);
+
+    // Chama a função de renderizar
+    render_status($situacaoGeral);
+
+    die();
+}
+add_action('wp_ajax_atualiza_status_geral', 'atualiza_status_geral_ajax');
+add_action('wp_ajax_nopriv_atualiza_status_geral', 'atualiza_status_geral_ajax');
