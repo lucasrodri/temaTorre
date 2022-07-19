@@ -138,7 +138,6 @@ function ajaxCarregaInstituicao()
     require_once(CFCORE_PATH . 'classes/admin.php');
     $entradas = array();
 
-
     $data = Caldera_Forms_Admin::get_entries(FORM_ID_GERAL, 1, 9999999);
     $ativos = $data['active'];
 
@@ -161,7 +160,8 @@ function ajaxCarregaInstituicao()
     //$date = date('M d, Y', strtotime($entradas["date"]));
 
     // função alterada para não retornar um form
-    render_geral_data($entradas[FORM_ID_GERAL]);
+    // função alterada para receber flag true de favaliador
+    render_geral_data($entradas[FORM_ID_GERAL], true);
     echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
     campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     die();

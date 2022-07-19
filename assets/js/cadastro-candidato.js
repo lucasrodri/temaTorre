@@ -23,7 +23,12 @@ function botaoRecurso() {
 
 async function atualizaRedeCandidatoGeral() {
 
-  if (!confirm('Você tem certeza que quer enviar esses dados? Essa ação não poderá ser desfeita.')){
+  if (!validacaoRedeCandidato('tab_instituicao_form')) {
+    alert("Há campos inválidos!");
+    return;
+  }
+
+  if (!confirm('Você tem certeza que quer enviar esses dados? Essa ação não poderá ser desfeita.')) {
     return;
   }
 
@@ -57,22 +62,27 @@ async function atualizaRedeCandidatoGeral() {
       },
       complete: function (data) {
         $("#loading_carregar").css("display", "none");
-        //TODO enviar alerta de finalizado
-        //TODO top of the page
+        alert('Dados enviados!');
+        atualizaStatusGeral();
+        window.scrollTo(0, 0);
       }
     });
   });
-
-  await atualizaStatusGeral();
 }
 
 
 async function atualizaRedeCandidato(painel, redeArray, entrada) {
 
-  if (!confirm('Você tem certeza que quer enviar esses dados? Essa ação não poderá ser desfeita.')){
+  // console.log('tab_redes_' + painel);
+  if (!validacaoRedeCandidato('tab_redes_' + painel)) {
+    alert("Há campos inválidos!");
     return;
   }
-  
+
+  if (!confirm('Você tem certeza que quer enviar esses dados? Essa ação não poderá ser desfeita.')) {
+    return;
+  }
+
   var div = document.getElementById('tab_redes_' + painel);
   var myNodelist = div.querySelectorAll('input, select, textarea'); //retorna uma NodeList
 
@@ -113,16 +123,16 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       },
       complete: function () {
         $("#loading_carregar").css("display", "none");
-        //TODO enviar alerta de finalizado
-        //TODO top of the page
+        alert('Dados enviados!');
+        atualizaStatusGeral();
+        window.scrollTo(0, 0);
       }
     });
   });
-
-  await atualizaStatusGeral();
 }
 
-function atualizaStatusGeral(){
+
+function atualizaStatusGeral() {
   //atualiza status geral
   jQuery(function ($) {
     $.ajax({
@@ -146,6 +156,7 @@ function atualizaStatusGeral(){
   });
 }
 
+
 function apagarAnexo(name) {
   if (confirm("Você está prestes a apagar o anexo! Essa ação não pode ser desfeita. Quer continuar?")) {
 
@@ -163,7 +174,278 @@ function apagarAnexo(name) {
     divNova.style.display = "";
     pDivNova.style.display = "";
 
+    //colocar elemento de upload como required
+    var upload = document.getElementById(item);
+    upload.setAttribute("required", "");
+
     // esconder o botão de apagar
     document.getElementById(name).style.display = "none";
   }
 }
+
+
+function validacaoRedeCandidato(painel) {
+  // console.log('chamei validação');
+
+  var div = document.getElementById(painel);
+  var y = div.querySelectorAll('input, textarea'); //retorna uma NodeList
+
+  // valid = true;
+
+  var valid = true;
+  var checarRadio = [];
+  var checarCheckbox = [];
+  var pular = ['estados-simples', 'cidades-simples'];
+
+
+  var flag_tab = painel.includes('redes') ? true : false;
+
+  for (i = 0; i < y.length; i++) {
+
+    if (pular.includes(y[i].name)) {
+      //pulando os selects 'estados-simples', 'cidades-simples'
+      continue;
+    }
+
+    [checarRadio, checarCheckbox, valid] = validaInput(y[i], checarRadio, checarCheckbox, valid, flag_tab);
+
+  }
+
+  // console.log({checarRadio});
+  // console.log({checarCheckbox});
+
+  for (c = 0; c < checarRadio.length; c++) {
+    valid = validaInputRadio(div, checarRadio[c], valid);
+  }
+
+  for (c = 0; c < checarCheckbox.length; c++) {
+    valid = validaInputRadio(div, checarCheckbox[c], valid);
+  }
+
+  // console.log("VALID " + valid);
+  return valid;
+}
+
+
+function validaInput(element, checarRadio, checarCheckbox, valid, flag_tab = false) {
+  requirido = element.getAttribute("required");
+  flagRequirido = false;
+
+  // Checa apenas se o campo for requerido
+  if ((requirido === "") || (flag_tab)) {
+    flagRequirido = true;
+  }
+
+  switch (element.type) {
+    case "textarea":
+
+      if (flagRequirido && (element.value == "")) {
+        setarInvalido(element);
+        valid = false;
+      }
+      break;
+
+    case "text":
+
+      //pular o outroClassificacao, ele só é checado no check
+      if (!element.name.includes("outroClassificacao")) {
+
+        if (flagRequirido && (element.value == "")) {
+          setarInvalido(element);
+          valid = false;
+        }
+
+        if (element.name == "cnpjDaInstituicao") {
+          if (!IsCNPJ(element.value)) {
+            mostrarAvisoValidacao(element, 'CNPJ');
+            valid = false;
+          } else {
+            ocultarAvisoValidacao(element);
+          }
+        }
+
+        if (element.name == "cepDaInstituicao") {
+          if (!element.checkValidity()) {
+            valid = false;
+            mostrarAvisoValidacao(element, 'CEP');
+          } else {
+            ocultarAvisoValidacao(element);
+          }
+        }
+      }
+
+      break;
+
+    case "email":
+
+      if (flagRequirido && (element.value == "")) {
+        setarInvalido(element);
+        valid = false;
+      }
+
+      if (!IsEmail(element.value)) {
+        mostrarAvisoValidacao(element, 'E-mail');
+        valid = false;
+      } else {
+        ocultarAvisoValidacao(element);
+      }
+
+      break;
+
+    case "file":
+
+      var extensoesPermitidas = {
+        'logo_instituicao': ['jpg', 'png', 'jpeg'],
+        'guia_instituicao': ['pdf'],
+      }
+
+      var tamanhoPermitido = {
+        'logo_instituicao': 5242880,
+        'guia_instituicao': 26214400,
+      }
+
+      if (flagRequirido || (element.value != "")) {
+
+        //checar extensão
+        var nomeArquivo = element.value.split(".");
+        var extensao = nomeArquivo[nomeArquivo.length - 1].toLowerCase();
+
+        if (!extensoesPermitidas[element.name].includes(extensao) || element.files.length == 0) {
+          setarInvalido(element);
+          valid = false;
+        }
+
+        if (element.files.length > 0) {
+          var tamanho = element.files[0].size;
+
+          if (tamanho > tamanhoPermitido[element.name]) {
+            mostrarAvisoValidacao(document.getElementById(element.name), 'Arquivo');
+            valid = false;
+          } else {
+            ocultarAvisoValidacao(document.getElementById(element.name));
+          }
+        }
+
+      }
+      break;
+
+    case "url":
+
+      if (flagRequirido && (element.value == "")) {
+        setarInvalido(element);
+        valid = false;
+      }
+
+      if (element.name == "urlDaInstituicao") {
+        if (!IsURL(element.value)) {
+          mostrarAvisoValidacao(element, 'URL');
+          valid = false;
+        } else {
+          ocultarAvisoValidacao(element);
+        }
+      }
+
+      break;
+
+    case "tel":
+
+      if (flagRequirido && (element.value == "")) {
+        setarInvalido(element);
+        valid = false;
+      }
+
+      if (!element.checkValidity()) {
+        valid = false;
+        mostrarAvisoValidacao(element, 'Telefone');
+      } else {
+        ocultarAvisoValidacao(element);
+      }
+
+      break;
+
+    case "radio":
+
+      classe = element.classList.item(0);
+      // If específico para natureza_op
+      if (classe == 'natureza_op') {
+        if (!checarRadio.includes(classe)) {
+          checarRadio.push(classe);
+        }
+      }
+
+      // Se o natureza_op for igual 4 ou 5 (instituição privada), inclui o outro radio para validação
+      if (element.checked == true && (element.id == "natureza_op_4" || element.id == "natureza_op_5")) {
+        //console.log( 'entrei na validação dos op4 e op5' );
+        checarRadio.push('porte_op');
+      }
+
+      break;
+
+    case "checkbox":
+
+      classe = element.classList.item(0);
+
+      if (!checarCheckbox.includes(classe)) {
+        checarCheckbox.push(classe);
+      }
+
+      break;
+
+    // default:
+    //   console.log("default");
+    //   console.log(element.type);
+    //   console.log(element.name);
+    //   // code block
+    //   break;
+
+  }
+
+  return [checarRadio, checarCheckbox, valid];
+}
+
+function validaInputRadio(div, classe, valid) {
+
+  // console.log("checando classe " + classe)
+  var r, flag = false;
+  r = div.getElementsByClassName(classe);
+
+  // console.log("tamanho de r (radio) " + r.length);
+
+  if (r.length > 0) {
+
+    flag = false;
+
+    for (i = 0; i < r.length; i++) {
+      if (r[i].checked) {
+        flag = true;
+
+        //adiciona verificação para outro
+        if (r[i].value == "Outro") {
+          // check_classificacao_3_rede-de-inovacao
+          nomeRede = r[i].name.split("_");
+          //outroClassificacao_rede-de-inovacao
+          nomeOutro = 'outroClassificacao_' + nomeRede[nomeRede.length - 1];
+
+          outroElement = document.getElementById(nomeOutro);
+
+          if (outroElement.value == "") {
+            setarInvalido(outroElement);
+          }
+
+        }
+      }
+    }
+
+    if (!flag) {
+
+      for (i = r.length - 1; i >= 0; i--) {
+        setarInvalido(r[i]);
+      }
+
+      valid = false;
+    }
+
+  }
+  return valid;
+}
+

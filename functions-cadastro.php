@@ -1015,7 +1015,7 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
 
     // Caso tenha um estado selecionado ao carregar, seta a variável global selectAberto
     if ($codigoEstadoSelecionado) {
-        echo '<script type="text/javascript"> setarSelectAberto('.$codigoEstadoSelecionado.'); </script>';
+        echo '<script type="text/javascript"> setarSelectAberto(' . $codigoEstadoSelecionado . '); </script>';
     }
 }
 

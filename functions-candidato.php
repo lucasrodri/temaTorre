@@ -14,7 +14,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 37;
+    $usuario_id = 38;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -202,13 +202,13 @@ function render_geral_form($entrada)
 }
 
 
-function render_geral_data($entrada)
+function render_geral_data($entrada, $avaliador = false)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
 
     // se o status for avaliacao ou homologado, não permite edição
-    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado")) ?
+    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado") ||  $avaliador) ?
         'disabled'
         : '';
 
@@ -310,7 +310,7 @@ function render_geral_data($entrada)
     <h4>Endereço</h4>
     <div class="mb-3">
         <!--se for pendente, o usuário pode editar: mostra selects  -->
-        <?php if ($statusFormInstituicao == "pendente") : ?>
+        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
             <?php echo carrega_estado_cidade_selecionado(valida($entrada, 'fld_1588802'), valida($entrada, 'fld_2343542')) ?>
         <?php else : ?>
             <div class="br-input">
@@ -358,12 +358,11 @@ function render_geral_data($entrada)
             <!-- <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p> -->
         </div>
 
-        <?php if ($statusFormInstituicao == "pendente") : ?>
+        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
 
             <button type="button" class="br-button secondary" id="anexo_logo_instituicao" name="anexo_logo_instituicao" onclick="apagarAnexo(name)">Apagar logo</button>
 
             <div id="logo_instituicao_new" class="br-upload" style="display:none;">
-
                 <label class="upload-label" for="logo_instituicao"><span>Logo<span class="field_required" style="color:#ee0000;">*</span></span></label>
                 <input class="upload-input" id="logo_instituicao" name="logo_instituicao" type="file" accept=".jpg,.png,.jpeg" onchange="changeError(name)" />
                 <div class="upload-list"></div>
@@ -381,7 +380,7 @@ function render_geral_data($entrada)
             <!-- <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p> -->
         </div>
 
-        <?php if ($statusFormInstituicao == "pendente") : ?>
+        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
 
             <button type="button" class="br-button secondary" id="anexo_guia_instituicao" name="anexo_guia_instituicao" onclick="apagarAnexo(name)">Apagar documento</button>
 
@@ -418,7 +417,7 @@ function render_geral_data($entrada)
     </div>
 
     <!-- Se estiver pendente e não tiver enviado recurso ainda -->
-    <?php if (($statusFormInstituicao == "pendente") && (strlen(valida($entrada, 'fld_223413')) < 1)) : ?>
+    <?php if (($statusFormInstituicao == "pendente") && (!$avaliador) && (strlen(valida($entrada, 'fld_223413')) < 1)) : ?>
         <button id="recurso-btn" class="br-button secondary" type="button" onclick="botaoRecurso();">
             Entrar com recurso?
         </button>
@@ -862,7 +861,7 @@ function atualiza_status_geral_ajax()
     $usuario_id = $current_user->ID;
 
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 37;
+    $usuario_id = 38;
 
     $entradas = array();
     $entradas_id = array();
