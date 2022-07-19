@@ -99,7 +99,8 @@ function msg_avaliacao_enviada($nomeDaInstituicao, $status)
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '')
 {
 
-  $to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
+  #$to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
+  $to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
 
   $subject = '';
   $message = '';
