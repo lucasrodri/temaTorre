@@ -1376,3 +1376,17 @@ function sm_pre_get_posts( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'sm_pre_get_posts', 1 );
+
+// desativar verificação do certificado do email
+// https://gist.github.com/slaFFik/c1d7d4249f47da7195fb973109952090
+add_filter('wp_mail_smtp_custom_options', function( $phpmailer ) {
+	$phpmailer->SMTPOptions = array(
+		'ssl' => array(
+			'verify_peer'       => false,
+			'verify_peer_name'  => false,
+			'allow_self_signed' => true
+		)
+	);
+
+	return $phpmailer;
+} );
