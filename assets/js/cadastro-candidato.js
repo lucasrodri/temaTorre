@@ -56,6 +56,7 @@ async function atualizaRedeCandidatoGeral() {
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
         $('#tab_instituicao').html('');
+        window.scrollTo(0, 0);
       },
       success: function (html) {
         $('#tab_instituicao').html(html);
@@ -64,7 +65,6 @@ async function atualizaRedeCandidatoGeral() {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
         atualizaStatusGeral();
-        window.scrollTo(0, 0);
       }
     });
   });
@@ -116,6 +116,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
         $('#tab_redes_' + painel).html('');
+        window.scrollTo(0, 0);
       },
       success: function (html) {
         //console.log("Sucesso " + painel);
@@ -125,7 +126,6 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
         atualizaStatusGeral();
-        window.scrollTo(0, 0);
       }
     });
   });

@@ -4,6 +4,8 @@
 * Shortcode para renderizar o formulário de início
 */
 
+define('USER_TESTE', 39);
+
 add_shortcode('shortcode_candidato_view', 'candidato_view');
 
 function candidato_view()
@@ -14,7 +16,7 @@ function candidato_view()
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 38;
+    $usuario_id = USER_TESTE;
     $usuario_login = $current_user->user_login;
 
     $entradas = array();
@@ -202,13 +204,13 @@ function render_geral_form($entrada)
 }
 
 
-function render_geral_data($entrada, $avaliador = false)
+function render_geral_data($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
 
     // se o status for avaliacao ou homologado, não permite edição
-    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado") ||  $avaliador) ?
+    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado")) ?
         'disabled'
         : '';
 
@@ -310,7 +312,7 @@ function render_geral_data($entrada, $avaliador = false)
     <h4>Endereço</h4>
     <div class="mb-3">
         <!--se for pendente, o usuário pode editar: mostra selects  -->
-        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
             <?php echo carrega_estado_cidade_selecionado(valida($entrada, 'fld_1588802'), valida($entrada, 'fld_2343542')) ?>
         <?php else : ?>
             <div class="br-input">
@@ -358,7 +360,7 @@ function render_geral_data($entrada, $avaliador = false)
             <!-- <p class="text-base mt-1">Insira a logomarca, de preferência de 450x250 pixels, no formato PNG ou JPG</p> -->
         </div>
 
-        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
 
             <button type="button" class="br-button secondary" id="anexo_logo_instituicao" name="anexo_logo_instituicao" onclick="apagarAnexo(name)">Apagar logo</button>
 
@@ -380,7 +382,7 @@ function render_geral_data($entrada, $avaliador = false)
             <!-- <p class="text-base mt-1">Insira o guia de uso da marca no formato PDF de tamanho máximo 25MB</p> -->
         </div>
 
-        <?php if (($statusFormInstituicao == "pendente") && (!$avaliador)) : ?>
+        <?php if ($statusFormInstituicao == "pendente") : ?>
 
             <button type="button" class="br-button secondary" id="anexo_guia_instituicao" name="anexo_guia_instituicao" onclick="apagarAnexo(name)">Apagar documento</button>
 
@@ -417,14 +419,14 @@ function render_geral_data($entrada, $avaliador = false)
     </div>
 
     <!-- Se estiver pendente e não tiver enviado recurso ainda -->
-    <?php if (($statusFormInstituicao == "pendente") && (!$avaliador) && (strlen(valida($entrada, 'fld_223413')) < 1)) : ?>
+    <?php if (($statusFormInstituicao == "pendente") && (strlen(valida($entrada, 'fld_223413')) < 1)) : ?>
         <button id="recurso-btn" class="br-button secondary" type="button" onclick="botaoRecurso();">
-            Entrar com recurso?
+            Enviar mensagem para Avaliador?
         </button>
 
         <div id="recurso-div" class="br-textarea mb-3" style="display:none">
-            <label for="recursoInstituicao">Insira o recurso para enviar ao Avaliador</label>
-            <textarea class="textarea-start-size" name="recursoInstituicao" placeholder="Recurso para enviar ao Avaliador" maxlength="800"></textarea>
+            <label for="recursoInstituicao">Insira a mensagem para enviar ao Avaliador</label>
+            <textarea class="textarea-start-size" name="recursoInstituicao" placeholder="Mensagem para enviar ao Avaliador" maxlength="800"></textarea>
             <?php if ($statusFormInstituicao == "pendente") : ?>
                 <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
             <?php endif; ?>
@@ -434,11 +436,11 @@ function render_geral_data($entrada, $avaliador = false)
     <!-- Se já tiver apresentado recurso -->
     <?php if (strlen(valida($entrada, 'fld_223413')) > 1) : ?>
 
-        <h4>Recurso</h4>
+        <h4>Mensagem para Avaliador</h4>
 
         <div class="br-textarea mb-3">
-            <label for="recursoInstituicao">Recurso para o avaliador</label>
-            <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Recurso para enviar ao Avaliador" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
+            <label for="recursoInstituicao">Mensagem</label>
+            <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Mensagem para enviar ao Avaliador" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
             <?php if ($statusFormInstituicao == "pendente") : ?>
                 <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
             <?php endif; ?>
@@ -861,7 +863,7 @@ function atualiza_status_geral_ajax()
     $usuario_id = $current_user->ID;
 
     // para teste estou usando um usuário meu aqui
-    $usuario_id = 38;
+    $usuario_id = USER_TESTE;
 
     $entradas = array();
     $entradas_id = array();

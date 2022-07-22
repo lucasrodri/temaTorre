@@ -95,7 +95,7 @@ function avaliador_view()
                         <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
                             <div class="tab-panel" id="panel-<?php echo $i; ?>">
                                 <div id="tab_redes_<?php echo $i; ?>"></div>
-                                <div class="mb-3">
+                                <div id="tags_<?php echo $arrayRedes[$i - 2]; ?>" class="mb-3" style="display:none;">
                                     <p class="label mb-3">Insira as Tags para o post<span class="field_required" style="color:#ee0000;">*</span></p>
                                     <?php
                                     echo do_shortcode('[tmwpi_shortcode_campo_seletor_tags div_id="taxonomy-' . $arrayRedes[$i - 2] . '" select_id="escolha_tags_' . $arrayRedes[$i - 2] . '"]');
@@ -221,14 +221,6 @@ function campos_avaliador_redes($entry, $rede = "geral")
 ?>
     <div id="div_<?php echo $rede ?>">
 
-        <!-- se tiver recurso mostra botao -->
-        <?php if (strlen(valida($entry, 'fld_223413')) > 1) : ?>
-            <div class="br-textarea mb-3">
-                <label>Resposta ao recurso</label>
-                <button class="br-button secondary" type="button" onclick="confirm('Deseja enviar email para ajuda?');">Enviar email para ajuda</button>
-            </div>
-        <?php endif; ?>
-
         <div class="br-textarea mb-3">
             <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
             <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
@@ -236,25 +228,23 @@ function campos_avaliador_redes($entry, $rede = "geral")
 
         <div class="br-textarea mb-3">
             <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeError(name)" onfocusout="validacaoAvaliador()" <?php echo $required ?>></textarea>
+            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeErrorValidacao(name)" <?php echo $required ?>></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
 
         <div class="mb-3 radio-avaliador">
             <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
             <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadio(name)" onfocusout="validacaoAvaliador()" />
+                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadioValidacao(name)" />
                 <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
             </div>
             <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadio(name)" onfocusout="validacaoAvaliador()" />
+                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadioValidacao(name)" />
                 <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
                 <br>
             </div>
         </div>
     </div>
-
-    <!-- TODO: mostrar um resumo das avaliações e pareceres escritos por rede com JS -->
 <?php
 }
 

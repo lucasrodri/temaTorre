@@ -699,6 +699,7 @@ function cadastro_action_form()
         }
 
         envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
+        envia_email_avaliador('cadastro', $nomeDaInstituicao);
 
         // redirecionar para a página de sucesso
         wp_redirect(esc_url(home_url('/sucesso')));

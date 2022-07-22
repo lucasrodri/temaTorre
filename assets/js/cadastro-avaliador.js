@@ -142,12 +142,25 @@ function relaciona_nome($s) {
     }
 }
 
+// Função auxiliar para chamar o changeError e a validação
+function changeErrorValidacao(name) {
+    changeError(name);
+    validacaoAvaliador();
+}
+
+// Função auxiliar para chamar o changeErrorRadio e a validação
+function changeErrorRadioValidacao(name) {
+    changeErrorRadio(name);
+    validacaoAvaliador();
+}
+
+
 // Função que realiza a validação para liberar o botão de enviar do Avaliador
 function validacaoAvaliador() {
     var divResumo = document.getElementById('resumo-avaliador');
 
     if (divResumo.style.display == 'none') {
-        divResumo.style.display = 'inline';
+        divResumo.style.display = 'block';
     }
 
     divResumo.innerHTML = '';
@@ -167,6 +180,7 @@ function validacaoAvaliador() {
         var parecer = document.getElementById('parecerAvaliador_' + redeArray);
         var pendente = document.getElementById('avaliador_' + redeArray + '_op_1');
         var homologado = document.getElementById('avaliador_' + redeArray + '_op_2');
+        var tagsDiv = document.getElementById('tags_' + redeArray);
 
         // validar parecer
         if (parecer.value == '') {
@@ -188,6 +202,14 @@ function validacaoAvaliador() {
             divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
             valid[i] = true;
         }
+
+        // mostra as tags caso homologado
+        if (tagsDiv)
+            if (homologado.checked) {
+                tagsDiv.style.display = 'block';
+            } else {
+                tagsDiv.style.display = 'none';
+            }
     }
 
     var botaoAvaliador = document.getElementById('action-avaliador-input');
