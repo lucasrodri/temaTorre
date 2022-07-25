@@ -209,12 +209,10 @@ function campos_avaliador_redes($entry, $rede = "geral")
     if ($rede == "geral") {
         echo "<h3>Avaliação da Instituição</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Instituição";
-        $required = 'required';
         $fld_historico = "fld_4416984";
     } else {
         echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Rede de " . relaciona($rede)[2];
-        $required = '';
         $fld_historico = "fld_6135036";
     }
 ?>
@@ -227,7 +225,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
 
         <div class="br-textarea mb-3">
             <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeErrorValidacao(name)" <?php echo $required ?>></textarea>
+            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeErrorValidacao(name)"></textarea>
             <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
         </div>
 

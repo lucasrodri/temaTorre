@@ -182,13 +182,14 @@ function validacaoAvaliador() {
         var homologado = document.getElementById('avaliador_' + redeArray + '_op_2');
         var tagsDiv = document.getElementById('tags_' + redeArray);
 
-        // validar parecer
-        if (parecer.value == '') {
+        // validar parecer apenas se não for homologado
+        if (!homologado.checked && parecer.value == '') {
             setarInvalido(parecer);
             valid[i] = false;
         } else {
             //divResumo.innerHTML += '<i class="fas fa-check"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido <br>';
             divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido</span><br>';
+            setarValido(parecer);
             valid[i] = true;
         }
 
