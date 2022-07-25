@@ -160,8 +160,7 @@ function ajaxCarregaInstituicao()
     //$date = date('M d, Y', strtotime($entradas["date"]));
 
     // função alterada para não retornar um form
-    // função alterada para receber flag true de favaliador
-    render_geral_data($entradas[FORM_ID_GERAL], true);
+    render_geral_data($entradas[FORM_ID_GERAL]);
     echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
     campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     die();
@@ -222,7 +221,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">
-            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
             <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 
