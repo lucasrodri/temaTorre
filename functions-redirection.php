@@ -73,7 +73,7 @@ function pre_process_shortcode()
                 // se o usuário logado não for admin, deve ser redirecionado para home
                 if (!is_user_logged_in()) {
                     wp_redirect(wp_login_url());
-                } else if (!usuario_tem_role($current_user, 'visualizador_cadastros') || !current_user_can('administrator')) {
+                } else if (!usuario_tem_role($current_user, 'visualizador_cadastros') && !current_user_can('administrator')) {
                     wp_redirect(home_url());
                 }
 
