@@ -4,7 +4,7 @@
 * Shortcode para renderizar o formulário de início
 */
 
-define('USER_TESTE', 39);
+define('USER_TESTE', 18);
 
 add_shortcode('shortcode_candidato_view', 'candidato_view');
 
@@ -204,13 +204,13 @@ function render_geral_form($entrada)
 }
 
 
-function render_geral_data($entrada)
+function render_geral_data($entrada, $flag_view = 'false')
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
 
     // se o status for avaliacao ou homologado, não permite edição
-    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado")) ?
+    $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado") || $flag_view == 'true') ?
         'disabled'
         : '';
 

@@ -345,7 +345,7 @@ function cadastro_form_render()
 }
 
 
-function cadastro_redes_render($rede_nome, $entrada = "")
+function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
 {
     $title = get_options($rede_nome)[0];
     $opcoes = get_options($rede_nome)[1];
@@ -354,7 +354,7 @@ function cadastro_redes_render($rede_nome, $entrada = "")
 
     $statusRede = valida($entrada, 'fld_3707629');
     //$statusRede = 'pendente';
-    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado")) ?
+    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado") || $flag_view == 'true') ?
         'disabled'
         : '';
 

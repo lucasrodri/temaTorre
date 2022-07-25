@@ -1415,6 +1415,7 @@ add_filter('wp_mail_smtp_custom_options', function( $phpmailer ) {
 
 include "criar-tabelas.php";
 include "functions-admin.php";
+include "functions-gerente.php";
 include "functions-avaliador.php";
 include "functions-cadastro.php";
 include "functions-candidato.php";
