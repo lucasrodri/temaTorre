@@ -19,8 +19,8 @@ function tabela_estados_create()
 
     if ($installed_ver != $jal_db_version) {
 
-        $table_estados = "wp_tematorre_estados";
-        $table_municipios = "wp_tematorre_municipios";
+        $table_estados = $wpdb->prefix . "tematorre_estados"; 
+        $table_municipios = $wpdb->prefix . "tematorre_municipios";
 
         // set the default character set and collation for the table
         $charset_collate = $wpdb->get_charset_collate();
@@ -67,8 +67,8 @@ function tabela_estados_create()
 
 function insert_sql_estados()
 {
-
-    $sql =  "INSERT INTO wp_tematorre_estados VALUES 
+    global $wpdb;
+    $sql =  "INSERT INTO ". $wpdb->prefix ."tematorre_estados VALUES 
         (11,'RO','Rondônia',-10.83,-63.34,'Norte'),
         (12,'AC','Acre',-8.77,-70.55,'Norte'),
         (13,'AM','Amazonas',-3.47,-65.1,'Norte'),
@@ -103,8 +103,8 @@ function insert_sql_estados()
 
 function insert_sql_municipios()
 {
-
-    $sql =  "INSERT INTO wp_tematorre_municipios VALUES
+    global $wpdb;
+    $sql =  "INSERT INTO ". $wpdb->prefix ."tematorre_municipios VALUES
 (5200050,'Abadia de Goiás',-16.7573,-49.4412,FALSE,52,'1050',62,'America/Sao_Paulo'),
 (3100104,'Abadia dos Dourados',-18.4831,-47.3916,FALSE,31,'4001',34,'America/Sao_Paulo'),
 (5200100,'Abadiânia',-16.197,-48.7057,FALSE,52,'9201',62,'America/Sao_Paulo'),

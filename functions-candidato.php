@@ -821,7 +821,7 @@ add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_aj
 function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM ". $wpdb->prefix ."tematorre_estados order by nome;";
     $estados = $wpdb->get_results($sql);
 
     $checked = "";
