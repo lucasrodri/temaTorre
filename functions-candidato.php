@@ -439,6 +439,11 @@ function render_geral_data($entrada, $flag_view = 'false')
         <h4>Mensagem para Avaliador</h4>
 
         <div class="br-textarea mb-3">
+            <label for="historicoRecursoInstituicao">Histórico da mensagem</label>
+            <textarea class="textarea-start-size disabled" id="historicoRecursoInstituicao" name="historicoRecursoInstituicao" placeholder="Não há histórico da mensagem" readonly value="<?php echo valida($entrada, 'fld_299311'); ?>"><?php echo valida($entrada, 'fld_299311'); ?></textarea>
+        </div>
+
+        <div class="br-textarea mb-3">
             <label for="recursoInstituicao">Mensagem</label>
             <textarea class="textarea-start-size" id="recursoInstituicao" name="recursoInstituicao" placeholder="Mensagem para enviar ao Avaliador" maxlength="800" value="<?php echo valida($entrada, 'fld_223413'); ?>" <?php echo $disabled ?>><?php echo valida($entrada, 'fld_223413'); ?></textarea>
             <?php if ($statusFormInstituicao == "pendente") : ?>
@@ -568,7 +573,7 @@ function render_status($status)
 }
 
 
-function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $status = "avaliacao")
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -600,6 +605,8 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada, $status);
 
     Caldera_Forms_Entry_Update::update_field_value('fld_223413', $entrada, $recursoInstituicao);
+    //Campo: campo_extra1
+    Caldera_Forms_Entry_Update::update_field_value('fld_299311', $entrada, $historicoRecursoInstituicao);
 }
 
 function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao")
@@ -698,16 +705,28 @@ function atualiza_geral_candidato_ajax()
         $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
     }
 
+    //Histórico do recurso
+    if (isset($_POST['historicoRecursoInstituicao'])) $historicoRecursoInstituicao = (trim($_POST['historicoRecursoInstituicao']));
+    else $historicoRecursoInstituicao = "";
+
     if (isset($_POST['recursoInstituicao'])) $recursoInstituicao = ($_POST['recursoInstituicao']);
     else $recursoInstituicao = "";
 
-    //if ($recursoInstituicao) {
-    //TODO envia_email de recurso (mensagem para candidato)
-    //TODO envia_email de recurso para avaliador??
-    //}
+    // apenas se tiver recurso escrito
+    if (strlen($recursoInstituicao) > 1) {
+        //Adicionando o recurso ao histórico:
+        date_default_timezone_set('America/Sao_Paulo');
+        $date = date('d/m/Y h:i:sa', time());
+
+        // se já houver alguma coisa, acrescenta um \n
+        if (strlen($historicoRecursoInstituicao) > 1)
+            $historicoRecursoInstituicao .= "\n\n";
+
+        $historicoRecursoInstituicao .= "Mensagem enviada em " . $date . ":\n" . $recursoInstituicao;
+    }
 
     //funcao para criar a entrada no Caldera (Form geral)
-    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, "avaliacao");
+    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, "avaliacao");
 
     //TODO envia email de update
 
@@ -802,7 +821,7 @@ add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_aj
 function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM ". $wpdb->prefix ."tematorre_estados order by nome;";
     $estados = $wpdb->get_results($sql);
 
     $checked = "";

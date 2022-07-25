@@ -229,7 +229,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">
-            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
             <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 

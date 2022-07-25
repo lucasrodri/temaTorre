@@ -963,7 +963,7 @@ function carrega_estados()
     // Função que carrega o estado enquanto a página carrega
 
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM ".$wpdb->prefix ."tematorre_estados order by nome;";
     //$estados = $wpdb->get_col($sql);
     $estados = $wpdb->get_results($sql);
 
@@ -988,7 +988,7 @@ function retorna_nome_uf($codigoEstado)
 {
     // Função para retornar o nome do estado a partir do cópdigp
     global $wpdb;
-    $sql = "SELECT nome FROM wp_tematorre_estados WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $sql = "SELECT nome FROM ".$wpdb->prefix ."tematorre_estados WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
     $estados = $wpdb->get_col($sql);
 
     if (!empty($estados)) {
@@ -1003,7 +1003,7 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
     // Função que carrega o select de cidades para cada estado enquanto a página carrega
 
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM wp_tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM ".$wpdb->prefix ."tematorre_estados order by nome;";
     //$estados = $wpdb->get_col($sql);
     $estados = $wpdb->get_results($sql);
 
@@ -1023,7 +1023,7 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
 function gera_select_cidade($codigoEstado, $codigoEstadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
-    $sql = "SELECT codigo_ibge, nome FROM wp_tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $sql = "SELECT codigo_ibge, nome FROM ".$wpdb->prefix ."tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
     $cidades = $wpdb->get_results($sql);
 
     $estadoUnidade = retorna_nome_uf($codigoEstado);
