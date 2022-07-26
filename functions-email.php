@@ -17,8 +17,8 @@
 function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 {
 
-  // $to = "torre@mcti.gov.br, "; //adicionar outros e-mails
-  $to = "bcasamo+torre@gmail.com";
+  //$to = "torre@mcti.gov.br, "; //adicionar outros e-mails
+  $to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com, torre@mcti.gov.br";
 
   $subject = '';
   $message = '';
@@ -71,7 +71,7 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 
   $headers = array('Content-Type: text/html; charset=UTF-8');
 
-  //wp_mail($to, $subject, $message, $headers);
+  wp_mail($to, $subject, $message, $headers);
 }
 
 function msg_candidatura_avaliar($nomeDaInstituicao)
