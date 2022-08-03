@@ -108,8 +108,9 @@ function msg_remocao_candidato($nomeDaInstituicao, $parecer)
 //envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecer)
 //envia_email('apagar',   $nomeDaInstituicao, $emailDoCandidato, $parecer)
 //envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato)
+//envia_email('resumo', $nomeDaInstituicao, $emailDoCandidato, '', '', '', $resumo)
 
-function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '')
+function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '', $resumo = '')
 {
 
   #$to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
@@ -159,6 +160,11 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
       $message = msg_publicado($nomeDaInstituicao);
       break;
 
+    case 'resumo':
+      $subject =  'Seu processo de candidatura à Torre MCTI foi atualizado - adequações';
+      $message = msg_resumo_avaliacao($nomeDaInstituicao, $resumo);
+      break;
+
     default:
       # code...
       break;
@@ -171,14 +177,11 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
 
 
 /*
-* Mensagens "automáticas" para o Candidato
+* Mensagens enviadas para o Candidato
 */
 
 function msg_cadastro($nomeDaInstituicao, $username, $password)
 {
-  /*
-	* Chamada pela função ???? do functions.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Recebemos os dados da sua candidatura e a partir de agora falta pouco para concluir o seu processo de cadastro e se tornar membro da Torre MCTI.&nbsp;</p><p style="text-align: left;">Seu login de acesso &eacute; <strong>' . $username . '</strong> e sua senha &eacute; <strong>' . $password . '</strong>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">Isso porque todos os cadastros que recebemos passam por uma Acompanhamento pelos membros do Comit&ecirc; Gestor, como descrito no passo a passo.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Agradecemos novamente o seu interesse em fazer parte da Torre MCTI!</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -187,9 +190,6 @@ function msg_cadastro($nomeDaInstituicao, $username, $password)
 
 function msg_desistir($nomeDaInstituicao)
 {
-  /*
-	* Chamada pela função ????? do functions.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Informamos que atendemos ao seu pedido de cancelamento do processo de cadastro para se tornar membro da Torre MCTI.&nbsp;</p><p style="text-align: left;">Esperamos que tenha interesse em se tornar membro novamente no futuro. Se voc&ecirc; mudar de ideia &eacute; s&oacute; reiniciar o processo seguindo o passo a passo dispon&iacute;vel no portal da <a href="https://torre.mcti.gov.br/orientacoes/" target="_blank" rel="noopener">Torre MCTI</a>.&nbsp;</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -198,9 +198,6 @@ function msg_desistir($nomeDaInstituicao)
 
 function msg_reenviar($nomeDaInstituicao)
 {
-  /*
-	* Chamada pela função ??? do functions.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Recebemos os dados atualizados da sua candidatura e a partir de agora falta pouco para concluir o seu processo de cadastro e se tornar membro da Torre MCTI.&nbsp;</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">Isso porque todos os cadastros que recebemos passam por uma Acompanhamento pelos membros do Comit&ecirc; Gestor, como descrito no passo a passo.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Agradecemos novamente o seu interesse em fazer parte da Torre MCTI!</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -209,9 +206,6 @@ function msg_reenviar($nomeDaInstituicao)
 
 function msg_editar($nomeDaInstituicao)
 {
-  /*
-	* Chamada pela função ??? do functions.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Os dados da sua candidatura na Torre MCTI foram editados!</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">Isso porque todas as edi&ccedil;&otilde;es que recebemos passam por uma Acompanhamento pelos membros do Comit&ecirc; Gestor.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -220,14 +214,11 @@ function msg_editar($nomeDaInstituicao)
 
 
 /*
-* Mensagens enviadas pelo Avaliador
+* Mensagens "automáticas" para o Avaliador
 */
 
 function msg_homologado($nomeDaInstituicao, $parecer)
 {
-  /*
-	* Chamada pela função ???? do carregaform.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Ficamos felizes em dizer que seu processo de cadastro na Torre MCTI foi homologado.</p><p style="text-align: left;">Agora, voc&ecirc; deve assinar o termo de Ades&atilde;o (ou declara&ccedil;&atilde;o de atendimento &agrave;s condi&ccedil;&otilde;es espec&iacute;ficas).</p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">O parecer de sua candidatura &eacute; o seguinte:<br />' . $parecer . '</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -236,9 +227,6 @@ function msg_homologado($nomeDaInstituicao, $parecer)
 
 function msg_pendente($nomeDaInstituicao, $parecer)
 {
-  /*
-	* Chamada pela função ??? do carregaform.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Informamos que a equipe de avalia&ccedil;&atilde;o encontrou problemas no seu processo para se tornar membro da Torre MCTI. Para obter mais informa&ccedil;&otilde;es <a href="https://torre.mcti.gov.br/acompanhamento/">clique aqui</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">O parecer de sua candidatura &eacute; o seguinte:<br />' . $parecer . '</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -247,9 +235,6 @@ function msg_pendente($nomeDaInstituicao, $parecer)
 
 function msg_apagar($nomeDaInstituicao, $parecer)
 {
-  /*
-	* Chamada pela função ??? do functions.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Informamos que seu processo de candidatura &agrave; Torre MCTI foi removido por um de nossos Avaliadores.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">O parecer de sua candidatura &eacute; o seguinte:<br />' . $parecer . '</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Esperamos que tenha interesse em se candidatar novamente no futuro.</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
@@ -258,11 +243,16 @@ function msg_apagar($nomeDaInstituicao, $parecer)
 
 function msg_publicado($nomeDaInstituicao)
 {
-  /*
-	* Chamada pela função ???? do carregaform.php
-	*/
 
   $message = '<p style="text-align: left;">Ol&aacute; caro respons&aacute;vel pela institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Ficamos felizes em dizer que sua candidatura &agrave; Torre MCTI foi publicada.</p><p style="text-align: left;">Voc&ecirc; pode acompanhar as publica&ccedil;&otilde;es na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Estamos &agrave; disposi&ccedil;&atilde;o,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
+
+  return $message;
+}
+
+function msg_resumo_avaliacao($nomeDaInstituicao, $resumo)
+{
+
+  $message = '<p style="text-align: left;">Ol&aacute; respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Segue o resumo da an&aacute;lise da candidatura:</p>' . $resumo . '<p style="text-align: left;">Voc&ecirc; pode ajustar os dados, bem como acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aguardamos a realiza&ccedil;&atilde;o dos ajustes indicados para encaminhar os dados para homologa&ccedil;&atilde;o.</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
   return $message;
 }

@@ -572,6 +572,16 @@ function render_status($status)
     }
 }
 
+function relaciona_status($s)
+{
+    switch ($s) {
+        case "pendente":
+            return 'Ajustes necessários';
+        case "homologado":
+            return 'Homologado';
+    }
+}
+
 
 function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $status = "avaliacao")
 {

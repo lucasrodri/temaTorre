@@ -311,7 +311,15 @@ function avaliador_action_form()
         $historicoParecer_rede[$rede] .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede];
     }
 
-    //casos de status: [avaliacao, pendente, homologado, publicado]
+    $resumo = '';
+    $resumo .= '<ul>';
+    $resumo .= "<li>Informações da Instituição: " . relaciona_status($situacaoAvaliador_geral) . "</li>";
+    foreach ($arrayRedes as $rede) {
+        if ($situacaoAvaliador_rede[$rede] != "") {
+            $resumo .= "<li>Rede de " . relaciona($rede)[2] . ": " . relaciona_status($situacaoAvaliador_rede[$rede]) . "</li>";
+        }
+    }
+    $resumo .= '</ul>';
 
     //----------------------------submit
     if (isset($_POST["enviar"])) {
@@ -326,11 +334,13 @@ function avaliador_action_form()
         $nomeDaInstituicao  = valida($entry, 'fld_266564');
         $emailDoCandidato  = valida($entry, 'fld_7868662');
 
-        // if ($statusGeral == 'pendente') {
-        //     envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
-        // } else if ($statusGeral == 'homologado') {
-        //     envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
-        // }
+        if ($statusGeral == 'pendente') {
+            //envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
+            envia_email('resumo', $nomeDaInstituicao, $emailDoCandidato, '', '', '', $resumo);
+        } else if ($statusGeral == 'homologado') {
+            // caso homologado -> enviar as tags escolhidas
+            envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
+        }
 
         // redirecionar para a página de avaliacao
         wp_redirect(esc_url(home_url('/avaliador')));
