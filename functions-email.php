@@ -118,8 +118,8 @@ function msg_remocao_candidato($nomeDaInstituicao, $parecer)
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '', $username = '', $password = '')
 {
 
-  #$to = $emailDoCandidato . ", bcasamo+torre@gmail.com";
-  $to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
+  $to = $emailDoCandidato . ", lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
+  //$to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
 
   $subject = '';
   $message = '';

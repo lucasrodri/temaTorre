@@ -355,6 +355,17 @@ function validaFormulario() {
           }
         }
 
+        //preciso da flag de requirido pq esse elemento existe em todos as redes
+        if (flagRequirido && y[i].name.includes("cpfRepresentante_")) {
+
+          if (!IsCPF(y[i].value)) {
+            mostrarAvisoValidacao(y[i], 'CPF');
+            valid = false;
+          } else {
+            ocultarAvisoValidacao(y[i]);
+          }
+        }
+
         break;
 
       case "email":
@@ -602,9 +613,6 @@ function validarEspecifico(name) {
 
   if (name == "cnpjDaInstituicao") {
 
-    //console.log( "validar text cnpjDaInstituicao" );
-    //console.log( IsCNPJ( element.value ) );
-
     if (!IsCNPJ(element.value)) {
       mostrarAvisoValidacao(element, 'CNPJ');
     } else {
@@ -614,9 +622,6 @@ function validarEspecifico(name) {
   }
 
   if (name == "urlDaInstituicao") {
-
-    //console.log( "validar text urlDaInstituicao" );
-    //.log( IsURL( element.value ) );
 
     if (!IsURL(element.value)) {
       mostrarAvisoValidacao(element, 'URL');
@@ -635,6 +640,18 @@ function validarEspecifico(name) {
     }
   }
 
+  if (name.includes("cpfRepresentante_")) {
+
+    // console.log("validar text cpfRepresentante_");
+    //console.log(IsCPF(element.value));
+
+    if (!IsCPF(element.value)) {
+      mostrarAvisoValidacao(element, 'CPF');
+    } else {
+      ocultarAvisoValidacao(element);
+    }
+
+  }
 
   if (element.type == "email") {
 
@@ -943,41 +960,19 @@ function IsURL(url) {
 }
 
 function IsCPF(cpf) {
-  cpf = cpf.replace(/[^\d]+/g, '');
-  if (cpf == '')
-    return false;
-  // Elimina CPFs invalidos conhecidos    
-  if (cpf.length != 11 ||
-    cpf == "00000000000" ||
-    cpf == "11111111111" ||
-    cpf == "22222222222" ||
-    cpf == "33333333333" ||
-    cpf == "44444444444" ||
-    cpf == "55555555555" ||
-    cpf == "66666666666" ||
-    cpf == "77777777777" ||
-    cpf == "88888888888" ||
-    cpf == "99999999999")
-    return false;
-  // Valida 1o digito 
-  add = 0;
-  for (i = 0; i < 9; i++)
-    add += parseInt(cpf.charAt(i)) * (10 - i);
-  rev = 11 - (add % 11);
-  if (rev == 10 || rev == 11)
-    rev = 0;
-  if (rev != parseInt(cpf.charAt(9)))
-    return false;
-  // Valida 2o digito 
-  add = 0;
-  for (i = 0; i < 10; i++)
-    add += parseInt(cpf.charAt(i)) * (11 - i);
-  rev = 11 - (add % 11);
-  if (rev == 10 || rev == 11)
-    rev = 0;
-  if (rev != parseInt(cpf.charAt(10)))
-    return false;
-  return true;
+  cpf = cpf.replace(/\D/g, '');
+  if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  var result = true;
+  [9, 10].forEach(function (j) {
+    var soma = 0, r;
+    cpf.split(/(?=)/).splice(0, j).forEach(function (e, i) {
+      soma += parseInt(e) * ((j + 2) - (i + 1));
+    });
+    r = soma % 11;
+    r = (r < 2) ? 0 : 11 - r;
+    if (r != cpf.substring(j, j + 1)) result = false;
+  });
+  return result;
 }
 
 // https://gist.github.com/alexbruno/6623b5afa847f891de9cb6f704d86d02

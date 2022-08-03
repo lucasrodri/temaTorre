@@ -124,6 +124,12 @@ jQuery(document).ready(function ($) {
     $(this).mask("(00) 0000-00009");
   });
 
+  $("#cpfRepresentante_rede-de-suporte").mask("999.999.999-99");
+  $("#cpfRepresentante_rede-de-formacao").mask("999.999.999-99");
+  $("#cpfRepresentante_rede-de-inovacao").mask("999.999.999-99");
+  $("#cpfRepresentante_rede-de-pesquisa").mask("999.999.999-99");
+  $("#cpfRepresentante_rede-de-tecnologia").mask("999.999.999-99");
+  
   //colocando um if para não dar erros em outras páginas
   if (document.getElementById('cadastro_wizard') || document.getElementById('radio_function')) {
 
@@ -176,8 +182,11 @@ jQuery(document).ready(function ($) {
 
         //Preciso pegar específicamente o input nomeCompleto para não mexer no outroClassificação
         nomeInputText = "nomeCompleto_rede-de-" + nomeRede;
+        nomeInputCPF = "cpfRepresentante_rede-de-" + nomeRede;
+
         // Tenho que listar os inputs para não pegar checkbox
         checkSlave.querySelectorAll(`input[type=text][name=${nomeInputText}]`).forEach(input => input.required = "true");
+        checkSlave.querySelectorAll(`input[type=text][name=${nomeInputCPF}]`).forEach(input => input.required = "true");
         checkSlave.querySelectorAll('input[type=email]').forEach(input => input.required = "true");
         checkSlave.querySelectorAll('input[type=tel]').forEach(input => input.required = "true");
         checkSlave.querySelectorAll('textarea').forEach(textarea => textarea.required = "true");
