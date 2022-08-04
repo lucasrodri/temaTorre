@@ -67,7 +67,7 @@ function pre_process_shortcode()
                 } else if (!current_user_can('administrator')) {
                     wp_redirect(home_url());
                 }
-
+                //TODO adicionar checagem de permissão de avaliador
             } else if (in_array('shortcode_gerente_view', $matches[2])) {
 
                 // se o usuário logado não for admin, deve ser redirecionado para home
@@ -76,7 +76,6 @@ function pre_process_shortcode()
                 } else if (!usuario_tem_role($current_user, 'visualizador_cadastros') && !current_user_can('administrator')) {
                     wp_redirect(home_url());
                 }
-
             } else if (in_array('shortcode_candidato_view', $matches[2])) {
                 // se o usuário logado já for candidato, deve checar se é o id correto
                 if (!is_user_logged_in()) {

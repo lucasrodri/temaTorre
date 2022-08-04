@@ -636,6 +636,8 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $statu
     Caldera_Forms_Entry_Update::update_field_value('fld_2391778', $entrada, $dados_redes["abrangencias"]);
 
     Caldera_Forms_Entry_Update::update_field_value('fld_6140408', $entrada, $dados_redes["nomeCompleto"]);
+    // campo_extra3
+    Caldera_Forms_Entry_Update::update_field_value('fld_2025685', $entrada, $dados_redes["cpfRepresentante"]);
     Caldera_Forms_Entry_Update::update_field_value('fld_7130000', $entrada, $dados_redes["emailRepresentante"]);
     Caldera_Forms_Entry_Update::update_field_value('fld_5051662', $entrada, $dados_redes["telefoneRepresentante"]);
 
@@ -804,6 +806,8 @@ function atualiza_rede_candidato_ajax()
         //dados do representante
         if (isset($elements['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($elements['nomeCompleto_' . $key]);
         else $dados_redes[$key]["nomeCompleto"] = "";
+        if (isset($elements['cpfRepresentante_' . $key])) $dados_redes[$key]["cpfRepresentante"] = ($elements['cpfRepresentante_' . $key]);
+        else $dados_redes[$key]["cpfRepresentante"] = "";
         if (isset($elements['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($elements['emailRepresentante_' . $key]);
         else $dados_redes[$key]["emailRepresentante"] = "";
         if (isset($elements['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($elements['telefoneRepresentante_' . $key]);
@@ -831,7 +835,7 @@ add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_aj
 function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM ". $wpdb->prefix ."tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM " . $wpdb->prefix . "tematorre_estados order by nome;";
     $estados = $wpdb->get_results($sql);
 
     $checked = "";
@@ -921,17 +925,25 @@ function atualiza_status_geral_ajax()
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
     $arrayRedes = explode(";", $redes);
 
+    // guardar todos os status e aí ver no final 
+    $status = array();
+
     // pega status aba instituição
-    $situacaoGeral = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
-    // echo '$situacaoGeral '.$situacaoGeral.'<br>';
+    $status[] = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
+    //echo '$situacaoGeral '. valida($entradas[FORM_ID_GERAL], 'fld_4899711') .'<br>';
 
     foreach ($arrayRedes as $rede) {
-        $statusRede = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
-        // echo '$statusRede '.$statusRede.'<br>';
+        $status[] = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
+        //echo '$statusRede '. valida($entradas[relaciona($rede)[1]], 'fld_3707629') .'<br>';
+    }
 
-        if ($statusRede == "pendente") {
-            $situacaoGeral = "pendente";
-        }
+    $situacaoGeral = '';
+    if (in_array("pendente", $status)) {
+        $situacaoGeral = "pendente";
+    } else if (in_array("avaliacao", $status)) {
+        $situacaoGeral = "avaliacao";
+    } else {
+        $situacaoGeral = "homologado";
     }
 
     // Chama o update no campo geral

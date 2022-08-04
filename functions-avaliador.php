@@ -165,9 +165,11 @@ function ajaxCarregaInstituicao()
     // $flag_gerente é uma string!!!
     render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente);
     echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
-    if ($flag_gerente == 'false'){
+    
+    if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     }
+
     die();
 }
 add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
@@ -205,9 +207,11 @@ function ajaxCarregaRede()
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
-    if ($flag_gerente == 'false'){
+    
+    if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[relaciona($rede)[1]], $rede);
     }
+    
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
