@@ -6,7 +6,7 @@ function voltarListaEntradas() {
 
 var redesArrayGlobal;
 
-async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
+async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gerente = 'false') {
 
     //console.log("recebi user_id " + user_id);
     //console.log("recebi redes " + redes);
@@ -17,8 +17,9 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
     document.getElementById('entrada-voltar-btn').style.display = 'inline';
 
     document.getElementById('span-header-accordion').innerHTML = 'Instituição: ' + nomeInstituicao;
-
-    document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
+    if (flag_gerente == 'false') {
+        document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
+    }
     // não posso trocar o hidden pq tenho que associá-lo na function admin_post
     //document.getElementById('hidden-avaliador-input').value = 'atualiza_avaliador_' + user_id;
 
@@ -50,6 +51,7 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
             data: {
                 action: 'carrega_instituicao',
                 usuario_id: user_id,
+                flag: flag_gerente,
             },
             beforeSend: function () {
                 $("#loading_carregar").css("display", "block");
@@ -78,13 +80,13 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '') {
 
         document.getElementById('tab-item-' + painel).style.display = 'inline';
 
-        await chama_carrega_rede(painel, redesArray[j], user_id);
+        await chama_carrega_rede(painel, redesArray[j], user_id, flag_gerente);
 
     }
 }
 
 
-function chama_carrega_rede(painel, redeArray, user_id) {
+function chama_carrega_rede(painel, redeArray, user_id, flag_gerente) {
 
     jQuery(function ($) {
         $.ajax({
@@ -94,6 +96,7 @@ function chama_carrega_rede(painel, redeArray, user_id) {
                 action: 'carrega_rede',
                 usuario_id: user_id,
                 rede: redeArray,
+                flag: flag_gerente,
             },
             beforeSend: function () {
                 $("#loading_carregar").css("display", "block");

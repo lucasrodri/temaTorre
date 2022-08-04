@@ -345,7 +345,7 @@ function cadastro_form_render()
 }
 
 
-function cadastro_redes_render($rede_nome, $entrada = "")
+function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
 {
     $title = get_options($rede_nome)[0];
     $opcoes = get_options($rede_nome)[1];
@@ -354,7 +354,7 @@ function cadastro_redes_render($rede_nome, $entrada = "")
 
     $statusRede = valida($entrada, 'fld_3707629');
     //$statusRede = 'pendente';
-    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado")) ?
+    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado") || $flag_view == 'true') ?
         'disabled'
         : '';
 
@@ -374,7 +374,7 @@ function cadastro_redes_render($rede_nome, $entrada = "")
 
     <div class="br-textarea mb-3">
         <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
-        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_4486725'); ?>" <?php echo $disabled; ?>><?php echo valida($entrada, 'fld_4486725'); ?></textarea>
+        <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Descreva os Produtos, serviços e/ou ferramentas ofertados" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_4486725'); ?>" <?php echo $disabled; ?>><?php echo valida($entrada, 'fld_4486725'); ?></textarea>
     </div>
 
     <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -432,6 +432,13 @@ function cadastro_redes_render($rede_nome, $entrada = "")
 
     <div class="mb-3">
         <div class="br-input">
+            <label for="cpfRepresentante_<?php echo $rede_nome; ?>">CPF<span class="field_required" style="color:#ee0000;">*</span></label>
+            <input id="cpfRepresentante_<?php echo $rede_nome; ?>" name="cpfRepresentante_<?php echo $rede_nome; ?>" type="text" placeholder="000.000.000-00" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_2025685'); ?>" <?php echo $disabled; ?> />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="br-input">
             <label for="emailRepresentante_<?php echo $rede_nome; ?>">E-mail<span class="field_required" style="color:#ee0000;">*</span></label>
             <input id="emailRepresentante_<?php echo $rede_nome; ?>" name="emailRepresentante_<?php echo $rede_nome; ?>" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" value="<?php echo valida($entrada, 'fld_7130000'); ?>" <?php echo $disabled; ?> />
         </div>
@@ -453,35 +460,129 @@ function get_options($rede_nome)
         case 'rede-de-suporte':
             $title = 'Rede de Suporte';
             $opcoes = array(
-                "Bases de dados e informações", "Certificadora", "Gestão", "Infraestrutura de laboratórios", "Instrumentos financeiros", "Metrologia", "Políticas públicas", "Outro"
+                "Base de dados e informações",
+                "Certificadora",
+                "Eventos",
+                "Gestão",
+                "Infraestrutura de laboratórios",
+                "Instrumentos financeiros",
+                "Internacionalização",
+                "Metrologia, ensaios e testes",
+                "Políticas públicas",
+                "Premiação",
+                "Propriedade industrial e intelectual",
+                "Outro"
             );
             break;
 
         case 'rede-de-formacao':
             $title = 'Rede de Formação Tecnológica';
             $opcoes = array(
-                "Graduação", "Pós-Graduação", "Promoção e popularização da Ciência", "Qualificação profissional", "Outro"
+                "Base de dados e informações",
+                "Educação profissional técnica",
+                "Educação profissional tecnológica",
+                "Graduação",
+                "Pós-Graduação",
+                "Promoção e popularização da Ciência",
+                "Qualificação profissional",
+                "Outro"
             );
             break;
 
         case 'rede-de-pesquisa':
             $title = 'Rede de Pesquisa Aplicada';
             $opcoes = array(
-                "Bases de dados e informações", "Ciências Agrárias", "Ciências Biológicas", "Ciências da Saúde", "Ciências Exatas e da Terra", "Ciências Sociais Aplicadas", "Engenharias", "Outro"
+                "Base de dados e informações",
+                "Ciências Agrárias",
+                "Ciências Biológicas",
+                "Ciências da Saúde",
+                "Ciências Exatas e da Terra",
+                "Ciências Humanas",
+                "Ciências Sociais Aplicadas",
+                "Engenharias",
+                "Linguística, Letras e Artes",
+                "Outro"
             );
             break;
 
         case 'rede-de-inovacao':
             $title = 'Rede de Inovação';
             $opcoes = array(
-                "Incubadora", "Núcleo de Inovação Tecnológica (NIT)", "Parque tecnológico", "Outro"
+                "Aceleradora de negócios",
+                "Base de dados e informações",
+                "Centro de inovação",
+                "Cidade inteligente",
+                "Distrito ou área de inovação",
+                "Espaço aberto e cooperativo de trabalho (coworking)",
+                "Incubadora de empresas",
+                "Laboratório aberto de prototipagem de produtos e processos (makerspace)",
+                "Núcleo de Inovação Tecnológica (NIT)",
+                "Organização associativa",
+                "Parque tecnológico",
+                "Polo tecnológico",
+                "Startup",
+                "Outro"
             );
             break;
 
         case 'rede-de-tecnologia':
             $title = 'Rede de Tecnologias Aplicadas';
             $opcoes = array(
-                "Agricultura", "Coque, derivados de petróleo e de biocombustíveis", "Equipamentos de transporte, exceto veículos automotores", "Farmoquímicos e farmacêuticos", "Informação e Comunicação", "Química", "Outro"
+                "Administração pública, defesa e seguridade social",
+                "Água, esgoto, atividades de gestão de resíduos e descontaminação",
+                "Alimentos",
+                "Alojamento e alimentação",
+                "Arquitetura e engenharia",
+                "Artefatos de couro, artigos para viagem e calçados",
+                "Artes, cultura, esporte e recreação",
+                "Artigos do vestuário e acessórios",
+                "Atividades administrativas e serviços complementares",
+                "Atividades fotográficas e similares",
+                "Bebidas",
+                "Borracha e de material plástico",
+                "Celulose, papel e produtos de papel",
+                "Combustíveis gasosos",
+                "Comércio; reparação de veículos automotores e motocicletas",
+                "Construção",
+                "Coque, derivados do petróleo e de biocombustíveis",
+                "Design e decoração de interiores",
+                "Educação",
+                "Energia elétrica",
+                "Equipamentos de transporte, exceto veículos automotores",
+                "Extrativismo",
+                "Fabricação de equipamentos de informática, produtos eletrônicos e ópticos",
+                "Fabricação de máquinas e equipamentos",
+                "Fabricação de máquinas, aparelhos e materiais elétricos",
+                "Fabricação de produtos diversos",
+                "Fabricação de veículos automotores, reboques e carrocerias",
+                "Farmoquímicos e farmacêuticos",
+                "Financeira, seguro e serviços relacionados",
+                "Florestal",
+                "Fumo",
+                "Gestão empresarial",
+                "Imobiliária",
+                "Impressão e reprodução de gravações",
+                "Informação e comunicação",
+                "Jurídicas, contabilidade e auditoria",
+                "Madeireira",
+                "Manutenção, reparação e instalação de máquinas e equipamentos",
+                "Metalurgia",
+                "Minerais não-metálicos",
+                "Móveis",
+                "Organismos internacionais e outras instituições extraterritoriais",
+                "Organizações associativas",
+                "Pecuária",
+                "Pesca e aqüicultura",
+                "Pesquisa e desenvolvimento científico",
+                "Produtos de metal, exceto máquinas e equipamentos",
+                "Publicidade e pesquisa de mercado",
+                "Química",
+                "Saúde humana e serviços sociais",
+                "Têxteis",
+                "Transporte, armazenagem e correio",
+                "Vapor, água quente e ar condicionado",
+                "Veterinária",
+                "Outro"
             );
             break;
     }
@@ -625,6 +726,8 @@ function cadastro_action_form()
         //dados do representante
         if (isset($_POST['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_' . $key]);
         else $dados_redes[$key]["nomeCompleto"] = "";
+        if (isset($_POST['cpfRepresentante_' . $key])) $dados_redes[$key]["cpfRepresentante"] = ($_POST['cpfRepresentante_' . $key]);
+        else $dados_redes[$key]["cpfRepresentante"] = "";
         if (isset($_POST['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_' . $key]);
         else $dados_redes[$key]["emailRepresentante"] = "";
         if (isset($_POST['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_' . $key]);
@@ -852,6 +955,8 @@ function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2391778', $dados_redes["abrangencias"]));
 
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6140408', $dados_redes["nomeCompleto"]));
+    // campo_extra3
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2025685', $dados_redes["cpfRepresentante"]));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7130000', $dados_redes["emailRepresentante"]));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5051662', $dados_redes["telefoneRepresentante"]));
 
@@ -862,7 +967,7 @@ function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7938112', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5960872', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6135036', ""));
-    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2025685', ""));
+    // $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2025685', "")); // agora uso esse campo no cpfRepresentante
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4663810', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2676148', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9425460', ""));
@@ -963,7 +1068,7 @@ function carrega_estados()
     // Função que carrega o estado enquanto a página carrega
 
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM ".$wpdb->prefix ."tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM " . $wpdb->prefix . "tematorre_estados order by nome;";
     //$estados = $wpdb->get_col($sql);
     $estados = $wpdb->get_results($sql);
 
@@ -988,7 +1093,7 @@ function retorna_nome_uf($codigoEstado)
 {
     // Função para retornar o nome do estado a partir do cópdigp
     global $wpdb;
-    $sql = "SELECT nome FROM ".$wpdb->prefix ."tematorre_estados WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $sql = "SELECT nome FROM " . $wpdb->prefix . "tematorre_estados WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
     $estados = $wpdb->get_col($sql);
 
     if (!empty($estados)) {
@@ -1003,7 +1108,7 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
     // Função que carrega o select de cidades para cada estado enquanto a página carrega
 
     global $wpdb;
-    $sql = "SELECT codigo_uf, nome FROM ".$wpdb->prefix ."tematorre_estados order by nome;";
+    $sql = "SELECT codigo_uf, nome FROM " . $wpdb->prefix . "tematorre_estados order by nome;";
     //$estados = $wpdb->get_col($sql);
     $estados = $wpdb->get_results($sql);
 
@@ -1023,7 +1128,7 @@ function carrega_selects_cidades($codigoEstadoSelecionado = '', $cidadeSeleciona
 function gera_select_cidade($codigoEstado, $codigoEstadoSelecionado = '', $cidadeSelecionada = '')
 {
     global $wpdb;
-    $sql = "SELECT codigo_ibge, nome FROM ".$wpdb->prefix ."tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
+    $sql = "SELECT codigo_ibge, nome FROM " . $wpdb->prefix . "tematorre_municipios WHERE codigo_uf=\"" . $codigoEstado . "\" order by nome;";
     $cidades = $wpdb->get_results($sql);
 
     $estadoUnidade = retorna_nome_uf($codigoEstado);
