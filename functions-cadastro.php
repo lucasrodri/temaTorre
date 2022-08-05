@@ -361,18 +361,22 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
     $styleOutro = (strlen(valida($entrada, 'fld_6678080')) > 1) ?
         ''
         : 'display:none;';
-    
+
     $rede_ativa = valida($entrada, 'fld_4663810') == "true" ? '' : 'display:none;';
+
 ?>
 
     <div class="h4"><?php echo $title; ?>
-        <?php 
-            if(valida($entrada, 'fld_4663810') == "true"){
-                if ($entrada != "") render_status($statusRede); 
-            }
-            ?>
+        <?php
+        if (valida($entrada, 'fld_4663810') == "true") {
+            if ($entrada != "") render_status($statusRede);
+        }
+        ?>
     </div>
-    <div id="<?php echo $rede_nome; ?>" style="<?php if ($entrada != "") {echo $rede_ativa;} ?>">
+
+    <div id="<?php echo $rede_nome; ?>" style="<?php if ($entrada != "") {
+                                                    echo $rede_ativa;
+                                                } ?>">
         <div class="br-textarea mb-3">
             <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
             <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_605717'); ?>" <?php echo $disabled; ?>><?php echo valida($entrada, 'fld_605717'); ?></textarea>

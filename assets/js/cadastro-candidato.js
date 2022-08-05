@@ -70,7 +70,6 @@ async function atualizaRedeCandidatoGeral() {
   });
 }
 
-
 async function atualizaRedeCandidato(painel, redeArray, entrada) {
 
   // console.log('tab_redes_' + painel);
@@ -264,6 +263,15 @@ function validaInput(element, checarRadio, checarCheckbox, valid, flag_tab = fal
           }
         }
 
+        if (element.name.includes("cpfRepresentante_")) {
+          if (!IsCPF(element.value)) {
+            mostrarAvisoValidacao(element, 'CPF');
+            valid = false;
+          } else {
+            ocultarAvisoValidacao(element);
+          }
+        }
+
         if (element.name == "cepDaInstituicao") {
           if (!element.checkValidity()) {
             valid = false;
@@ -449,3 +457,18 @@ function validaInputRadio(div, classe, valid) {
   return valid;
 }
 
+function criarRedeCandidato(painel, redeArray) {
+  //mostrar a div dentro do cadastro render
+  document.getElementById(relaciona(redeArray)[0]).style.display = 'inline';
+
+  //apagar o botão qeu a chamou 
+  document.getElementById("botaoAdicionar_" + painel).style.display = 'none';
+  
+  //mostrar div do botão de atualizar
+  var divBotaoAtualizar = document.getElementById("botaoAtualizar_" + painel);
+  divBotaoAtualizar.style.display = 'inline';
+
+  //renomear botão
+  var botaoAtualizar = divBotaoAtualizar.querySelectorAll('button')[0]; //retorna uma NodeList
+  botaoAtualizar.innerHTML = 'Enviar nova submissão!';
+}

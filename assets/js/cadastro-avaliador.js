@@ -17,11 +17,10 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
     document.getElementById('entrada-voltar-btn').style.display = 'inline';
 
     document.getElementById('span-header-accordion').innerHTML = 'Instituição: ' + nomeInstituicao;
+
     if (flag_gerente == 'false') {
         document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
     }
-    // não posso trocar o hidden pq tenho que associá-lo na function admin_post
-    //document.getElementById('hidden-avaliador-input').value = 'atualiza_avaliador_' + user_id;
 
     // Preciso desse for em todos os tab-item para apága-los ao chamar de novo
     for (var i = 0; i < 6; i++) {
@@ -142,6 +141,23 @@ function relaciona_nome($s) {
             return "Tecnologias Aplicadas";
         case "geral":
             return "Instituição";
+    }
+}
+
+function relaciona($s) {
+    switch ($s) {
+        case "check_suporte":
+            return ["rede-de-suporte", "Suporte"];
+        case "check_formacao":
+            return ["rede-de-formacao", "Formação Tecnológica"];
+        case "check_pesquisa":
+            return ["rede-de-pesquisa", "Pesquisa Aplicada"];
+        case "check_inovacao":
+            return ["rede-de-inovacao", "Inovação"];
+        case "check_tecnologia":
+            return ["rede-de-tecnologia", "Tecnologias Aplicadas"];
+        case "geral":
+            return ["instituicao", "Instituição"];
     }
 }
 

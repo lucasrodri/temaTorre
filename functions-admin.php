@@ -82,7 +82,7 @@ function criar_forms_vazios()
 
         foreach ($todasEntradasGeral as $umaEntradaGeral) {
             $userIdGeral = $umaEntradaGeral['user']['ID'];
-            //echo 'Estou analisando o ' . $userIdGeral . '<br><br>';
+            //echo '<br><br>Estou analisando o ' . $userIdGeral . '<br>';
 
             foreach ($form_ids as $form_id) {
                 $dataForm = Caldera_Forms_Admin::get_entries($form_id, 1, 9999999);
@@ -99,10 +99,17 @@ function criar_forms_vazios()
 
                         if ($userIdGeral == $userIdForm) {
                             $entrada = $umaEntradaForm['_entry_id'];
-                            //echo 'O' . $userIdGeral . ' possui entrada no ' . $form_id . ' de numero '.$entrada .'<br>';
+                            echo 'O' . $userIdGeral . ' possui entrada no ' . $form_id . ' de numero '.$entrada .'<br>';
+
+                            $form1 = Caldera_Forms_Forms::get_form($form_id);
+                            $entry = new Caldera_Forms_Entry($form1, $entrada);
 
                             //update campo4  para true
-                            Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'true');
+                            if (valida($entry, 'fld_605717') == "") {
+                                Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'false');    
+                            } else {
+                                Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'true');
+                            }                            
 
                             $flag = true;
                             break;
@@ -127,7 +134,7 @@ function criar_forms_vazios()
                         $dados_redes["emailRepresentante"] = "";
                         $dados_redes["telefoneRepresentante"] = "";
 
-                        insert_entrada_form_especifico($form_id, $dados_redes, $userIdForm, 'false');
+                        insert_entrada_form_especifico($form_id, $dados_redes, $userIdGeral, false);
                     }
                 }
             }

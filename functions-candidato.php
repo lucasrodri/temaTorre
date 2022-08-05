@@ -134,7 +134,7 @@ function candidato_view()
                     $entrada = $entradas[$form_id];
                     $statusRede = valida($entrada, 'fld_3707629');
                     $redeAtiva = valida($entrada, 'fld_4663810');
-                    //$statusRede = 'pendente';
+                    $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
                     ?>
 
                     <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
@@ -143,20 +143,19 @@ function candidato_view()
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
 
                         <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
-                        
+
                         <?php if ($redeAtiva == "false") : ?>
-                            <div class="row mt-5">
+                            <div id="botaoAdicionar_<?php echo $i; ?>" class="row mt-5">
                                 <div class="col-md-12 text-center">
-                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Adicionar nova entrada nesta rede!</button>
+                                    <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede!</button>
                                 </div>
                             </div>
                         <?php endif; ?>
 
-                        <?php if ($statusRede == "pendente" && $redeAtiva == "true") : ?>
-                            <div class="row mt-5">
+                        <?php if ($statusRede == "pendente") : ?>
+                            <div id="botaoAtualizar_<?php echo $i; ?>" class="row mt-5" style="<?php echo $styleRedeAtiva; ?>">
                                 <div class="col-md-12 text-center">
                                     <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
-                                    <!-- <input type="submit" class="br-button primary" value="Atualizar Dados" name="enviar"> -->
                                     <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
@@ -166,14 +165,14 @@ function candidato_view()
             <?php endfor; ?>
         </div>
     </div>
-    <?php
+<?php
 }
 
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
-    ?>
+?>
 
     <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
@@ -629,12 +628,19 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_299311', $entrada, $historicoRecursoInstituicao);
 }
 
-function update_entrada_form_especifico_candidato($entrada, $dados_redes, $status = "avaliacao")
+function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag = "true", $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
     * Usado para os forms específicos de cada rede 
 	*/
+
+    if ($flag == "false") {
+        foreach ($dados_redes as $key => $value) {
+            $dados_redes[$key] = "";
+        }
+        $status = "pendente";
+    }
 
     Caldera_Forms_Entry_Update::update_field_value('fld_605717', $entrada, $dados_redes["urlServico"]);
     Caldera_Forms_Entry_Update::update_field_value('fld_4486725', $entrada, $dados_redes["produtoServicos"]);
@@ -652,6 +658,9 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $statu
     Caldera_Forms_Entry_Update::update_field_value('fld_5051662', $entrada, $dados_redes["telefoneRepresentante"]);
 
     Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada, $status);
+
+    // campo_extra4
+    Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, $flag);
 
     //$versaoOld = valida($entrada, 'fld_2402818');
     //Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
@@ -825,7 +834,7 @@ function atualiza_rede_candidato_ajax()
     }
 
     // faz o update dos dados no caldera
-    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "avaliacao");
+    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao");
 
     //TODO envia email de update
 
@@ -932,8 +941,10 @@ function atualiza_status_geral_ajax()
         }
     }
 
-    $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
-    $arrayRedes = explode(";", $redes);
+    //$redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
+    //$arrayRedes = explode(";", $redes);
+    $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
+    $arrayRedes = explode(";", $todas_redes);
 
     // guardar todos os status e aí ver no final 
     $status = array();
@@ -943,8 +954,10 @@ function atualiza_status_geral_ajax()
     //echo '$situacaoGeral '. valida($entradas[FORM_ID_GERAL], 'fld_4899711') .'<br>';
 
     foreach ($arrayRedes as $rede) {
-        $status[] = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
-        //echo '$statusRede '. valida($entradas[relaciona($rede)[1]], 'fld_3707629') .'<br>';
+        if (valida($entradas[relaciona($rede)[1]], 'fld_4663810') == "true") {
+            $status[] = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
+            //echo '$statusRede '. valida($entradas[relaciona($rede)[1]], 'fld_3707629') .'<br>';
+        }
     }
 
     $situacaoGeral = '';
