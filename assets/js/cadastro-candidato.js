@@ -472,3 +472,36 @@ function criarRedeCandidato(painel, redeArray) {
   var botaoAtualizar = divBotaoAtualizar.querySelectorAll('button')[0]; //retorna uma NodeList
   botaoAtualizar.innerHTML = 'Enviar nova submissão!';
 }
+
+async function excluirRedeCandidato(painel, redeArray, entrada) {
+
+  if (!confirm('Você tem certeza que quer excluir essa rede? Essa ação não poderá ser desfeita.')) {
+    return;
+  }
+
+  await jQuery(function ($) {
+    $.ajax({
+      type: "POST",
+      url: my_ajax_object.ajax_url,
+      data: {
+        action: 'exclui_rede_candidato',
+        entrada: entrada,
+        rede: redeArray,
+      },
+      beforeSend: function () {
+        $("#loading_carregar").css("display", "block");
+        $('#tab_redes_' + painel).html('');
+        window.scrollTo(0, 0);
+      },
+      success: function (html) {
+        //console.log("Sucesso " + painel);
+        $('#tab_redes_' + painel).html(html);
+      },
+      complete: function () {
+        $("#loading_carregar").css("display", "none");
+        alert('Dados enviados!');
+        atualizaStatusGeral();
+      }
+    });
+  });
+}

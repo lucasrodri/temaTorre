@@ -107,11 +107,10 @@ function candidato_view()
 
             <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
                 <input type="submit" onClick="return confirm('Você tem certeza que quer apagar sua candidatura? Essa ação não poderá ser desfeita.')" class="br-button danger mr-3" value="Desistir do Processo" name="enviar">
-                <input type="hidden" name="usuario_id" value="<?php echo $user_id;?>">
+                <input type="hidden" name="usuario_id" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="action" value="desistir_candidato">
             </form>
 
-            
         </div>
     </div>
 
@@ -156,19 +155,19 @@ function candidato_view()
                         <?php if ($redeAtiva == "false") : ?>
                             <div id="botaoAdicionar_<?php echo $i; ?>" class="row mt-5">
                                 <div class="col-md-12 text-center">
-                                    <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede!</button>
+                                    <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
                                 </div>
                             </div>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div id="botaoExcluir_<?php echo $i; ?>" class="row mt-5" style="<?php echo $styleRedeAtiva; ?>">
                                 <div class="col-md-12 text-center">
                                     <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir a Rede</button>
-                                    <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
+                                    <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
                         <?php endif; ?>
 
-                        <?php if ($statusRede == "pendente" || true ) : ?>
+                        <?php if ($statusRede == "pendente" || true) : ?>
                             <div id="botaoAtualizar_<?php echo $i; ?>" class="row mt-5" style="<?php echo $styleRedeAtiva; ?>">
                                 <div class="col-md-12 text-center">
                                     <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
@@ -207,17 +206,17 @@ function render_geral_form($entrada)
     <?php endif; ?>
 
     <div id="tab_instituicao">
-        <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-            <?php render_geral_data($entrada) ?>
+    <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+        <?php render_geral_data($entrada) ?>
 
-            <div class="row mt-5">
-                <?php if ($statusFormInstituicao == "pendente") : ?>
-                    <div class="col-md-12 text-center">
-                        <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
-                    </div>
-                    <input type="hidden" name="action" value="atualiza_geral_candidato">
-                <?php endif; ?>
-            </div>
+        <div class="row mt-5">
+            <?php if ($statusFormInstituicao == "pendente") : ?>
+                <div class="col-md-12 text-center">
+                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
+                </div>
+                <input type="hidden" name="action" value="atualiza_geral_candidato">
+            <?php endif; ?>
+        </div>
         </form>
     </div>
 <?php
@@ -991,7 +990,44 @@ function atualiza_status_geral_ajax()
 add_action('wp_ajax_atualiza_status_geral', 'atualiza_status_geral_ajax');
 add_action('wp_ajax_nopriv_atualiza_status_geral', 'atualiza_status_geral_ajax');
 
-function desistir_candidato(){
+function exclui_rede_candidato_ajax()
+{
+    // $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    $entrada = (isset($_POST['entrada'])) ? $_POST['entrada'] : '';
+    $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
+
+    $dados_redes = array();
+    $dados_redes["urlServico"] = "";
+    $dados_redes["produtoServicos"] = "";
+    $dados_redes["classificacoes"] = "";
+    $dados_redes["outroClassificacao"] = "";
+    $dados_redes["publicos"] = "";
+    $dados_redes["abrangencias"] = "";
+    $dados_redes["nomeCompleto"] = "";
+    $dados_redes["cpfRepresentante"] = "";
+    $dados_redes["emailRepresentante"] = "";
+    $dados_redes["telefoneRepresentante"] = "";
+
+    // faz o update dos dados no caldera
+    update_entrada_form_especifico_candidato($entrada, $dados_redes, "false");
+
+    //TODO envia email de update
+
+    $form_id = relaciona($rede)[1];
+    $form = Caldera_Forms_Forms::get_form($form_id);
+    $entry =  new Caldera_Forms_Entry($form, $entrada);
+
+    // renderiza novamente para o candidato
+    cadastro_redes_render(relaciona($rede)[0], $entry);
+
+    die();
+}
+add_action('wp_ajax_exclui_rede_candidato', 'exclui_rede_candidato_ajax');
+add_action('wp_ajax_nopriv_exclui_rede_candidato', 'exclui_rede_candidato_ajax');
+
+
+function desistir_candidato()
+{
     $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
     echo $usuario_id;
     //Fazer o for dos forms
