@@ -92,6 +92,7 @@ function candidato_view()
 
         <div class="col-md-12 align-button-right mr-4">
             <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
+
             <button id="carrega-form-btn" class="br-button success mr-sm-3" type="button" onclick="carrega_candidato()">
                 <?php if ($statusFormInstituicao == "pendente") : ?>
                     Edite seu formulário
@@ -103,6 +104,14 @@ function candidato_view()
             <button id="esconde-form-btn" class="br-button secondary" type="button" onclick="esconderFormulario();" style="display: none;">
                 Fechar formulário
             </button>
+
+            <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+                <input type="submit" onClick="return confirm('Você tem certeza que quer apagar sua candidatura? Essa ação não poderá ser desfeita.')" class="br-button danger mr-3" value="Desistir do Processo" name="enviar">
+                <input type="hidden" name="usuario_id" value="<?php echo $user_id;?>">
+                <input type="hidden" name="action" value="desistir_candidato">
+            </form>
+
+            
         </div>
     </div>
 
@@ -150,9 +159,16 @@ function candidato_view()
                                     <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede!</button>
                                 </div>
                             </div>
+                        <?php else: ?>
+                            <div id="botaoExcluir_<?php echo $i; ?>" class="row mt-5" style="<?php echo $styleRedeAtiva; ?>">
+                                <div class="col-md-12 text-center">
+                                    <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir a Rede</button>
+                                    <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
+                                </div>
+                            </div>
                         <?php endif; ?>
 
-                        <?php if ($statusRede == "pendente") : ?>
+                        <?php if ($statusRede == "pendente" || true ) : ?>
                             <div id="botaoAtualizar_<?php echo $i; ?>" class="row mt-5" style="<?php echo $styleRedeAtiva; ?>">
                                 <div class="col-md-12 text-center">
                                     <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
@@ -195,12 +211,7 @@ function render_geral_form($entrada)
             <?php render_geral_data($entrada) ?>
 
             <div class="row mt-5">
-                <?php if ($statusFormInstituicao == "avaliacao") : ?>
-                    <div class="col-md-12 text-center">
-                        <input type="submit" class="br-button danger" value="Desistir do Processo" name="enviar">
-                    </div>
-                    <input type="hidden" name="action" value="desistir_candidato">
-                <?php elseif ($statusFormInstituicao == "pendente") : ?>
+                <?php if ($statusFormInstituicao == "pendente") : ?>
                     <div class="col-md-12 text-center">
                         <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
                     </div>
@@ -979,3 +990,16 @@ function atualiza_status_geral_ajax()
 }
 add_action('wp_ajax_atualiza_status_geral', 'atualiza_status_geral_ajax');
 add_action('wp_ajax_nopriv_atualiza_status_geral', 'atualiza_status_geral_ajax');
+
+function desistir_candidato(){
+    $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    echo $usuario_id;
+    //Fazer o for dos forms
+    //Encontrar o que ele dono
+    //mandar apagar!!!
+    //Mandar apagar anexos
+    //Apagar usuários
+    //Enviar um email que o usuário foi apagado
+}
+add_action('admin_post_nopriv_desistir_candidato', 'desistir_candidato');
+add_action('admin_post_desistir_candidato', 'desistir_candidato');

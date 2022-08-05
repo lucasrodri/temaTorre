@@ -386,7 +386,7 @@
 }
 
 .align-button-left button,
-.align-button-right input {
+.align-button-left input {
   float: left !important;
   margin-left: 0px !important;
 }
