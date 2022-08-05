@@ -4,7 +4,7 @@
 * Shortcode para renderizar o formulário de início
 */
 
-define('USER_TESTE', 18);
+define('USER_TESTE', 24);
 
 add_shortcode('shortcode_candidato_view', 'candidato_view');
 
@@ -55,8 +55,10 @@ function candidato_view()
      */
 
     $statusFormInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
-    //$statusFormInstituicao = 'pendente';
-    $arrayRedes = explode(";", $redes);
+    //$statusFormInstituicao = 'pendente';    
+    $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
+    $arrayRedes = explode(";", $todas_redes);
+
 ?>
     <div class="br-table mb-3">
         <div class="table-header"></div>
@@ -131,6 +133,7 @@ function candidato_view()
                     $form_id = relaciona($arrayRedes[$i - 2])[1];
                     $entrada = $entradas[$form_id];
                     $statusRede = valida($entrada, 'fld_3707629');
+                    $redeAtiva = valida($entrada, 'fld_4663810');
                     //$statusRede = 'pendente';
                     ?>
 
@@ -140,8 +143,16 @@ function candidato_view()
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
 
                         <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
+                        
+                        <?php if ($redeAtiva == "false") : ?>
+                            <div class="row mt-5">
+                                <div class="col-md-12 text-center">
+                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Adicionar nova entrada nesta rede!</button>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
-                        <?php if ($statusRede == "pendente") : ?>
+                        <?php if ($statusRede == "pendente" && $redeAtiva == "true") : ?>
                             <div class="row mt-5">
                                 <div class="col-md-12 text-center">
                                     <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
@@ -155,15 +166,14 @@ function candidato_view()
             <?php endfor; ?>
         </div>
     </div>
-<?php
+    <?php
 }
-
 
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
     //$statusFormInstituicao = 'pendente';
-?>
+    ?>
 
     <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
