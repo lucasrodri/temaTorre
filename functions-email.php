@@ -71,7 +71,7 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 
   $headers = array('Content-Type: text/html; charset=UTF-8');
 
-  wp_mail($to, $subject, $message, $headers);
+  //wp_mail($to, $subject, $message, $headers);
 }
 
 function msg_candidatura_visualizar($nomeDaInstituicao)
@@ -178,7 +178,7 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
 
   $headers = array('Content-Type: text/html; charset=UTF-8');
 
-  wp_mail($to, $subject, $message, $headers);
+  //wp_mail($to, $subject, $message, $headers);
 }
 
 

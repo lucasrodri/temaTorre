@@ -781,25 +781,38 @@ function cadastro_action_form()
 
         //funcao para dá entrada no Caldera (Form especifico)
         // esse explode gera uma iteração a mais por conta do último ";"
+
+        $flag = array(
+            "rede-de-suporte" => false,
+            "rede-de-formacao" => false,
+            "rede-de-pesquisa" => false,
+            "rede-de-inovacao" => false,
+            "rede-de-tecnologia" => false,
+        );
         foreach (explode(";", $redes) as $key => $value) {
             switch ($value) {
                 case "check_suporte":
-                    insert_entrada_form_especifico("CF6297eae06f088", $dados_redes["rede-de-suporte"], $usuario_id);
+                    $flag['rede-de-suporte'] = true;
                     break;
                 case "check_formacao":
-                    insert_entrada_form_especifico("CF6298c3e77962a", $dados_redes["rede-de-formacao"], $usuario_id);
+                    $flag['rede-de-formacao'] = true;
                     break;
                 case "check_pesquisa":
-                    insert_entrada_form_especifico("CF6298c6a36c130", $dados_redes["rede-de-pesquisa"], $usuario_id);
+                    $flag['rede-de-pesquisa'] = true;
                     break;
                 case "check_inovacao":
-                    insert_entrada_form_especifico("CF6298c80222811", $dados_redes["rede-de-inovacao"], $usuario_id);
+                    $flag['rede-de-inovacao'] = true;
                     break;
                 case "check_tecnologia":
-                    insert_entrada_form_especifico("CF6298c879c2353", $dados_redes["rede-de-tecnologia"], $usuario_id);
+                    $flag['rede-de-tecnologia'] = true;
                     break;
             }
         }
+        insert_entrada_form_especifico("CF6297eae06f088", $dados_redes["rede-de-suporte"], $usuario_id, $flag['rede-de-suporte']);
+        insert_entrada_form_especifico("CF6298c3e77962a", $dados_redes["rede-de-formacao"], $usuario_id, $flag['rede-de-formacao']);
+        insert_entrada_form_especifico("CF6298c6a36c130", $dados_redes["rede-de-pesquisa"], $usuario_id, $flag['rede-de-pesquisa']);
+        insert_entrada_form_especifico("CF6298c80222811", $dados_redes["rede-de-inovacao"], $usuario_id, $flag['rede-de-inovacao']);
+        insert_entrada_form_especifico("CF6298c879c2353", $dados_redes["rede-de-tecnologia"], $usuario_id, $flag['rede-de-tecnologia']);
 
         envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
         envia_email_avaliador('cadastro', $nomeDaInstituicao);
@@ -927,12 +940,18 @@ function insert_entrada_form($idFormulario, $nomeDaInstituicao, $descricaoDaInst
     return $entryId;
 }
 
-function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id, $status = "avaliacao", $versao = 0)
+function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id, $flag, $status = "avaliacao", $versao = 0)
 {
     /*
 	* Função para inserir uma nova entrada em um Caldera Forms
     * Usado para os forms específicos de cada rede 
 	*/
+
+    if (!$flag) {
+        foreach ($dados_redes as $key => $value) {
+            $dados_redes[$key] = "";
+        }
+    }
 
     $form = Caldera_Forms_Forms::get_form($idFormulario);
     //Basic entry information
@@ -963,12 +982,16 @@ function insert_entrada_form_especifico($idFormulario, $dados_redes, $usuario_id
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_3707629', $status));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2402818', $versao));
 
+    // campo_extra4
+    $converted_res = $flag ? 'true' : 'false';
+    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4663810', $converted_res));
+
     //Demais campos que devem ser vazios
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_7938112', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_5960872', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_6135036', ""));
     // $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2025685', "")); // agora uso esse campo no cpfRepresentante
-    $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4663810', ""));
+    // $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_4663810', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_2676148', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_9425460', ""));
     $entry->add_field(get_fieldEntryValue_customizada($form, 'fld_8860363', ""));
