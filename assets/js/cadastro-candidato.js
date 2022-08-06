@@ -467,6 +467,11 @@ function criarRedeCandidato(painel, redeArray) {
   //mostrar div do botão de atualizar
   var divBotaoAtualizar = document.getElementById("botaoAtualizar_" + painel);
   divBotaoAtualizar.style.display = 'inline';
+  divBotaoAtualizar.className = 'col-md-12';
+  
+  //mudar posicao do botão
+  var divAtualizar = divBotaoAtualizar.querySelectorAll('div')[0]; //retorna uma NodeList
+  divAtualizar.className = 'text-center';
 
   //renomear botão
   var botaoAtualizar = divBotaoAtualizar.querySelectorAll('button')[0]; //retorna uma NodeList
