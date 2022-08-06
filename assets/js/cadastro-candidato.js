@@ -124,6 +124,19 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       complete: function () {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
+        $("#botaoExcluir_" + painel).css("display", "inline");
+
+        //mostrar div do botão de atualizar
+        var divBotaoExcluir = document.getElementById("botaoExcluir_" + painel);
+        divBotaoExcluir.style.display = 'inline';
+        divBotaoExcluir.className = 'col-md-12';
+        
+        //mudar posicao do botão
+        var divExcluir = divBotaoExcluir.querySelectorAll('div')[0]; //retorna uma NodeList
+        divExcluir.className = 'text-center';
+
+        $("#botaoAdicionar_" + painel).css("display", "none");
+        $("#botaoAtualizar_" + painel).css("display", "none");
         atualizaStatusGeral();
       }
     });
@@ -505,6 +518,8 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
       complete: function () {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
+        $("#botaoAdicionar_" + painel).css("display", "inline");
+        $("#botaoExcluir_" + painel).css("display", "none");
         atualizaStatusGeral();
       }
     });

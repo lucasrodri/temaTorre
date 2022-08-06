@@ -143,6 +143,7 @@ function candidato_view()
                     $statusRede = valida($entrada, 'fld_3707629');
                     $redeAtiva = valida($entrada, 'fld_4663810');
                     $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
+                    $styleAtualizaAtiva = $redeAtiva == "true" && $statusRede == "pendente" ? '' : 'display:none;';
                     ?>
 
                     <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
@@ -151,30 +152,32 @@ function candidato_view()
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
 
                         <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
+                    </div>
+                    <div>
                         <div class="row">
-                            <?php if ($redeAtiva == "false") : ?>
-                                <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12">
-                                    <div class="text-center">
-                                        <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
-                                    </div>
+                            
+                            <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12" style="display: <?php if ($redeAtiva == "false") {echo "";} else {echo "none";}?>;">
+                                <div class="text-center">
+                                    <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
                                 </div>
-                            <?php else : ?>
-                                <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {echo "6";} else {echo "12";}?>" style="<?php echo $styleRedeAtiva; ?>">
-                                    <div class="text-<?php if ($statusRede == "pendente") {echo "right";} else {echo "center";}?>">
-                                        <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir a Rede</button>
-                                        <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
-                                    </div>
+                            </div>
+                        
+                            <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {echo "6";} else {echo "12";}?>" style="<?php echo $styleRedeAtiva; ?>">
+                                <div class="text-<?php if ($statusRede == "pendente") {echo "right";} else {echo "center";}?>">
+                                    <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir a Rede</button>
+                                    <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
-                            <?php endif; ?>
+                            </div>
+                            
 
-                            <?php if ($statusRede == "pendente"): ?>
-                                <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleRedeAtiva; ?>">
-                                    <div class="text-left">
-                                        <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
-                                        <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
-                                    </div>
+                            
+                            <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleAtualizaAtiva; ?>">
+                                <div class="text-left">
+                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
+                                    <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
-                            <?php endif; ?>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
