@@ -4,7 +4,7 @@
 * Shortcode para renderizar o formulário de início
 */
 
-define('USER_TESTE', 24);
+define('USER_TESTE', 25);
 
 add_shortcode('shortcode_candidato_view', 'candidato_view');
 
@@ -1029,13 +1029,70 @@ add_action('wp_ajax_nopriv_exclui_rede_candidato', 'exclui_rede_candidato_ajax')
 function desistir_candidato()
 {
     $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
-    echo $usuario_id;
+
     //Fazer o for dos forms
-    //Encontrar o que ele dono
-    //mandar apagar!!!
+    $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
+    //para guardar as entradas para depois pegar com o valida alguns dados
+    $entradas = array();
+    //para usar no delete
+    $entradas_id = array();
+
+    foreach ($form_ids as $form_id) {
+        $data = Caldera_Forms_Admin::get_entries($form_id, 1, 9999999);
+        $ativos = $data['active'];
+
+        if ($ativos > 0) {
+            $todasEntradas = $data['entries'];
+
+            foreach ($todasEntradas as $umaEntrada) {
+                $user_id = $umaEntrada['user']['ID'];
+
+                if ($user_id == $usuario_id) {
+
+                    $entrada = $umaEntrada['_entry_id'];
+                    $entradas_id[$form_id] = $entrada; //novo array para guardar as entry_id
+                    $form = Caldera_Forms_Forms::get_form($form_id);
+                    $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
+                    break;
+                }
+            }
+        }
+    }
+    //coletando os dados da instituição e do candidato para uso no email:
+    $nomeInstituição = valida($entradas[FORM_ID_GERAL], 'fld_266564');
+    $nomeDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_1333267');
+    $emailDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_7868662');
+    $doc1UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_5438248');
+    $doc2UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_9588438');
+
+    //Apagando as entradas:
+    foreach ($entradas_id as $key => $value) {
+        Caldera_Forms_Entry_Bulk::delete_entries(array($value));
+    }
+
     //Mandar apagar anexos
-    //Apagar usuários
+    if ($doc1UnidadeUrl != "") {
+        $id = attachment_url_to_postid($doc1UnidadeUrl);
+        wp_delete_attachment($id);
+    }
+    if ($doc2UnidadeUrl != "") {
+        $id = attachment_url_to_postid($doc2UnidadeUrl);
+        wp_delete_attachment($id);
+    }
+    //Apagar usuário
+    
+    //$user = get_user_by('id', $usuario_id);
+    //$user_info = get_userdata($usuario_id);
+    //$user_name = $user_info->display_name;
+    //$user_email = $user_info->user_email;
+    wp_delete_user($usuario_id);
+    wp_logout();
+
     //Enviar um email que o usuário foi apagado
+    envia_email('desistir', $nomeInstituição, $emailDoCandidato);
+
+    //Enviando pra index
+    wp_redirect(home_url());
 }
 add_action('admin_post_nopriv_desistir_candidato', 'desistir_candidato');
 add_action('admin_post_desistir_candidato', 'desistir_candidato');
