@@ -124,13 +124,12 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       complete: function () {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
-        $("#botaoExcluir_" + painel).css("display", "inline");
 
         //mostrar div do botão de atualizar
         var divBotaoExcluir = document.getElementById("botaoExcluir_" + painel);
         divBotaoExcluir.style.display = 'inline';
         divBotaoExcluir.className = 'col-md-12';
-        
+
         //mudar posicao do botão
         var divExcluir = divBotaoExcluir.querySelectorAll('div')[0]; //retorna uma NodeList
         divExcluir.className = 'text-center';
@@ -476,12 +475,12 @@ function criarRedeCandidato(painel, redeArray) {
 
   //apagar o botão qeu a chamou 
   document.getElementById("botaoAdicionar_" + painel).style.display = 'none';
-  
+
   //mostrar div do botão de atualizar
   var divBotaoAtualizar = document.getElementById("botaoAtualizar_" + painel);
   divBotaoAtualizar.style.display = 'inline';
   divBotaoAtualizar.className = 'col-md-12';
-  
+
   //mudar posicao do botão
   var divAtualizar = divBotaoAtualizar.querySelectorAll('div')[0]; //retorna uma NodeList
   divAtualizar.className = 'text-center';
@@ -493,7 +492,7 @@ function criarRedeCandidato(painel, redeArray) {
 
 async function excluirRedeCandidato(painel, redeArray, entrada) {
 
-  if (!confirm('Você tem certeza que quer excluir essa rede? Essa ação não poderá ser desfeita.')) {
+  if (!confirm('Você tem certeza que quer excluir a entrada nesta rede? Essa ação não poderá ser desfeita.')) {
     return;
   }
 

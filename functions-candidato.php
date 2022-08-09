@@ -147,7 +147,7 @@ function candidato_view()
                     ?>
 
                     <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
-                    
+
                     <div id="tab_redes_<?php echo $i; ?>">
                         <?php cadastro_redes_render($nomeRede, $entrada); ?>
 
@@ -155,29 +155,39 @@ function candidato_view()
                     </div>
                     <div>
                         <div class="row">
-                            
-                            <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12" style="display: <?php if ($redeAtiva == "false") {echo "";} else {echo "none";}?>;">
+
+                            <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12" style="display: <?php if ($redeAtiva == "false") {
+                                                                                                                    echo "";
+                                                                                                                } else {
+                                                                                                                    echo "none";
+                                                                                                                } ?>;">
                                 <div class="text-center">
                                     <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
                                 </div>
                             </div>
-                        
-                            <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {echo "6";} else {echo "12";}?>" style="<?php echo $styleRedeAtiva; ?>">
-                                <div class="text-<?php if ($statusRede == "pendente") {echo "right";} else {echo "center";}?>">
-                                    <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir a Rede</button>
+
+                            <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {
+                                                                                            echo "6";
+                                                                                        } else {
+                                                                                            echo "12";
+                                                                                        } ?>" style="<?php echo $styleRedeAtiva; ?>">
+                                <div class="text-<?php if ($statusRede == "pendente") {
+                                                        echo "right";
+                                                    } else {
+                                                        echo "center";
+                                                    } ?>">
+                                    <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir entrada desta rede</button>
                                     <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
-                            
 
-                            
                             <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleAtualizaAtiva; ?>">
                                 <div class="text-left">
                                     <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
                                     <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -210,17 +220,17 @@ function render_geral_form($entrada)
     <?php endif; ?>
 
     <div id="tab_instituicao">
-    <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-        <?php render_geral_data($entrada) ?>
+        <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+            <?php render_geral_data($entrada) ?>
 
-        <div class="row mt-5">
-            <?php if ($statusFormInstituicao == "pendente") : ?>
-                <div class="col-md-12 text-center">
-                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
-                </div>
-                <input type="hidden" name="action" value="atualiza_geral_candidato">
-            <?php endif; ?>
-        </div>
+            <div class="row mt-5">
+                <?php if ($statusFormInstituicao == "pendente") : ?>
+                    <div class="col-md-12 text-center">
+                        <button class="br-button primary" type="button" onclick="atualizaRedeCandidatoGeral();">Atualizar Dados</button>
+                    </div>
+                    <input type="hidden" name="action" value="atualiza_geral_candidato">
+                <?php endif; ?>
+            </div>
         </form>
     </div>
 <?php
@@ -962,6 +972,7 @@ function atualiza_status_geral_ajax()
 
     // guardar todos os status e aí ver no final 
     $status = array();
+    $redes = "";
 
     // pega status aba instituição
     $status[] = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
@@ -971,7 +982,8 @@ function atualiza_status_geral_ajax()
         if (valida($entradas[relaciona($rede)[1]], 'fld_4663810') == "true") {
             $status[] = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
             //echo '$statusRede '. valida($entradas[relaciona($rede)[1]], 'fld_3707629') .'<br>';
-        }
+            $redes .= $rede . ";";
+        } 
     }
 
     $situacaoGeral = '';
@@ -983,8 +995,9 @@ function atualiza_status_geral_ajax()
         $situacaoGeral = "homologado";
     }
 
-    // Chama o update no campo geral
+    // Chama o update no campo geral de stats
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entradas_id[FORM_ID_GERAL], $situacaoGeral);
+    Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entradas_id[FORM_ID_GERAL], $redes);
 
     // Chama a função de renderizar
     render_status($situacaoGeral);
@@ -1084,16 +1097,17 @@ function desistir_candidato()
         wp_delete_attachment($id);
     }
     //Apagar usuário
-    
+
     //$user = get_user_by('id', $usuario_id);
     //$user_info = get_userdata($usuario_id);
     //$user_name = $user_info->display_name;
     //$user_email = $user_info->user_email;
     wp_delete_user($usuario_id);
-    wp_logout();
+    wp_logout(); //TODO testar o delete com usuário realmente logado
 
     //Enviar um email que o usuário foi apagado
     envia_email('desistir', $nomeInstituição, $emailDoCandidato);
+    //TODO email para o avaliador
 
     //Enviando pra index
     wp_redirect(home_url());
