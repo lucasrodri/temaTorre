@@ -200,11 +200,12 @@ function candidato_view()
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
+    echo 'statusFormInstituicao: ' . $statusFormInstituicao . " ué <br>";
     //$statusFormInstituicao = 'pendente';
 ?>
 
-    <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
-    <?php if (strlen(valida($entrada, 'fld_8529353')) > 1) : ?>
+    <!-- basta checar se tem algo no HISTÓRICO do parecer (sempre vai ter se tiver sido avaliado) -->
+    <?php if (strlen(valida($entrada, 'fld_4416984')) > 1) : ?>
         <div class="col-md-12">
 
             <div class="br-textarea mb-3">
@@ -994,6 +995,11 @@ function atualiza_status_geral_ajax()
     } else {
         $situacaoGeral = "homologado";
     }
+
+    /**
+     * "fld_9748069" "status_geral_instituicao -> status de todos os forms
+     * "fld_4899711" "status_instituicao"
+     */
 
     // Chama o update no campo geral de stats
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entradas_id[FORM_ID_GERAL], $situacaoGeral);

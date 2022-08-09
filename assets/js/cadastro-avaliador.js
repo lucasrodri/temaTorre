@@ -8,9 +8,6 @@ var redesArrayGlobal;
 
 async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gerente = 'false') {
 
-    //console.log("recebi user_id " + user_id);
-    //console.log("recebi redes " + redes);
-
     // mostrar div do conteúdo do form
     document.getElementById('lista-entradas-div').style.display = 'none';
     document.getElementById('entrada-form-div').style.display = 'inline';
@@ -18,19 +15,12 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
 
     document.getElementById('span-header-accordion').innerHTML = 'Instituição: ' + nomeInstituicao;
 
-    if (flag_gerente == 'false') {
-        document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
-    }
-
     // Preciso desse for em todos os tab-item para apága-los ao chamar de novo
     for (var i = 0; i < 6; i++) {
         if (document.getElementById('tab-item-' + (i + 2))) {
             document.getElementById('tab-item-' + (i + 2)).style.display = 'none';
         }
     }
-
-    // limpar as entradas já preenchidas
-    //limparFormAvaliador();
 
     // Removo o active das outras abas
     for (var i = 2; i <= 6; i++) {
@@ -61,6 +51,10 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
             },
             complete: function (data) {
                 $("#loading_carregar").css("display", "none");
+
+                if (flag_gerente == 'false' && document.getElementById('action-avaliador-input')) {
+                    document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
+                }
             }
         });
     });
@@ -196,40 +190,45 @@ function validacaoAvaliador() {
     for (var i = 0; i < divs.length; i++) {
         redeArray = divs[i];
 
-        var parecer = document.getElementById('parecerAvaliador_' + redeArray);
-        var pendente = document.getElementById('avaliador_' + redeArray + '_op_1');
-        var homologado = document.getElementById('avaliador_' + redeArray + '_op_2');
-        var tagsDiv = document.getElementById('tags_' + redeArray);
+        if (document.getElementById('parecerAvaliador_' + redeArray)) {
+            var parecer = document.getElementById('parecerAvaliador_' + redeArray);
+            var pendente = document.getElementById('avaliador_' + redeArray + '_op_1');
+            var homologado = document.getElementById('avaliador_' + redeArray + '_op_2');
+            var tagsDiv = document.getElementById('tags_' + redeArray);
 
-        // validar parecer apenas se não for homologado
-        if (!homologado.checked && parecer.value == '') {
-            setarInvalido(parecer);
-            valid[i] = false;
-        } else {
-            //divResumo.innerHTML += '<i class="fas fa-check"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido <br>';
-            divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido</span><br>';
-            setarValido(parecer);
-            valid[i] = true;
-        }
-
-        // validar input radio
-        if (!pendente.checked && !homologado.checked) {
-            setarInvalido(homologado);
-            setarInvalido(pendente);
-            valid[i] = false;
-        } else {
-            //divResumo.innerHTML += '<i class="fas fa-check"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada <br>';
-            divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
-            valid[i] = true;
-        }
-
-        // mostra as tags caso homologado
-        if (tagsDiv)
-            if (homologado.checked) {
-                tagsDiv.style.display = 'block';
+            // validar parecer apenas se não for homologado
+            if (!homologado.checked && parecer.value == '') {
+                setarInvalido(parecer);
+                valid[i] = false;
             } else {
-                tagsDiv.style.display = 'none';
+                //divResumo.innerHTML += '<i class="fas fa-check"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido <br>';
+                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' válido</span><br>';
+                setarValido(parecer);
+                valid[i] = true;
             }
+
+            // validar input radio
+            if (!pendente.checked && !homologado.checked) {
+                setarInvalido(homologado);
+                setarInvalido(pendente);
+                valid[i] = false;
+            } else {
+                //divResumo.innerHTML += '<i class="fas fa-check"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada <br>';
+                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
+                valid[i] = true;
+            }
+
+            // mostra as tags caso homologado
+            if (tagsDiv) {
+                if (homologado.checked) {
+                    tagsDiv.style.display = 'block';
+                } else {
+                    tagsDiv.style.display = 'none';
+                }
+            }
+        } else {
+            valid[i] = true;
+        }
     }
 
     var botaoAvaliador = document.getElementById('action-avaliador-input');

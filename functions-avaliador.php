@@ -25,9 +25,14 @@ function avaliador_view()
             $entrada = $umaEntrada['_entry_id'];
             $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
             // adicionar check da situação da rede geral fld_9748069
-            $entradas[$user_id] = array();
-            $entradas[$user_id][] = new Caldera_Forms_Entry($form, $entrada);
-            $entradas[$user_id][] = $umaEntrada['_date'];
+            $entry = new Caldera_Forms_Entry($form, $entrada);
+            $statusGeral = valida($entry, 'fld_9748069');
+
+            if ($statusGeral == 'avaliacao') {
+                $entradas[$user_id] = array();
+                $entradas[$user_id][] = $entry;
+                $entradas[$user_id][] = $umaEntrada['_date'];
+            }
         }
     }
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
@@ -106,6 +111,7 @@ function avaliador_view()
                     </div>
                 </div>
 
+                <hr class="mt-4 mb-4">
                 <div class="col-md-12 text-center">
                     <div id="resumo-avaliador" style="display:none;"></div>
 
@@ -115,7 +121,6 @@ function avaliador_view()
                     </div>
                     <input id="hidden-avaliador-input" type="hidden" name="action" value="avaliador_action">
                 </div>
-
             </div>
         </div>
     </form>
@@ -128,7 +133,7 @@ function avaliador_view()
         </div>
     </div>
 
-<?php
+    <?php
 }
 
 
@@ -165,7 +170,7 @@ function ajaxCarregaInstituicao()
     // $flag_gerente é uma string!!!
     render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente);
     echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
-    
+
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     }
@@ -207,11 +212,11 @@ function ajaxCarregaRede()
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
-    
+
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[relaciona($rede)[1]], $rede);
     }
-    
+
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
@@ -219,42 +224,54 @@ add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');
 function campos_avaliador_redes($entry, $rede = "geral")
 {
     if ($rede == "geral") {
-        echo "<h3>Avaliação da Instituição</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Instituição";
         $fld_historico = "fld_4416984";
+        $fld_status = "fld_4899711";
     } else {
-        echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
         $placeholder = "Escreva o parecer sobre os dados da Rede de " . relaciona($rede)[2];
         $fld_historico = "fld_6135036";
+        $fld_status = "fld_3707629";
     }
-?>
-    <div id="div_<?php echo $rede ?>">
 
-        <div class="br-textarea mb-3">
-            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
-            <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
-        </div>
+    $status = valida($entry, $fld_status);
 
-        <div class="br-textarea mb-3">
-            <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
-            <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeErrorValidacao(name)"></textarea>
-            <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
-        </div>
+    if ($status == "avaliacao") {
 
-        <div class="mb-3 radio-avaliador">
-            <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
-            <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadioValidacao(name)" />
-                <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
+        if ($rede == "geral") {
+            echo "<h3>Avaliação da Instituição</h3>";
+        } else {
+            echo "<h3>Avaliação da Rede de " . relaciona($rede)[2] . "</h3>";
+        }
+
+    ?>
+        <div id="div_<?php echo $rede ?>">
+
+            <div class="br-textarea mb-3">
+                <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
+                <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
             </div>
-            <div class="br-radio">
-                <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadioValidacao(name)" />
-                <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
-                <br>
+
+            <div class="br-textarea mb-3">
+                <label for="parecerAvaliador_<?php echo $rede ?>">Insira o parecer<span class="field_required" style="color:#ee0000;">*</span></label>
+                <textarea class="textarea-start-size" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="<?php echo $placeholder; ?>" maxlength="800" onchange="changeErrorValidacao(name)"></textarea>
+                <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            </div>
+
+            <div class="mb-3 radio-avaliador">
+                <p class="label mb-3">Escolha a situação<span class="field_required" style="color:#ee0000;">*</span></p>
+                <div class="br-radio">
+                    <input id="avaliador_<?php echo $rede ?>_op_1" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="pendente" onchange="changeErrorRadioValidacao(name)" />
+                    <label for="avaliador_<?php echo $rede ?>_op_1">Ajustes necessários</label>
+                </div>
+                <div class="br-radio">
+                    <input id="avaliador_<?php echo $rede ?>_op_2" type="radio" name="situacaoAvaliador_<?php echo $rede ?>" class="situacaoAvaliador_<?php echo $rede ?>" value="homologado" onchange="changeErrorRadioValidacao(name)" />
+                    <label for="avaliador_<?php echo $rede ?>_op_2">Homologado</label>
+                    <br>
+                </div>
             </div>
         </div>
-    </div>
 <?php
+    }
 }
 
 
@@ -289,6 +306,9 @@ function avaliador_action_form()
     if (strlen($historicoParecer_geral) > 1)
         $historicoParecer_geral .= "\n\n";
 
+    if (strlen($parecerAvaliador_geral) < 1)
+        $parecerAvaliador_geral = "Avaliado como Homologado.";
+
     $historicoParecer_geral .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_geral;
 
     //Campos das redes
@@ -318,6 +338,9 @@ function avaliador_action_form()
         // se já houver alguma coisa, acrescenta um \n
         if (strlen($historicoParecer_rede[$rede]) > 1)
             $historicoParecer_rede[$rede] .= "\n\n";
+
+        if (strlen($parecerAvaliador_rede[$rede]) < 1)
+            $parecerAvaliador_rede[$rede] = "Avaliado como Homologado.";
 
         //Adicionando o parecer ao histórico:
         $historicoParecer_rede[$rede] .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede];
@@ -378,13 +401,15 @@ add_action('admin_post_avaliador_action', 'avaliador_action_form');
 
 function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_geral, $situacaoAvaliador_geral, $entrada_geral, $historicoParecer_rede, $parecerAvaliador_rede, $situacaoAvaliador_rede, $tags_rede, $entrada_rede)
 {
-    //Form Geral
-    //Campo: historico_parecer_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada_geral, $historicoParecer_geral);
-    //Campo: parecer_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada_geral, $parecerAvaliador_geral);
-    //Campo: status_instituicao
-    Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada_geral, $situacaoAvaliador_geral);
+    if ($situacaoAvaliador_geral != "") {
+        //Form Geral
+        //Campo: historico_parecer_instituicao
+        Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada_geral, $historicoParecer_geral);
+        //Campo: parecer_instituicao
+        Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada_geral, $parecerAvaliador_geral);
+        //Campo: status_instituicao
+        Caldera_Forms_Entry_Update::update_field_value('fld_4899711', $entrada_geral, $situacaoAvaliador_geral);
+    }
 
     //Form Redes
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
