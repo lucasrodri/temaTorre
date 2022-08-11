@@ -372,9 +372,11 @@ function avaliador_action_form()
         if ($statusGeral == 'pendente') {
             //envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
             envia_email('resumo', $nomeDaInstituicao, $emailDoCandidato, '', '', '', $resumo);
+            envia_email_avaliador('pendente', $nomeDaInstituicao);
         } else if ($statusGeral == 'homologado') {
             // caso homologado -> enviar as tags escolhidas
-            envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
+            envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato);
+            envia_email_avaliador('homologado', $nomeDaInstituicao);
         }
 
         // redirecionar para a página de avaliacao

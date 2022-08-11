@@ -984,7 +984,7 @@ function atualiza_status_geral_ajax()
             $status[] = valida($entradas[relaciona($rede)[1]], 'fld_3707629');
             //echo '$statusRede '. valida($entradas[relaciona($rede)[1]], 'fld_3707629') .'<br>';
             $redes .= $rede . ";";
-        } 
+        }
     }
 
     $situacaoGeral = '';
@@ -1004,6 +1004,13 @@ function atualiza_status_geral_ajax()
     // Chama o update no campo geral de stats
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entradas_id[FORM_ID_GERAL], $situacaoGeral);
     Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entradas_id[FORM_ID_GERAL], $redes);
+
+    $nomeDaInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_266564');
+    $emailDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_7868662');
+
+    //envia o email de update
+    envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato);
+    envia_email_avaliador('reenviar', $nomeDaInstituicao);
 
     // Chama a função de renderizar
     render_status($situacaoGeral);
@@ -1034,7 +1041,7 @@ function exclui_rede_candidato_ajax()
     // faz o update dos dados no caldera
     update_entrada_form_especifico_candidato($entrada, $dados_redes, "false");
 
-    //TODO envia email de update
+    //TODO envia email de update --> mudei para o atualiza_status_geral_ajax
 
     $form_id = relaciona($rede)[1];
     $form = Caldera_Forms_Forms::get_form($form_id);
@@ -1082,8 +1089,8 @@ function desistir_candidato()
         }
     }
     //coletando os dados da instituição e do candidato para uso no email:
-    $nomeInstituição = valida($entradas[FORM_ID_GERAL], 'fld_266564');
-    $nomeDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_1333267');
+    $nomeDaInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_266564');
+    //$nomeDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_1333267');
     $emailDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_7868662');
     $doc1UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_5438248');
     $doc2UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_9588438');
@@ -1112,8 +1119,8 @@ function desistir_candidato()
     wp_logout(); //TODO testar o delete com usuário realmente logado
 
     //Enviar um email que o usuário foi apagado
-    envia_email('desistir', $nomeInstituição, $emailDoCandidato);
-    //TODO email para o avaliador
+    envia_email('desistir', $nomeDaInstituicao, $emailDoCandidato);
+    envia_email_avaliador('desistir', $nomeDaInstituicao);
 
     //Enviando pra index
     wp_redirect(home_url());
