@@ -82,7 +82,7 @@
 /*Classes para os posts*/
 
 .titulo-post {
-  font-family: Rawline;
+  /* font-family: Rawline; */
   font-style: normal;
   font-weight: normal;
   font-size: 36px;
@@ -94,7 +94,7 @@
 }
 
 .posted-rcc {
-  font-family: Rawline;
+  /* font-family: Rawline; */
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -113,15 +113,24 @@
 
 .entry-content-rcc {
   margin-top: 40px;
-  font-family: Rawline;
+  /* font-family: Rawline; */
   font-style: normal;
-  font-weight: normal;
-  color: #555555;
+  font-weight: normal !important;
+  color: #555555 !important;
+}
+
+.font-weight-bold{
+  font-weight: 700 !important;
 }
 
 .entry-content-rcc p {
   font-size: 16px;
   line-height: 32px;
+  color: #555555 !important;
+}
+
+.entry-content-rcc h3 {
+  font-weight: 400;
 }
 
 .entry-content-rcc a {
@@ -131,7 +140,7 @@
 }
 
 .cat-links-rcc {
-  font-family: Rawline;
+  /* font-family: Rawline; */
   font-style: normal;
   font-weight: 500;
   font-size: 12px;

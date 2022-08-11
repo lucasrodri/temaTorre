@@ -35,7 +35,7 @@
 			</div>
 		</header><!-- .entry-header -->
 
-		<div class="entry-content entry-content-rcc">
+		<div class="entry-content-rcc entry-content">
 			<?php
 			the_content();
 			
