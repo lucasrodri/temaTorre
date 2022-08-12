@@ -64,7 +64,7 @@ function pre_process_shortcode()
                 // se o usuário logado não for admin, deve ser redirecionado para home
                 if (!is_user_logged_in()) {
                     wp_redirect(wp_login_url());
-                } else if (!current_user_can('administrator')) {
+                } else if (!usuario_tem_role($current_user, 'avaliador') && !current_user_can('administrator')) {
                     wp_redirect(home_url());
                 }
                 //TODO adicionar checagem de permissão de avaliador
@@ -80,14 +80,9 @@ function pre_process_shortcode()
                 // se o usuário logado já for candidato, deve checar se é o id correto
                 if (!is_user_logged_in()) {
                     wp_redirect(wp_login_url());
-                } else if (!current_user_can('administrator')) { //Para travar so para administradores
-                    wp_redirect(home_url());
+                } else if (!usuario_tem_role($current_user, 'candidato')) {
+                     wp_redirect(home_url());
                 }
-                // else removido temporariamente enquanto página está em desenvolvimento
-                // else if (!usuario_tem_role($current_user, 'candidato')) {
-                //     wp_redirect(home_url());
-                // }
-                //TODO adicionar checagem do user dono do entry ID ou colocar 'página' de erro em  shortcode_candidato_view
             }
         }
     }

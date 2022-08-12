@@ -4,8 +4,6 @@
 * Shortcode para renderizar o formulário de início
 */
 
-define('USER_TESTE', 26);
-
 add_shortcode('shortcode_candidato_view', 'candidato_view');
 
 function candidato_view()
@@ -15,9 +13,6 @@ function candidato_view()
     $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
-    // para teste estou usando um usuário meu aqui
-    $usuario_id = USER_TESTE;
-    $usuario_login = $current_user->user_login;
 
     $entradas = array();
     $entradas_id = array();
@@ -60,140 +55,146 @@ function candidato_view()
     $arrayRedes = explode(";", $todas_redes);
 
 ?>
-    <div class="br-table mb-3">
-        <div class="table-header"></div>
-        <table>
-            <colgroup>
-                <col class="col-2">
-                <col class="col-7">
-                <col class="col-3">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th scope="col">Data de submissão</th>
-                    <th scope="col">Nome da Instituição</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="noHover">
-                    <td data-th="Data"><?php echo $date; ?></td>
-                    <td data-th="Nome"><?php echo valida($entradas[FORM_ID_GERAL], 'fld_266564'); ?></td>
-                    <td data-th="Status" id="tdStatus">
-                        <div id='loading_carregar_status' class="loading small" style='display:none;'></div>
-                        <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- Rodapé -->
-    </div>
-    <div class="row mt-5 mb-5">
-
-        <div class="col-md-12 align-button-right mr-4">
-            <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
-
-            <button id="carrega-form-btn" class="br-button success mr-sm-3" type="button" onclick="carrega_candidato()">
-                <?php if ($statusFormInstituicao == "pendente") : ?>
-                    Edite seu formulário
-                <?php else : ?>
-                    Veja seu formulário
-                <?php endif; ?>
-            </button>
-
-            <button id="esconde-form-btn" class="br-button secondary" type="button" onclick="esconderFormulario();" style="display: none;">
-                Fechar formulário
-            </button>
-
-            <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-                <input type="submit" onClick="return confirm('Você tem certeza que quer apagar sua candidatura? Essa ação não poderá ser desfeita.')" class="br-button danger mr-3" value="Desistir do Processo" name="enviar">
-                <input type="hidden" name="usuario_id" value="<?php echo $user_id; ?>">
-                <input type="hidden" name="action" value="desistir_candidato">
-            </form>
-
+    <?php if (!$entradas) : ?>
+        <div class="mb-5" id="lista-entradas-div">
+            <p>Não há candidaturas para visualização.</p>
         </div>
-    </div>
+    <?php else : ?>
+        <div class="br-table mb-3">
+            <div class="table-header"></div>
+            <table>
+                <colgroup>
+                    <col class="col-2">
+                    <col class="col-7">
+                    <col class="col-3">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Data de submissão</th>
+                        <th scope="col">Nome da Instituição</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="noHover">
+                        <td data-th="Data"><?php echo $date; ?></td>
+                        <td data-th="Nome"><?php echo valida($entradas[FORM_ID_GERAL], 'fld_266564'); ?></td>
+                        <td data-th="Status" id="tdStatus">
+                            <div id='loading_carregar_status' class="loading small" style='display:none;'></div>
+                            <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Rodapé -->
+        </div>
+        <div class="row mt-5 mb-5">
 
-    <div id="edit-form-div" class="br-tab mt-5" style="display: none;">
-        <nav class="tab-nav font-tab-torre">
-            <ul>
-                <li class="tab-item active">
-                    <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
-                </li>
-                <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
-                    <li class="tab-item">
-                        <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona($arrayRedes[$i - 2])[2] ?></span></button>
-                    </li>
-                <?php endfor; ?>
-            </ul>
-        </nav>
-        <div class="tab-content mt-4">
-            <div id='loading_carregar' class="loading medium" style='display:none;'></div>
-            <div class="tab-panel active" id="panel-1">
-                <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
+            <div class="col-md-12 align-button-right mr-4">
+                <!-- O botão tera um onclick que removerá a div 'edit-form-div-button' e aparecerá a div 'edit-form-div' -->
 
-                <input type="hidden" id="entrada_geral" name="entrada_geral" value="<?php echo $entradas_id[FORM_ID_GERAL]; ?>">
+                <button id="carrega-form-btn" class="br-button success mr-sm-3" type="button" onclick="carrega_candidato()">
+                    <?php if ($statusFormInstituicao == "pendente") : ?>
+                        Edite seu formulário
+                    <?php else : ?>
+                        Veja seu formulário
+                    <?php endif; ?>
+                </button>
+
+                <button id="esconde-form-btn" class="br-button secondary" type="button" onclick="esconderFormulario();" style="display: none;">
+                    Fechar formulário
+                </button>
+
+                <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+                    <input type="submit" onClick="return confirm('Você tem certeza que quer apagar sua candidatura? Essa ação não poderá ser desfeita.')" class="br-button danger mr-3" value="Desistir do Processo" name="enviar">
+                    <input type="hidden" name="usuario_id" value="<?php echo $user_id; ?>">
+                    <input type="hidden" name="action" value="desistir_candidato">
+                </form>
+
             </div>
-            <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
-                <div class="tab-panel" id="panel-<?php echo $i; ?>">
-                    <?php
-                    $nomeRede = relaciona($arrayRedes[$i - 2])[0];
-                    $form_id = relaciona($arrayRedes[$i - 2])[1];
-                    $entrada = $entradas[$form_id];
-                    $statusRede = valida($entrada, 'fld_3707629');
-                    $redeAtiva = valida($entrada, 'fld_4663810');
-                    $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
-                    $styleAtualizaAtiva = $redeAtiva == "true" && $statusRede == "pendente" ? '' : 'display:none;';
-                    ?>
+        </div>
 
-                    <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
+        <div id="edit-form-div" class="br-tab mt-5" style="display: none;">
+            <nav class="tab-nav font-tab-torre">
+                <ul>
+                    <li class="tab-item active">
+                        <button type="button" data-panel="panel-1"><span class="name">Instituição</span></button>
+                    </li>
+                    <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
+                        <li class="tab-item">
+                            <button type="button" data-panel="panel-<?php echo $i; ?>"><span class="name"><?php echo relaciona($arrayRedes[$i - 2])[2] ?></span></button>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </nav>
+            <div class="tab-content mt-4">
+                <div id='loading_carregar' class="loading medium" style='display:none;'></div>
+                <div class="tab-panel active" id="panel-1">
+                    <?php render_geral_form($entradas[FORM_ID_GERAL]); ?>
 
-                    <div id="tab_redes_<?php echo $i; ?>">
-                        <?php cadastro_redes_render($nomeRede, $entrada); ?>
+                    <input type="hidden" id="entrada_geral" name="entrada_geral" value="<?php echo $entradas_id[FORM_ID_GERAL]; ?>">
+                </div>
+                <?php for ($i = 2; $i < count($arrayRedes) + 1; $i++) : ?>
+                    <div class="tab-panel" id="panel-<?php echo $i; ?>">
+                        <?php
+                        $nomeRede = relaciona($arrayRedes[$i - 2])[0];
+                        $form_id = relaciona($arrayRedes[$i - 2])[1];
+                        $entrada = $entradas[$form_id];
+                        $statusRede = valida($entrada, 'fld_3707629');
+                        $redeAtiva = valida($entrada, 'fld_4663810');
+                        $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
+                        $styleAtualizaAtiva = $redeAtiva == "true" && $statusRede == "pendente" ? '' : 'display:none;';
+                        ?>
 
-                        <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
-                    </div>
-                    <div>
-                        <div class="row">
+                        <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
 
-                            <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12" style="display: <?php if ($redeAtiva == "false") {
-                                                                                                                    echo "";
-                                                                                                                } else {
-                                                                                                                    echo "none";
-                                                                                                                } ?>;">
-                                <div class="text-center">
-                                    <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
+                        <div id="tab_redes_<?php echo $i; ?>">
+                            <?php cadastro_redes_render($nomeRede, $entrada); ?>
+
+                            <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
+                        </div>
+                        <div>
+                            <div class="row">
+
+                                <div id="botaoAdicionar_<?php echo $i; ?>" class="mt-5 col-md-12" style="display: <?php if ($redeAtiva == "false") {
+                                                                                                                        echo "";
+                                                                                                                    } else {
+                                                                                                                        echo "none";
+                                                                                                                    } ?>;">
+                                    <div class="text-center">
+                                        <button class="br-button primary" type="button" onclick="criarRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>');">Adicionar nova entrada nesta rede</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {
-                                                                                            echo "6";
-                                                                                        } else {
-                                                                                            echo "12";
-                                                                                        } ?>" style="<?php echo $styleRedeAtiva; ?>">
-                                <div class="text-<?php if ($statusRede == "pendente") {
-                                                        echo "right";
-                                                    } else {
-                                                        echo "center";
-                                                    } ?>">
-                                    <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir entrada desta rede</button>
-                                    <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
+                                <div id="botaoExcluir_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {
+                                                                                                echo "6";
+                                                                                            } else {
+                                                                                                echo "12";
+                                                                                            } ?>" style="<?php echo $styleRedeAtiva; ?>">
+                                    <div class="text-<?php if ($statusRede == "pendente") {
+                                                            echo "right";
+                                                        } else {
+                                                            echo "center";
+                                                        } ?>">
+                                        <button class="br-button danger" type="button" onclick="excluirRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Excluir entrada desta rede</button>
+                                        <input type="hidden" name="action" value="excluir_<?php echo $arrayRedes[$i - 2]; ?>">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleAtualizaAtiva; ?>">
-                                <div class="text-left">
-                                    <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
-                                    <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
+                                <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleAtualizaAtiva; ?>">
+                                    <div class="text-left">
+                                        <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
+                                        <input type="hidden" name="action" value="atualiza_<?php echo $arrayRedes[$i - 2]; ?>">
+                                    </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endfor; ?>
+                <?php endfor; ?>
+            </div>
         </div>
-    </div>
+    <?php endif ?>
 <?php
 }
 
@@ -937,9 +938,6 @@ function atualiza_status_geral_ajax()
     $form_ids = array(FORM_ID_GERAL, FORM_ID_SUPORTE, FORM_ID_FORMACAO, FORM_ID_PESQUISA, FORM_ID_INOVACAO, FORM_ID_TECNOLOGIA);
     $current_user = wp_get_current_user();
     $usuario_id = $current_user->ID;
-
-    // para teste estou usando um usuário meu aqui
-    $usuario_id = USER_TESTE;
 
     $entradas = array();
     $entradas_id = array();
