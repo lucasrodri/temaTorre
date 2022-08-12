@@ -33,7 +33,7 @@ function candidato_view()
                     $entradas_id[$form_id] = $entrada; //novo array para guardar as entry_id
                     $form = Caldera_Forms_Forms::get_form($form_id);
                     $entradas[$form_id] = new Caldera_Forms_Entry($form, $entrada);
-                    if ($form_id == FORM_ID_GERAL){
+                    if ($form_id == FORM_ID_GERAL) {
                         $entradas["date"] = $umaEntrada['_date'];
                     }
                     //TODO levar em consideração versionamento

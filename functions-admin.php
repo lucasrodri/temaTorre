@@ -100,17 +100,17 @@ function criar_forms_vazios()
 
                         if ($userIdGeral == $userIdForm) {
                             $entrada = $umaEntradaForm['_entry_id'];
-                            echo 'O' . $userIdGeral . ' possui entrada no ' . $form_id . ' de numero '.$entrada .'<br>';
+                            //echo 'O' . $userIdGeral . ' possui entrada no ' . $form_id . ' de numero ' . $entrada . '<br>';
 
                             $form1 = Caldera_Forms_Forms::get_form($form_id);
                             $entry = new Caldera_Forms_Entry($form1, $entrada);
 
                             //update campo4  para true
                             if (valida($entry, 'fld_605717') == "") {
-                                Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'false');    
+                                Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'false');
                             } else {
                                 Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, 'true');
-                            }                            
+                            }
 
                             $flag = true;
                             break;
