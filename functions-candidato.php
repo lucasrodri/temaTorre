@@ -200,7 +200,6 @@ function candidato_view()
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
-    echo 'statusFormInstituicao: ' . $statusFormInstituicao . " ué <br>";
     //$statusFormInstituicao = 'pendente';
 ?>
 
