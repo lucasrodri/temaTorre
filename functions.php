@@ -817,7 +817,7 @@ function funcao_publicado_em() {
 }
 
 function funcao_post_footer() {
-	if ( has_category() || has_tag() ) {
+	if ( has_category() || has_tag() || tmwpi_has_tag()) {
 
         echo '<div class="post-taxonomies cat-links-rcc">';
 
@@ -833,7 +833,11 @@ function funcao_post_footer() {
 		echo '</div>';
 		echo '<div class="post-taxonomies tag-links-rcc">';
         /* translators: Used between list items, there is a space after the comma. */
-        $tags_list = get_the_tag_list( '', __( ' ', 'twentytwentyone' ) );
+        if ( function_exists( 'tmwpi_get_the_tag_list' ) ) {
+            $tags_list = tmwpi_get_the_tag_list( '', __( ' ', 'twentytwentyone' ) );
+        } else {
+            $tags_list = get_the_tag_list( '', __( ' ', 'twentytwentyone' ) );
+        }
         if ( $tags_list ) {
           printf(
             /* translators: %s: List of tags. */

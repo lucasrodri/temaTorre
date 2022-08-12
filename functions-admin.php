@@ -67,6 +67,7 @@ function admin_view()
 <?php
 }
 
+add_shortcode('shortcode_criar_forms_vazios', 'criar_forms_vazios');
 function criar_forms_vazios()
 {
     require_once(CFCORE_PATH . 'classes/admin.php');
