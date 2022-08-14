@@ -454,6 +454,7 @@ function twenty_twenty_one_scripts() {
 	wp_enqueue_script( 'form-validation-js', get_template_directory_uri() . '/assets/js/form-validation.js' , array('jquery', 'form-footer-js'), $ver, true);
 	wp_enqueue_script( 'cadastro-candidato-js', get_template_directory_uri() . '/assets/js/cadastro-candidato.js' , array('jquery'), $ver);
 	wp_enqueue_script( 'cadastro-avaliador-js', get_template_directory_uri() . '/assets/js/cadastro-avaliador.js' , array('jquery'), $ver);
+	wp_enqueue_script( 'cadastro-homologado-js', get_template_directory_uri() . '/assets/js/cadastro-homologado.js' , array('jquery'), $ver);
 	//Fim
 
 	// Threaded comment reply styles.
@@ -1421,6 +1422,7 @@ include "criar-tabelas.php";
 include "functions-admin.php";
 include "functions-gerente.php";
 include "functions-avaliador.php";
+include "functions-homologado.php";
 include "functions-cadastro.php";
 include "functions-candidato.php";
 include "functions-email.php";

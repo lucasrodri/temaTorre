@@ -421,3 +421,9 @@
   align-items: center;
   flex-direction: column;
 }
+
+/* Para botão publicado */
+.botao-publicado {
+  background-color: #a0d468 !important;
+  color: #304A01 !important;
+}

@@ -6,7 +6,7 @@ function voltarListaEntradas() {
 
 var redesArrayGlobal;
 
-async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gerente = 'false') {
+async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gerente = 'false', flag_homologado = 'false') {
 
     // mostrar div do conteúdo do form
     document.getElementById('lista-entradas-div').style.display = 'none';
@@ -73,13 +73,13 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
 
         document.getElementById('tab-item-' + painel).style.display = 'inline';
 
-        await chama_carrega_rede(painel, redesArray[j], user_id, flag_gerente);
+        await chama_carrega_rede(painel, redesArray[j], user_id, flag_gerente, flag_homologado);
 
     }
 }
 
 
-function chama_carrega_rede(painel, redeArray, user_id, flag_gerente) {
+function chama_carrega_rede(painel, redeArray, user_id, flag_gerente, flag_homologado) {
 
     jQuery(function ($) {
         $.ajax({
@@ -89,7 +89,8 @@ function chama_carrega_rede(painel, redeArray, user_id, flag_gerente) {
                 action: 'carrega_rede',
                 usuario_id: user_id,
                 rede: redeArray,
-                flag: flag_gerente,
+                flag_gerente: flag_gerente,
+                flag_homologado: flag_homologado
             },
             beforeSend: function () {
                 $("#loading_carregar").css("display", "block");

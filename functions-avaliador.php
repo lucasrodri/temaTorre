@@ -169,7 +169,7 @@ function ajaxCarregaInstituicao()
     // função alterada para não retornar um form
     // $flag_gerente é uma string!!!
     render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente);
-    echo '<input type="hidden" name="entrada_geral" value="' . $entrada . '">';
+    echo '<input type="hidden" id="entrada_geral" name="entrada_geral" value="' . $entrada . '">';
 
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[FORM_ID_GERAL]);
@@ -183,7 +183,8 @@ function ajaxCarregaRede()
 {
     $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
     $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
-    $flag_gerente = (isset($_POST['flag'])) ? $_POST['flag'] : 'false';
+    $flag_gerente = (isset($_POST['flag_gerente'])) ? $_POST['flag_gerente'] : 'false';
+    $flag_homologado = (isset($_POST['flag_homologado'])) ? $_POST['flag_homologado'] : 'false';
     require_once(CFCORE_PATH . 'classes/admin.php');
     $entradas = array();
 
@@ -215,6 +216,10 @@ function ajaxCarregaRede()
 
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[relaciona($rede)[1]], $rede);
+    }
+
+    if ($flag_homologado == 'true') {
+        botao_publicado_render($entradas[relaciona($rede)[1]], $entrada, $rede);
     }
 
     die();
@@ -445,11 +450,4 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
 
     //Campo: status_geral_instituicao
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada_geral, $situacaoGeral);
-}
-
-function avaliador_view_homologado()
-{
-
-    //cópia do avaliador_view() mas só mostra homologados
-    return;
 }

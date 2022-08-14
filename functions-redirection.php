@@ -68,6 +68,12 @@ function pre_process_shortcode()
                     wp_redirect(home_url());
                 }
                 //TODO adicionar checagem de permissão de avaliador
+            } else if (in_array('shortcode_homologado_view', $matches[2])) {
+                if (!is_user_logged_in()) {
+                    wp_redirect(wp_login_url() . "?redirect_to=" . home_url() . "/homologados");
+                } else if (!usuario_tem_role($current_user, 'avaliador') && !current_user_can('administrator')) {
+                    wp_redirect(home_url());
+                }
             } else if (in_array('shortcode_gerente_view', $matches[2])) {
 
                 // se o usuário logado não for visualizador_cadastros, deve ser redirecionado para home

@@ -599,6 +599,9 @@ function render_status($status)
         case 'homologado':
             echo '<button class="br-button success small mt-3 mt-sm-0 noHover" type="button">Homologado</button>';
             break;
+        case 'publicado':
+            echo '<button class="botao-publicado br-button success small mt-3 mt-sm-0 noHover" type="button">Publicado</button>';
+            break;
         case 'avaliacao':
             echo '<button class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>';
             break;
