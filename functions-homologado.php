@@ -147,3 +147,22 @@ function botao_publicado_render($entry, $entrada_id, $rede)
     </div>
 <?php
 }
+
+function homologado_action_form()
+{
+    $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
+    $entradaInstituicaoId = (isset($_POST['entradaInstituicaoId'])) ? $_POST['entradaInstituicaoId'] : '';
+    $entradaRedeId = (isset($_POST['entradaRedeId'])) ? $_POST['entradaRedeId'] : '';
+    require_once(CFCORE_PATH . 'classes/admin.php');
+    
+    $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+    $entryGeral = new Caldera_Forms_Entry($form, $entradaInstituicaoId);
+    //Ex.:
+    $statusFormInstituicao = valida($entryGeral, 'fld_4899711');
+
+    $form_id = relaciona($rede)[1];
+    $form = Caldera_Forms_Forms::get_form($form_id);
+    $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
+    //Ex.:
+    $statusRede = valida($entryRede, 'fld_3707629');
+}
