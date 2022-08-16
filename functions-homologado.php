@@ -188,7 +188,7 @@ function homologado_action_form()
     $telefoneRepresentante = valida($entryRede, 'fld_5051662');
 
     $classificacoes = valida($entryRede, 'fld_8777940');
-    //$outroClassificacao = valida($entryRede, 'fld_6678080'); //---- PERGUNTA: vamos incluir isso em algum lugar?
+    //$outroClassificacao = valida($entryRede, 'fld_6678080'); //---- TODO: talvez inserir concatenar no solucao
     $tags_rede = valida($entryRede, 'fld_7938112');
 
     //-------------------------------------------------------- criar o post
@@ -200,6 +200,7 @@ function homologado_action_form()
     //removendo essa contagem pq não conta para posts rascunnho
     //$posts = count_user_posts($usuario_id, $post_type);
 
+    //--- deletando
     $args = array(
         'numberposts' => -1,
         'post_type' => $post_type,
@@ -217,14 +218,14 @@ function homologado_action_form()
         }
     }
 
+    //---- criacao do post
     $titulo = $nomeDaInstituicao;
-    $conteudo = ''; //content é vazio
 
     $post_id = wp_insert_post(array(
         'post_author' => $usuario_id,
         'post_type' => $post_type,
         'post_title' => $titulo,
-        'post_content' => $conteudo,
+        'post_content' => '', //content é vazio
         'post_status' => 'publish',
         'comment_status' => 'closed',
         'ping_status' => 'closed',
@@ -366,8 +367,10 @@ function homologado_despublica_rede()
         if (empty($user_posts)) return;
 
         foreach ($user_posts as $user_post) {
-            $post = array('ID' => $user_post->ID, 'post_status' => 'draft');
-            wp_update_post($post);
+            //$post = array('ID' => $user_post->ID, 'post_status' => 'draft');
+            //wp_update_post($post);
+            //Apagar o post
+            wp_delete_post($user_post->ID, true);
         }
     }
 
