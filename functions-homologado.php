@@ -162,6 +162,7 @@ function homologado_action_form()
     $entryGeral = new Caldera_Forms_Entry($form, $entradaInstituicaoId);
 
     $nomeDaInstituicao = valida($entryGeral, 'fld_266564');
+    $emailDoCandidato = valida($entryGeral, 'fld_7868662');
     $descricaoDaInstituicao = valida($entryGeral, 'fld_6461522');
     $natureza_op = valida($entryGeral, 'fld_5902421');
     $doc1UnidadeUrl = valida($entryGeral, 'fld_5438248');
@@ -314,6 +315,10 @@ function homologado_action_form()
 
     echo 'post publicado' . $post_id . '<br>';
     echo 'Veja o novo post em: <a href="' . esc_url(get_permalink($post_id)) . '"> Link </a>';
+
+    //-------------------------------------------------------- envia emails
+    envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato);
+    envia_email_avaliador('publicado', $nomeDaInstituicao);
 
     // renderiza novamente o botão
     botao_publicado_render($entryRede, $entradaRedeId, $rede);

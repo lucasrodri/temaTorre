@@ -60,8 +60,8 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
       break;
 
     case 'publicado':
-      $subject = 'Avaliação enviada';
-      $message = msg_avaliacao_enviada($nomeDaInstituicao, 'Publicado');
+      $subject = 'Soluções publicadas na Torre MCTI';
+      $message = msg_publicado_avaliador($nomeDaInstituicao);
       break;
 
     default:
@@ -104,6 +104,11 @@ function msg_remocao_candidato($nomeDaInstituicao, $parecer)
   return $message;
 }
 
+function msg_publicado_avaliador($nomeDaInstituicao)
+{
+  $message = '<p style="text-align: left;">Ol&aacute; Avaliador(a),</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A(s) solu&ccedil;&atilde;o(&otilde;es) &agrave; Torre MCTI da institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ' foi(foram) publicada(s).</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aten&ccedil;&atilde;o: essa &eacute; uma mensagem autom&aacute;tica do sistema de candidatura da Torre MCTI.</p>';
+  return $message;
+}
 
 // exemplos para candidato
 //envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);

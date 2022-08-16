@@ -389,20 +389,6 @@ function avaliador_action_form()
         wp_redirect(esc_url(home_url('/avaliador')));
         exit;
     }
-    /*
-    //caso pendente
-    o form geral
-    os forms das redes
-    marcado como ajustes 
-    status é pendente
-
-    //caso homologado
-    status => homologado
-    assinar o termo
-
-    //caso publicado <---- como fazer os posts
-    // vamos criar uma nova função de visualização function avaliador_view_publico() -> form apenas para os homologados
-    */
 }
 add_action('admin_post_nopriv_avaliador_action', 'avaliador_action_form');
 add_action('admin_post_avaliador_action', 'avaliador_action_form');
