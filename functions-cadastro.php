@@ -353,7 +353,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
     $abrangencia = get_options($rede_nome)[3];
 
     $statusRede = valida($entrada, 'fld_3707629');
-    //$statusRede = 'pendente';
+
     $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado") || $flag_view == 'true') ?
         'disabled'
         : '';

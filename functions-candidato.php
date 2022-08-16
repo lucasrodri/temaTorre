@@ -52,7 +52,7 @@ function candidato_view()
      */
 
     $statusFormInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_4899711');
-    //$statusFormInstituicao = 'pendente';    
+
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
 
@@ -203,7 +203,7 @@ function candidato_view()
 function render_geral_form($entrada)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
-    //$statusFormInstituicao = 'pendente';
+
 ?>
 
     <!-- basta checar se tem algo no HISTÓRICO do parecer (sempre vai ter se tiver sido avaliado) -->
@@ -243,7 +243,6 @@ function render_geral_form($entrada)
 function render_geral_data($entrada, $flag_view = 'false')
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
-    //$statusFormInstituicao = 'pendente';
 
     // se o status for avaliacao ou homologado, não permite edição
     $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado") || $flag_view == 'true') ?

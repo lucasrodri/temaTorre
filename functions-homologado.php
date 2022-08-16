@@ -196,23 +196,22 @@ function homologado_action_form()
 
     $post_type = relaciona($rede)[0];
 
-    $posts = count_user_posts($usuario_id, $post_type); //count user's posts
-    if ($posts > 0) {
-        //user has posts
+    //removendo essa contagem pq não conta para posts rascunnho
+    //$posts = count_user_posts($usuario_id, $post_type);
 
-        $args = array(
-            'numberposts' => -1,
-            'post_type' => $post_type,
-            'author' => $usuario_id
-        );
-        // get all posts by this user: posts, pages, attachments, etc..
-        $user_posts = get_posts($args);
+    $args = array(
+        'numberposts' => -1,
+        'post_type' => $post_type,
+        'author' => $usuario_id,
+        'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+    );
 
-        if (empty($user_posts)) return;
+    $user_posts = get_posts($args);
 
-        // delete all the user posts
+    if (!empty($user_posts)) {
+
         foreach ($user_posts as $user_post) {
-            echo 'estou deletand o post ' . $user_post->ID . '<br>';
+            //echo 'estou deletand o post ' . $user_post->ID . '<br>';
             wp_delete_post($user_post->ID, true);
         }
     }
@@ -245,7 +244,7 @@ function homologado_action_form()
 
     $texto_hover = $nomeDaInstituicao;
     $texto = $descricaoDaInstituicao; //descricao
-    $solucao = 'URL dos serviços relacionados na rede especificada:\n' . $urlServico . '\nProdutos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada:' . $produtoServicos;
+    $solucao = '<p>URL dos serviços relacionados na rede especificada:</p><p>' . $urlServico . '</p><p>Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada:</p><p>' . $produtoServicos . '</p>';
     $url = $urlDaInstituicao;
 
     $publico_alvo = str_replace(";", ", ",  rtrim($publicos, ";"));
@@ -290,28 +289,28 @@ function homologado_action_form()
         update_field('logomarca', $doc1UnidadeId, $post_id);
     }
 
-    //setar tags
+    //setar categorias
     if ($classificacoes) {
         $categoria_slug = getCategoryNameRede($post_type);
         $nomesCategoria = explode(";",  rtrim($classificacoes, ";"));
 
         foreach ($nomesCategoria as $nomeCategoria) {
-            
             $categoriaId = retorna_ou_cria_categoria($categoria_slug, $nomeCategoria);
-            
-            //---- PERGUNTA:vamos fazer append ou criar novos posts???
+            // true para dar append nas categorias
             wp_set_post_terms($post_id, $categoriaId, $categoria_slug, true);
         }
     }
 
-
     //setar tags
     if ($tags_rede) {
+        //false para setar todas as tags como tematres_wp
         wp_set_post_terms($post_id, str_replace(";", ",", $tags_rede), 'tematres_wp', false);
     }
 
 
     //-------------------------------------------------------- atualizar status da rede como publicado
+    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entradaRedeId, 'publicado');
+    //adicionar parecer/histórico na rede??
 
     echo 'post publicado' . $post_id . '<br>';
     echo 'Veja o novo post em: <a href="' . esc_url(get_permalink($post_id)) . '"> Link </a>';
@@ -328,15 +327,57 @@ function retorna_ou_cria_categoria($r_tax, $nomeCategoria)
 {
     $category = get_term_by('name', $nomeCategoria, $r_tax);
 
-    //var_dump($category);
-
     if ($category->term_id) {
-        //checa se categoria já existe
-        echo 'cat existe: ' . $nomeCategoria . '<br>';
+        //echo 'cat existe: ' . $nomeCategoria . '<br>';
         return $category->term_id;
     } else {
-        //senão a cria
-        echo 'criando nova cat: ' . $nomeCategoria . ' na slug ' . $r_tax . '<br>';
+        //echo 'criando nova cat: ' . $nomeCategoria . ' na slug ' . $r_tax . '<br>';
         return wp_insert_term($nomeCategoria, $r_tax, array());
     }
 }
+
+
+function homologado_despublica_rede()
+{
+    $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
+    $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
+    //$entradaInstituicaoId = (isset($_POST['entradaInstituicaoId'])) ? $_POST['entradaInstituicaoId'] : '';
+    $entradaRedeId = (isset($_POST['entradaRedeId'])) ? $_POST['entradaRedeId'] : '';
+
+    $post_type = relaciona($rede)[0];
+
+    $posts = count_user_posts($usuario_id, $post_type);
+
+    if ($posts > 0) {
+
+        $args = array(
+            'numberposts' => -1,
+            'post_type' => $post_type,
+            'author' => $usuario_id
+        );
+
+        $user_posts = get_posts($args);
+
+        if (empty($user_posts)) return;
+
+        foreach ($user_posts as $user_post) {
+            $post = array('ID' => $user_post->ID, 'post_status' => 'draft');
+            wp_update_post($post);
+        }
+    }
+
+    //-------------------------------------------------------- atualizar status da rede como despublicado
+    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entradaRedeId, 'homologado');
+
+    // aba da rede
+    $form_id = relaciona($rede)[1];
+    $form = Caldera_Forms_Forms::get_form($form_id);
+    $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
+
+    // renderiza novamente o botão
+    botao_publicado_render($entryRede, $entradaRedeId, $rede);
+
+    die();
+}
+
+add_action('wp_ajax_despublica_rede', 'homologado_despublica_rede');
