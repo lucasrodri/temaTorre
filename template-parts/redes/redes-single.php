@@ -36,7 +36,7 @@
 
 			<?php
 			$image = get_field('logomarca');
-			if( $image ):
+			if ($image) :
 				// Image variables.
 				$url = $image['url'];
 				$title = $image['title'];
@@ -44,16 +44,16 @@
 
 				// Thumbnail size attributes.
 				$size = 'thumbnail_redes_retangular';
-				$thumb = $image['sizes'][ $size ];
-				$width = $image['sizes'][ $size . '-width' ];
-				$height = $image['sizes'][ $size . '-height' ];
-				?>
+				$thumb = $image['sizes'][$size];
+				$width = $image['sizes'][$size . '-width'];
+				$height = $image['sizes'][$size . '-height'];
+			?>
 
 				<div class="mt-3 mb-3" style="display: flex; justify-content: center;">
 					<img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($alt); ?>" />
 				</div>
 			<?php endif; ?>
-			
+
 			<?php if (get_field('visao')) { ?>
 				<div class="mt-3 mb-3">
 					<div class="visao-texto">
@@ -91,47 +91,97 @@
 
 			<?php if (get_field('publico-alvo')) { ?>
 				<div class="mt-3 mb-3">
-						<p class="font-weight-bold">Público-alvo</p>
-						<p><?php the_field('publico-alvo'); ?></p>
+					<p class="font-weight-bold">Público-alvo</p>
+					<p><?php the_field('publico-alvo'); ?></p>
 				</div>
 			<?php } ?>
 
 			<?php if (get_field('abrangencia')) { ?>
 				<div class="mt-3 mb-3">
-						<p class="font-weight-bold">Abrangência</p>
-						<p><?php the_field('abrangencia'); ?></p>
+					<p class="font-weight-bold">Abrangência</p>
+					<p><?php the_field('abrangencia'); ?></p>
 				</div>
 			<?php } ?>
 
-<?php if (get_field('natureza_juridica')) { ?>
+			<?php if (get_field('natureza_juridica')) { ?>
 				<div class="mt-3 mb-3">
-						<p class="font-weight-bold">Natureza jurídica da instituição</p>
-						<p><?php the_field('natureza_juridica'); ?></p>
+					<p class="font-weight-bold">Natureza jurídica da instituição</p>
+					<p><?php the_field('natureza_juridica'); ?></p>
 				</div>
 			<?php } ?>
 
-			<?php if(current_user_can('administrator') || current_user_can('editor')) { ?>
-    		<!-- Stuff here for administrators -->
+			<?php if (get_field('estado')) { ?>
+				<h3>Endereço da instituição</h3>
+
+				<div class="row">
+					<?php if (get_field('estado')) { ?>
+						<div class="col-md-4">
+							<div class="mt-3 mb-3">
+								<p class="font-weight-bold">Estado</p>
+								<p><?php the_field('estado'); ?></p>
+							</div>
+						</div>
+					<?php } ?>
+					<?php if (get_field('cidade')) { ?>
+						<div class="col-md-4">
+							<div class="mt-3 mb-3">
+								<p class="font-weight-bold">Cidade</p>
+								<p><?php the_field('cidade'); ?></p>
+							</div>
+						</div>
+					<?php } ?>
+
+					<?php if (get_field('cep')) { ?>
+						<div class="col-md-4">
+							<div class="mt-3 mb-3">
+								<p class="font-weight-bold">CEP</p>
+								<p><?php the_field('cep'); ?></p>
+							</div>
+						</div>
+					<?php } ?>
+
+				</div>
+
+				<!-- <div class="row"> -->
+					<?php if (get_field('endereco')) { ?>
+						<div class="mt-3 mb-3">
+							<p class="font-weight-bold">Endereço</p>
+							<p><?php the_field('endereco'); ?></p>
+						</div>
+					<?php } ?>
+
+					<?php if (get_field('complemento')) { ?>
+						<div class="mt-3 mb-3">
+							<p class="font-weight-bold">Complemento</p>
+							<p><?php the_field('complemento'); ?></p>
+						</div>
+					<?php } ?>
+				<!-- </div> -->
+
+			<?php } ?>
+
+			<?php if (current_user_can('administrator') || current_user_can('editor')) { ?>
+				<!-- Stuff here for administrators -->
 				<h3>Informações de Contato</h3>
 
 				<?php if (get_field('responsavel')) { ?>
 					<div class="mt-3 mb-3">
-							<p class="font-weight-bold">Responsável</p>
-							<p><?php the_field('responsavel'); ?></p>
+						<p class="font-weight-bold">Responsável</p>
+						<p><?php the_field('responsavel'); ?></p>
 					</div>
 				<?php } ?>
 
 				<?php if (get_field('e-mail')) { ?>
 					<div class="mt-3 mb-3">
-							<p class="font-weight-bold">E-mail</p>
-							<p><?php the_field('e-mail'); ?></p>
+						<p class="font-weight-bold">E-mail</p>
+						<p><?php the_field('e-mail'); ?></p>
 					</div>
 				<?php } ?>
 
 				<?php if (get_field('telefone')) { ?>
 					<div class="mt-3 mb-3">
-							<p class="font-weight-bold">Telefone</p>
-							<p><?php the_field('telefone'); ?></p>
+						<p class="font-weight-bold">Telefone</p>
+						<p><?php the_field('telefone'); ?></p>
 					</div>
 				<?php } ?>
 

@@ -170,6 +170,7 @@ function ajaxCarregaInstituicao()
     // $flag_gerente é uma string!!!
     render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente);
     echo '<input type="hidden" id="entrada_geral" name="entrada_geral" value="' . $entrada . '">';
+    echo '<input type="hidden" id="usuario_id" name="usuario_id" value="' . $usuario_id . '">';
 
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[FORM_ID_GERAL]);

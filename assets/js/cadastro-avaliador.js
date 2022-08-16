@@ -65,7 +65,7 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
     // crio novo array que relacion as redes com o número do painel
     var redesPainel = Array();
     for (var i = 0; i < redesArray.length - 1; i++) {
-        redesPainel[i] = relaciona_painel(redesArray[i]);
+        redesPainel[i] = relaciona(redesArray[i])[2];
     }
 
     for (var j = 0; j < redesPainel.length; j++) {
@@ -107,52 +107,22 @@ function chama_carrega_rede(painel, redeArray, user_id, flag_gerente, flag_homol
     });
 }
 
-function relaciona_painel($s) {
-    switch ($s) {
-        case "check_suporte":
-            return 2;
-        case "check_formacao":
-            return 3;
-        case "check_pesquisa":
-            return 4;
-        case "check_inovacao":
-            return 5;
-        case "check_tecnologia":
-            return 6;
-    }
-}
-
-function relaciona_nome($s) {
-    switch ($s) {
-        case "check_suporte":
-            return "Suporte";
-        case "check_formacao":
-            return "Formação Tecnológica";
-        case "check_pesquisa":
-            return "Pesquisa Aplicada";
-        case "check_inovacao":
-            return "Inovação";
-        case "check_tecnologia":
-            return "Tecnologias Aplicadas";
-        case "geral":
-            return "Instituição";
-    }
-}
 
 function relaciona($s) {
+    //retorna slug da rede, nome da rede e painel
     switch ($s) {
         case "check_suporte":
-            return ["rede-de-suporte", "Suporte"];
+            return ["rede-de-suporte", "Suporte", 2];
         case "check_formacao":
-            return ["rede-de-formacao", "Formação Tecnológica"];
+            return ["rede-de-formacao", "Formação Tecnológica", 3];
         case "check_pesquisa":
-            return ["rede-de-pesquisa", "Pesquisa Aplicada"];
+            return ["rede-de-pesquisa", "Pesquisa Aplicada", 4];
         case "check_inovacao":
-            return ["rede-de-inovacao", "Inovação"];
+            return ["rede-de-inovacao", "Inovação", 5];
         case "check_tecnologia":
-            return ["rede-de-tecnologia", "Tecnologias Aplicadas"];
+            return ["rede-de-tecnologia", "Tecnologias Aplicadas", 6];
         case "geral":
-            return ["instituicao", "Instituição"];
+            return ["instituicao", "Instituição", 0];
     }
 }
 
@@ -202,8 +172,7 @@ function validacaoAvaliador() {
                 setarInvalido(parecer);
                 valid[i] = false;
             } else {
-                //divResumo.innerHTML += '<i class="fas fa-check"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' preenchido <br>';
-                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona_nome(redeArray) + ' válido</span><br>';
+                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Parecer da aba ' + relaciona(redeArray)[1] + ' válido</span><br>';
                 setarValido(parecer);
                 valid[i] = true;
             }
@@ -214,8 +183,7 @@ function validacaoAvaliador() {
                 setarInvalido(pendente);
                 valid[i] = false;
             } else {
-                //divResumo.innerHTML += '<i class="fas fa-check"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada <br>';
-                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona_nome(redeArray) + ' selecionada</span><br>';
+                divResumo.innerHTML += '<span class="feedback success mb-1" role="alert"><i class="fas fa-check-circle" aria-hidden="true"></i> Situação da aba ' + relaciona(redeArray)[1] + ' selecionada</span><br>';
                 valid[i] = true;
             }
 
@@ -244,41 +212,3 @@ function validacaoAvaliador() {
         spanAvaliador.style.display = 'none';
     }
 }
-
-/*
-Função para limpar o Form.
-Sem uso no momento, decidimos utilizar uma tag <a> para voltar a seleção de instituicoes para avaliacao
-*/
-// function limparFormAvaliador() {
-//     return;
-//     var divs = ['div_geral', 'div_check_suporte', 'div_check_formacao', 'div_check_pesquisa', 'div_check_inovacao', 'div_check_tecnologia'];
-
-//     for (var i = 0; i < 6; i++) {
-//         var div = document.getElementById(divs[i]);
-//         var elements = div.querySelectorAll('input, select, textarea');
-
-//         for (el of elements) {
-//             // limpar valor
-//             el.value = '';
-
-//             // if (el.type == 'select-multiple') {
-//             //     // limpar entradas do select2
-//             //     $(el).val(null).empty();
-//             // }
-
-//             if (el.type == 'radio') {
-//                 el.checked = false;
-//             }
-
-//             el.parentElement.removeAttribute("valid");
-//             el.parentElement.classList.remove("success");
-//         }
-//     }
-
-//     // Limpar div de resumo
-//     document.getElementById('resumo-avaliador').innerHTML = '';
-//     // Desabilitar o botão por precaução
-//     document.getElementById('action-avaliador-input').setAttribute("disabled", "");
-//     // Mostrar aviso de preenchimento
-//     document.getElementById('span-avaliador-input').style.display = 'inline';
-// }
