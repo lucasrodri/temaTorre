@@ -191,32 +191,16 @@ function homologado_action_form()
     //$outroClassificacao = valida($entryRede, 'fld_6678080'); //---- TODO: talvez inserir concatenar no solucao
     $tags_rede = valida($entryRede, 'fld_7938112');
 
+    $historicoParecer = valida($entryRede, 'fld_6135036');
+
     //-------------------------------------------------------- criar o post
     //https://wordpress.stackexchange.com/questions/106973/wp-insert-post-or-similar-for-custom-post-type
     //https://wordpress.stackexchange.com/questions/244221/check-if-author-or-current-user-has-posts-published
 
     $post_type = relaciona($rede)[0];
 
-    //removendo essa contagem pq não conta para posts rascunnho
-    //$posts = count_user_posts($usuario_id, $post_type);
-
     //--- deletando
-    $args = array(
-        'numberposts' => -1,
-        'post_type' => $post_type,
-        'author' => $usuario_id,
-        'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
-    );
-
-    $user_posts = get_posts($args);
-
-    if (!empty($user_posts)) {
-
-        foreach ($user_posts as $user_post) {
-            //echo 'estou deletand o post ' . $user_post->ID . '<br>';
-            wp_delete_post($user_post->ID, true);
-        }
-    }
+    deleta_todos_posts($post_type, $usuario_id);
 
     //---- criacao do post
     $titulo = $nomeDaInstituicao;
@@ -311,11 +295,20 @@ function homologado_action_form()
 
 
     //-------------------------------------------------------- atualizar status da rede como publicado
-    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entradaRedeId, 'publicado');
-    //adicionar parecer/histórico na rede??
 
-    echo 'post publicado' . $post_id . '<br>';
-    echo 'Veja o novo post em: <a href="' . esc_url(get_permalink($post_id)) . '"> Link </a>';
+    //Adicionando o parecer ao histórico:
+    date_default_timezone_set('America/Sao_Paulo');
+    $date = date('d/m/Y h:i:sa', time());
+
+    // se já houver alguma coisa, acrescenta um \n
+    if (strlen($historicoParecer) > 1)
+        $historicoParecer .= "\n\n";
+
+    $parecerAvaliador = "Post da Rede publicado.";
+    $historicoParecer .= "Atualização em " . $date . ":\n" . $parecerAvaliador;
+    $status = 'publicado';
+
+    update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
 
     //-------------------------------------------------------- envia emails
     envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato);
@@ -323,6 +316,11 @@ function homologado_action_form()
 
     // renderiza novamente o botão
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
+
+    //--------------------------------------------------------  Mostra novo post
+    echo '<div>';
+    echo 'Veja o novo post em: <a href="' . esc_url(get_permalink($post_id)) . '"> Link </a>';
+    echo '</div>';
 
     die();
 }
@@ -347,45 +345,104 @@ function homologado_despublica_rede()
 {
     $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
     $rede = (isset($_POST['rede'])) ? $_POST['rede'] : '';
-    //$entradaInstituicaoId = (isset($_POST['entradaInstituicaoId'])) ? $_POST['entradaInstituicaoId'] : '';
+    $entradaInstituicaoId = (isset($_POST['entradaInstituicaoId'])) ? $_POST['entradaInstituicaoId'] : '';
     $entradaRedeId = (isset($_POST['entradaRedeId'])) ? $_POST['entradaRedeId'] : '';
 
-    $post_type = relaciona($rede)[0];
-
-    $posts = count_user_posts($usuario_id, $post_type);
-
-    if ($posts > 0) {
-
-        $args = array(
-            'numberposts' => -1,
-            'post_type' => $post_type,
-            'author' => $usuario_id
-        );
-
-        $user_posts = get_posts($args);
-
-        if (empty($user_posts)) return;
-
-        foreach ($user_posts as $user_post) {
-            //$post = array('ID' => $user_post->ID, 'post_status' => 'draft');
-            //wp_update_post($post);
-            //Apagar o post
-            wp_delete_post($user_post->ID, true);
-        }
-    }
-
-    //-------------------------------------------------------- atualizar status da rede como despublicado
-    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entradaRedeId, 'homologado');
+    // aba instituicao
+    $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+    $entryGeral = new Caldera_Forms_Entry($form, $entradaInstituicaoId);
+    $nomeDaInstituicao = valida($entryGeral, 'fld_266564');
+    $emailDoCandidato = valida($entryGeral, 'fld_7868662');
 
     // aba da rede
     $form_id = relaciona($rede)[1];
     $form = Caldera_Forms_Forms::get_form($form_id);
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
 
+    $historicoParecer = valida($entryRede, 'fld_6135036');
+
+    //-------------------------------------------------------- deleta os posts
+    $post_type = relaciona($rede)[0];
+    deleta_todos_posts($post_type, $usuario_id);
+
+    //-------------------------------------------------------- atualizar status da rede como despublicado
+
+    //Adicionando o parecer ao histórico:
+    date_default_timezone_set('America/Sao_Paulo');
+    $date = date('d/m/Y h:i:sa', time());
+
+    // se já houver alguma coisa, acrescenta um \n
+    if (strlen($historicoParecer) > 1)
+        $historicoParecer .= "\n\n";
+
+    $parecerAvaliador = "Post da Rede despublicado.";
+    $historicoParecer .= "Atualização em " . $date . ":\n" . $parecerAvaliador;
+    $status = 'homologado';
+
+    update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
+
+    //-------------------------------------------------------- envia emails
+    envia_email('despublicado', $nomeDaInstituicao, $emailDoCandidato);
+    envia_email_avaliador('despublicado', $nomeDaInstituicao);
+
     // renderiza novamente o botão
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
 
     die();
 }
-
 add_action('wp_ajax_despublica_rede', 'homologado_despublica_rede');
+
+function deleta_todos_posts($post_type, $usuario_id)
+{
+    $args = array(
+        'numberposts' => -1,
+        'post_type' => $post_type,
+        'author' => $usuario_id,
+        'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+    );
+
+    $user_posts = get_posts($args);
+
+    if (!empty($user_posts)) {
+
+        foreach ($user_posts as $user_post) {
+            wp_delete_post($user_post->ID, true);
+        }
+    }
+}
+
+function update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entrada_rede)
+{
+    //Campo: status_*
+    Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede, $status);
+    //Campo: campo_extra2
+    Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede, $historicoParecer);
+    //Campo: campo_extra1
+    Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede, $parecerAvaliador);
+}
+
+function historico_parecer_readonly($entry, $rede = "geral")
+{
+    if ($rede == "geral") {
+        $fld_historico = "fld_4416984";
+        $fld_parecer = "fld_8529353";
+    } else {
+        $fld_historico = "fld_6135036";
+        $fld_parecer = "fld_5960872";
+    }
+
+?>
+    <div id="div_<?php echo $rede ?>">
+
+        <div class="br-textarea mb-3">
+            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
+            <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
+        </div>
+
+        <div class="br-textarea mb-3">
+            <label for="parecerAvaliador_<?php echo $rede ?>">Último parecer</span></label>
+            <textarea class="textarea-start-size disabled" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="Não há último parecer" maxlength="800" readonly value="<?php echo valida($entry, $fld_parecer); ?>"><?php echo valida($entry, $fld_parecer); ?></textarea>
+        </div>
+    </div>
+<?php
+}

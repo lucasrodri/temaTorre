@@ -64,6 +64,11 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
       $message = msg_publicado_avaliador($nomeDaInstituicao);
       break;
 
+    case 'despublicado':
+      $subject = 'Soluções despublicadas na Torre MCTI';
+      $message = msg_despublicado_avaliador($nomeDaInstituicao);
+      break;
+
     default:
       # code...
       break;
@@ -107,6 +112,12 @@ function msg_remocao_candidato($nomeDaInstituicao, $parecer)
 function msg_publicado_avaliador($nomeDaInstituicao)
 {
   $message = '<p style="text-align: left;">Ol&aacute; Avaliador(a),</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A(s) solu&ccedil;&atilde;o(&otilde;es) &agrave; Torre MCTI da institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ' foi(foram) publicada(s).</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aten&ccedil;&atilde;o: essa &eacute; uma mensagem autom&aacute;tica do sistema de candidatura da Torre MCTI.</p>';
+  return $message;
+}
+
+function msg_despublicado_avaliador($nomeDaInstituicao)
+{
+  $message = '<p style="text-align: left;">Ol&aacute; Avaliador(a),</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A(s) solu&ccedil;&atilde;o(&otilde;es) &agrave; Torre MCTI da institui&ccedil;&atilde;o ' . $nomeDaInstituicao . ' foi(foram) despublicada(s).</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aten&ccedil;&atilde;o: essa &eacute; uma mensagem autom&aacute;tica do sistema de candidatura da Torre MCTI.</p>';
   return $message;
 }
 
@@ -170,6 +181,11 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $parecer = '
     case 'publicado':
       $subject = 'As soluções de sua instituição foram publicadas na Torre MCTI';
       $message = msg_publicado($nomeDaInstituicao);
+      break;
+
+    case 'despublicado':
+      $subject = 'As soluções de sua instituição foram despublicadas na Torre MCTI';
+      $message = msg_despublicado($nomeDaInstituicao);
       break;
 
     case 'resumo':
@@ -259,6 +275,15 @@ function msg_publicado($nomeDaInstituicao)
 {
 
   $message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p>Informamos que a(s) solu&ccedil;&atilde;o(&otilde;es) &agrave; Torre MCTI foi(foram) publicada(s).</p><p>Voc&ecirc; pode acompanh&aacute;-la(s) em <a href="torre.mcti.gov.br" target="_blank">torre.mcti.gov.br</a> .</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
+
+  return $message;
+}
+
+
+function msg_despublicado($nomeDaInstituicao)
+{
+
+  $message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ',</p><p style="text-align: left;">&nbsp;</p><p>Informamos que a(s) solu&ccedil;&atilde;o(&otilde;es) &agrave; Torre MCTI foi(foram) despublicada(s) por um de nosso avaliadores.</p><p>Voc&ecirc; pode acompanh&aacute;-la(s) em <a href="torre.mcti.gov.br" target="_blank">torre.mcti.gov.br</a> .</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
   return $message;
 }

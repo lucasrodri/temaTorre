@@ -41,6 +41,7 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
                 action: 'carrega_instituicao',
                 usuario_id: user_id,
                 flag: flag_gerente,
+                flag_homologado: flag_homologado
             },
             beforeSend: function () {
                 $("#loading_carregar").css("display", "block");

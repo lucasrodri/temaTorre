@@ -141,6 +141,7 @@ function ajaxCarregaInstituicao()
 {
     $usuario_id = (isset($_POST['usuario_id'])) ? $_POST['usuario_id'] : '';
     $flag_gerente = (isset($_POST['flag'])) ? $_POST['flag'] : 'false';
+    $flag_homologado = (isset($_POST['flag_homologado'])) ? $_POST['flag_homologado'] : 'false';
 
     require_once(CFCORE_PATH . 'classes/admin.php');
     $entradas = array();
@@ -165,6 +166,10 @@ function ajaxCarregaInstituicao()
         }
     }
     //$date = date('M d, Y', strtotime($entradas["date"]));
+
+    if ($flag_gerente == 'true' || $flag_homologado == 'true') {
+        historico_parecer_readonly($entradas[FORM_ID_GERAL], "geral");
+    }
 
     // função alterada para não retornar um form
     // $flag_gerente é uma string!!!
@@ -211,6 +216,10 @@ function ajaxCarregaRede()
         }
     }
     //$date = date('M d, Y', strtotime($entradas["date"]));
+
+    if ($flag_gerente == 'true' || $flag_homologado == 'true') {
+        historico_parecer_readonly($entradas[relaciona($rede)[1]], $rede);
+    }
 
     cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
