@@ -119,7 +119,7 @@
   color: #555555 !important;
 }
 
-.font-weight-bold{
+.font-weight-bold {
   font-weight: 700 !important;
 }
 
@@ -426,4 +426,11 @@
 .botao-publicado {
   background-color: #a0d468 !important;
   color: #304A01 !important;
+}
+
+/* Para parte extra da breadcrumb */
+.extra-crumb {
+  font-size: var(--font-size-scale-down-01);
+  font-weight: var(--font-weight-medium);
+  padding: 0 0 0 var(--spacing-scale-base);  
 }

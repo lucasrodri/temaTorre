@@ -732,46 +732,76 @@ function dsgov_breadcrumb() {
 
 add_shortcode('shortcode_breadcrumb_redes', 'dsgov_breadcrumb_redes');
 #Ex: [shortcode_breadcrumb_redes rede_slug="rede-de-suporte" rede_name="Rede de Suporte" categoria_slug="bolsas" categoria_name="Bolsas" categoria_rede="suporte_categoria"] 
-function dsgov_breadcrumb_redes($params) {
+function dsgov_breadcrumb_redes($params)
+{
 
-	$var = shortcode_atts([
-			'rede_slug' => 'rede-de-suporte',
-			'rede_name' => 'Rede de Suporte',
-			'categoria_slug' => 'bolsas',
-			'categoria_name' => 'Bolsas',
-			'categoria_rede' => 'suporte_categoria',
-			'type' => 'post',
-	], $params);
+    $var = shortcode_atts([
+        'rede_slug' => 'rede-de-suporte',
+        'rede_name' => 'Rede de Suporte',
+        'categoria_slug' => 'bolsas',
+        'categoria_name' => 'Bolsas',
+        'categoria_rede' => 'suporte_categoria',
+        'type' => 'post',
+    ], $params);
 
-	echo '<div class="col pt-3 pb-3">';
-	echo '<div class="br-breadcrumb">';
-	echo '<ul class="crumb-list">';
-	//casinha home
-	echo '<li class="crumb home">';
-	$onclick = " onclick=\"window.location.href='".home_url()."'\" ";
-	echo '<div class="br-button circle"'. $onclick .'><span class="sr-only">Página inicial</span><i class="icon fas fa-home"></i></div>';
-	echo '</li>';
+    echo '<div class="col pt-3 pb-3">';
+    echo '<div class="br-breadcrumb">';
+    echo '<ul class="crumb-list">';
+    //casinha home
+    echo '<li class="crumb home">';
+    $onclick = " onclick=\"window.location.href='" . home_url() . "'\" ";
+    echo '<div class="br-button circle"' . $onclick . '><span class="sr-only">Página inicial</span><i class="icon fas fa-home"></i></div>';
+    echo '</li>';
 
-	echo '<li class="crumb"><i class="icon fas fa-chevron-right"></i>';
-	echo '<a href="'.get_post_type_archive_link( $var['rede_slug'] ).'"> '.$var['rede_name'].' </a>';
-	echo '</li>';
+    echo '<li class="crumb"><i class="icon fas fa-chevron-right"></i>';
+    echo '<a href="' . get_post_type_archive_link($var['rede_slug']) . '"> ' . $var['rede_name'] . ' </a>';
+    echo '</li>';
 
-	if($var['type'] == 'post' || $var['type'] == 'taxonomy') {
-		echo '<li class="crumb" data-active="active"><i class="icon fas fa-chevron-right"></i><span>';
-		echo '<a href="'.get_site_url().'/'.$var['categoria_rede'].'/'.$var['categoria_slug'].'"> '.$var['categoria_name'].' </a>';
-		echo '</span></li>';
+    if ($var['type'] == 'post' || $var['type'] == 'taxonomy') {
+        echo '<li class="crumb" data-active="active"><i class="icon fas fa-chevron-right"></i><span>';
+        echo '<a href="' . get_site_url() . '/' . $var['categoria_rede'] . '/' . $var['categoria_slug'] . '"> ' . $var['categoria_name'] . ' </a>';
+        echo '</span></li>';
+    }
+
+    if ($var['type'] == 'post') {
+        echo '<li class="crumb" data-active="active"><i class="icon fas fa-chevron-right"></i><span>';
+        the_title();
+        echo '</span></li>';
+    }
+
+    echo '</div></div>';
+}
+
+function dsgov_breadcrumb_extra_classificacao($rede_slug, $rede_name, $categoria_rede)
+{
+	/* Pegar a taxonomia do post
+	https://developer.wordpress.org/reference/functions/get_the_terms/#comment-2587 */
+	$term_obj_list = get_the_terms(get_the_id(), $categoria_rede);
+	$terms_string = wp_list_pluck($term_obj_list, 'name');
+	sort($terms_string); //ordenar por nome
+	$terms_string_slug = wp_list_pluck($term_obj_list, 'slug', 'name');
+
+	echo "<div class=\"container-lg d-block\">";
+	echo "<div class=\"breadcrumb-post\" style=\"margin-left: -24px;\">";
+
+	echo do_shortcode('[shortcode_breadcrumb_redes rede_slug="' . $rede_slug . '" rede_name="' . $rede_name . '" categoria_slug="' . $terms_string_slug[$terms_string[0]] . '" categoria_name="' . $terms_string[0] . '" categoria_rede="' . $categoria_rede . '"]');
+
+	if (sizeof($terms_string_slug) > 1) {
+		echo '<div class="col pb-3">';
+		echo '<div class="extra-crumb">';
+		echo "Também encontrado nas classificações: ";
+
+		for ($i = 1; $i < sizeof($terms_string_slug); $i++) {
+			echo '<a href="' . get_site_url() . '/' . $categoria_rede . '/' . $terms_string_slug[$terms_string[$i]] . '">' . $terms_string[$i]  . '</a>';
+
+			if ($i !== sizeof($terms_string_slug) - 1)
+				echo ', ';
+		}
+		echo '</div></div>';
 	}
-
-	if($var['type'] == 'post') {
-		echo '<li class="crumb" data-active="active"><i class="icon fas fa-chevron-right"></i><span>';
-		the_title();
-		echo '</span></li>';
-	}
-
 
 	echo '</div></div>';
 }
-
 /*  
  * -- Novo formato para as imagens do cardápio --
 */
