@@ -28,14 +28,14 @@ function publicaRede(painel, redeArray, entradaRedeId) {
       },
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
-        //em vez de recarregar os dados, recarrego apenas o botão
-        $('#divPublicado' + painel).html('');
-      },
-      success: function (html) {
+        $('#tab_redes_' + painel).html('');
+        window.scrollTo(0, 0);
+    },
+    success: function (html) {
         //console.log("Sucesso " + painel);
-        $('#divPublicado_' + painel).html(html);
-      },
-      complete: function () {
+        $('#tab_redes_' + painel).html(html);
+    },
+    complete: function () {
         $("#loading_carregar").css("display", "none");
         alert('Post publicado!');
       }
@@ -74,14 +74,14 @@ function despublicaRede(painel, redeArray, entradaRedeId) {
       },
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
-        //em vez de recarregar os dados, recarrego apenas o botão
-        $('#divPublicado' + painel).html('');
-      },
-      success: function (html) {
+        $('#tab_redes_' + painel).html('');
+        window.scrollTo(0, 0);
+    },
+    success: function (html) {
         //console.log("Sucesso " + painel);
-        $('#divPublicado_' + painel).html(html);
-      },
-      complete: function () {
+        $('#tab_redes_' + painel).html(html);
+    },
+    complete: function () {
         $("#loading_carregar").css("display", "none");
         alert('Post despublicado!');
       }

@@ -158,8 +158,8 @@ function homologado_action_form()
 
     //-------------------------------------------------------- pegar os dados para o post
     // aba instituicao
-    $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
-    $entryGeral = new Caldera_Forms_Entry($form, $entradaInstituicaoId);
+    $formGeral = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+    $entryGeral = new Caldera_Forms_Entry($formGeral, $entradaInstituicaoId);
 
     $nomeDaInstituicao = valida($entryGeral, 'fld_266564');
     $emailDoCandidato = valida($entryGeral, 'fld_7868662');
@@ -304,7 +304,7 @@ function homologado_action_form()
     if (strlen($historicoParecer) > 1)
         $historicoParecer .= "\n\n";
 
-    $parecerAvaliador = "Post da Rede publicado.";
+    $parecerAvaliador = "Post da Rede publicado: " . esc_url(get_permalink($post_id)) . " .";
     $historicoParecer .= "Atualização em " . $date . ":\n" . $parecerAvaliador;
     $status = 'publicado';
 
@@ -314,7 +314,11 @@ function homologado_action_form()
     envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato);
     envia_email_avaliador('publicado', $nomeDaInstituicao);
 
-    // renderiza novamente o botão
+    // Renderizar aba da rede (preciso recarregar a rede)
+    $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
+    historico_parecer_readonly($entryRede, $rede);
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, true);
+    echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
 
     //--------------------------------------------------------  Mostra novo post
@@ -349,8 +353,8 @@ function homologado_despublica_rede()
     $entradaRedeId = (isset($_POST['entradaRedeId'])) ? $_POST['entradaRedeId'] : '';
 
     // aba instituicao
-    $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
-    $entryGeral = new Caldera_Forms_Entry($form, $entradaInstituicaoId);
+    $formGeral = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
+    $entryGeral = new Caldera_Forms_Entry($formGeral, $entradaInstituicaoId);
     $nomeDaInstituicao = valida($entryGeral, 'fld_266564');
     $emailDoCandidato = valida($entryGeral, 'fld_7868662');
 
@@ -385,7 +389,11 @@ function homologado_despublica_rede()
     envia_email('despublicado', $nomeDaInstituicao, $emailDoCandidato);
     envia_email_avaliador('despublicado', $nomeDaInstituicao);
 
-    // renderiza novamente o botão
+    // Renderizar aba da rede (preciso recarregar a rede)
+    $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
+    historico_parecer_readonly($entryRede, $rede);
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, true);
+    echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
 
     die();
