@@ -291,7 +291,7 @@ function msg_despublicado($nomeDaInstituicao)
 function msg_resumo_avaliacao($nomeDaInstituicao, $resumo)
 {
 
-  $message = '<p style="text-align: left;">Ol&aacute; respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Segue o resumo da an&aacute;lise da candidatura:</p>' . $resumo . '<p style="text-align: left;">Voc&ecirc; pode ajustar os dados, bem como acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aguardamos a realiza&ccedil;&atilde;o dos ajustes indicados para encaminhar os dados para homologa&ccedil;&atilde;o.</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
+  $message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Segue o resumo da an&aacute;lise da candidatura:</p>' . $resumo . '<p style="text-align: left;">Voc&ecirc; pode ajustar os dados, bem como acompanhar seu processo na p&aacute;gina de <a href="https://torre.mcti.gov.br/acompanhamento/">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Aguardamos a realiza&ccedil;&atilde;o dos ajustes indicados para encaminhar os dados para homologa&ccedil;&atilde;o.</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
   return $message;
 }

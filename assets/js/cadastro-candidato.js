@@ -526,9 +526,21 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
 }
 
 function editaRedeCandidato(painel, redeArray, entrada) {
-  document.getElementById("botaoEdita_"+painel).style.display = 'none';
-  document.getElementById("botaoAtualizar_"+painel).style.display = '';  
-  document.getElementById("botaoAtualizar_"+painel).className = "mt-5 col-md-12";
-  document.getElementById("botaoAtualizar_"+painel).children[0].className = "text-center";
-  //TODO: liberar os campos para escrita
+  document.getElementById("botaoEdita_" + painel).style.display = 'none';
+  document.getElementById("botaoAtualizar_" + painel).style.display = '';
+  document.getElementById("botaoAtualizar_" + painel).className = "mt-5 col-md-12";
+  document.getElementById("botaoAtualizar_" + painel).children[0].className = "text-center";
+
+  //Liberar os campos para edição
+  var div = document.getElementById('tab_redes_' + painel);
+  var y = div.querySelectorAll('input, textarea'); //retorna uma NodeList
+
+  for (i = 0; i < y.length; i++) {
+    element = y[i];
+    disabled = element.getAttribute("disabled");
+
+    if (disabled === "") {
+      element.removeAttribute("disabled");
+    }
+  }
 }
