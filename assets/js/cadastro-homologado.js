@@ -30,13 +30,23 @@ function publicaRede(painel, redeArray, entradaRedeId) {
         $("#loading_carregar").css("display", "block");
         $('#tab_redes_' + painel).html('');
         window.scrollTo(0, 0);
-    },
-    success: function (html) {
+      },
+      success: function (html) {
         //console.log("Sucesso " + painel);
         $('#tab_redes_' + painel).html(html);
-    },
-    complete: function () {
+      },
+      complete: function () {
         $("#loading_carregar").css("display", "none");
+        if (document.getElementById('div_' + redeArray)) {
+          var historico = document.getElementById('div_' + redeArray);
+          var titulo = historico.nextSibling;
+          while (titulo && titulo.nodeType != 1) {
+            titulo = titulo.nextSibling;
+          }
+          if (historico && titulo) {
+            historico.before(titulo);
+          }
+        }
         alert('Post publicado!');
       }
     });
@@ -76,13 +86,23 @@ function despublicaRede(painel, redeArray, entradaRedeId) {
         $("#loading_carregar").css("display", "block");
         $('#tab_redes_' + painel).html('');
         window.scrollTo(0, 0);
-    },
-    success: function (html) {
+      },
+      success: function (html) {
         //console.log("Sucesso " + painel);
         $('#tab_redes_' + painel).html(html);
-    },
-    complete: function () {
+      },
+      complete: function () {
         $("#loading_carregar").css("display", "none");
+        if (document.getElementById('div_' + redeArray)) {
+          var historico = document.getElementById('div_' + redeArray);
+          var titulo = historico.nextSibling;
+          while (titulo && titulo.nodeType != 1) {
+            titulo = titulo.nextSibling;
+          }
+          if (historico && titulo) {
+            historico.before(titulo);
+          }
+        }
         alert('Post despublicado!');
       }
     });

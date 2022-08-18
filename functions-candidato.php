@@ -210,54 +210,7 @@ function candidato_view()
                     </div>
                 <?php endfor; ?>
             </div>
-
-            <?php
-            $user_posts = array();
-            $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
-            $flag_show_posts = false;
-            foreach ($post_types as $post_type) {
-                $args = array(
-                    'numberposts' => -1,
-                    'post_type' => $post_type,
-                    'author' => $usuario_id,
-                    'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
-                );
-                $posts = get_posts($args);
-                if (!empty($posts)) {
-                    $flag_show_posts = true;
-                }
-                array_push($user_posts, $posts);
-            }
-            ?>
-            <?php if($flag_show_posts):?>
-                <div class="br-list" role="list">
-                    <div class="header">
-                        <div class="title">
-                            <div class="h5"> Publicações relacionadas: </div>
-                        </div>
-                    </div><span class="br-divider"></span>
-                    <?php
-                    for ($i=0; $i < count($user_posts); $i++) { 
-                        $user_post = $user_posts[$i][0];
-                        if ($user_post) {
-                            $post_id = $user_post->ID;
-                            $post_link = esc_url(get_permalink($post_id));
-                            $post_title = $user_post->post_title;
-                            $post_date = date_i18n('d', strtotime($user_post->post_date)) . " de " . date_i18n('F', strtotime($user_post->post_date)) . " de " . date_i18n('Y', strtotime($user_post->post_date));
-                    ?>
-                            <div class="align-items-center br-item py-4" role="listitem">
-                                <div class="row align-items-center">
-                                    <div class="col-auto"><i class="fas fa-newspaper" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="col"><a href="<?php echo $post_link ?>" target="_blank"><?php echo $post_title." da Rede de ".relaciona_rede($post_types[$i])[2]; ?></a></div>
-                                    <div class="col-auto"><?php echo $post_date; ?></div>
-                                </div>
-                            </div><span class="br-divider"></span>
-                    <?php
-                        }
-                    } ?>
-                </div>
-            <? endif ?>
+            <?php posts_publicado_render($usuario_id);?>
         </div>
     <?php endif ?>
 <?php
@@ -1221,3 +1174,53 @@ function desistir_candidato()
 }
 add_action('admin_post_nopriv_desistir_candidato', 'desistir_candidato');
 add_action('admin_post_desistir_candidato', 'desistir_candidato');
+
+function posts_publicado_render($usuario_id) {
+    $user_posts = array();
+    $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
+    $flag_show_posts = false;
+    foreach ($post_types as $post_type) {
+        $args = array(
+            'numberposts' => -1,
+            'post_type' => $post_type,
+            'author' => $usuario_id,
+            'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+        );
+        $posts = get_posts($args);
+        if (!empty($posts)) {
+            $flag_show_posts = true;
+        }
+        array_push($user_posts, $posts);
+    }
+    ?>
+    <?php if($flag_show_posts):?>
+        <div class="br-list" role="list">
+            <div class="header">
+                <div class="title">
+                    <div class="h5"> Publicações relacionadas: </div>
+                </div>
+            </div><span class="br-divider"></span>
+            <?php
+            for ($i=0; $i < count($user_posts); $i++) { 
+                $user_post = $user_posts[$i][0];
+                if ($user_post) {
+                    $post_id = $user_post->ID;
+                    $post_link = esc_url(get_permalink($post_id));
+                    $post_title = $user_post->post_title;
+                    $post_date = date_i18n('d', strtotime($user_post->post_date)) . " de " . date_i18n('F', strtotime($user_post->post_date)) . " de " . date_i18n('Y', strtotime($user_post->post_date));
+            ?>
+                    <div class="align-items-center br-item py-4" role="listitem">
+                        <div class="row align-items-center">
+                            <div class="col-auto"><i class="fas fa-newspaper" aria-hidden="true"></i>
+                            </div>
+                            <div class="col"><a href="<?php echo $post_link ?>" target="_blank"><?php echo $post_title." da Rede de ".relaciona_rede($post_types[$i])[2]; ?></a></div>
+                            <div class="col-auto"><?php echo $post_date; ?></div>
+                        </div>
+                    </div><span class="br-divider"></span>
+            <?php
+                }
+            } ?>
+        </div>
+    <?php endif ?>
+    <?php
+}

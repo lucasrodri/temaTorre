@@ -180,7 +180,7 @@ function ajaxCarregaInstituicao()
     if ($flag_gerente == 'false') {
         campos_avaliador_redes($entradas[FORM_ID_GERAL]);
     }
-
+    posts_publicado_render($usuario_id);
     die();
 }
 add_action('wp_ajax_carrega_instituicao', 'ajaxCarregaInstituicao');
@@ -231,7 +231,7 @@ function ajaxCarregaRede()
     if ($flag_homologado == 'true') {
         botao_publicado_render($entradas[relaciona($rede)[1]], $entrada, $rede);
     }
-
+    posts_publicado_render($usuario_id);
     die();
 }
 add_action('wp_ajax_carrega_rede', 'ajaxCarregaRede');

@@ -317,14 +317,11 @@ function homologado_action_form()
     // Renderizar aba da rede (preciso recarregar a rede)
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
     historico_parecer_readonly($entryRede, $rede);
-    cadastro_redes_render(relaciona($rede)[0], $entryRede, true);
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true');
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
 
-    //--------------------------------------------------------  Mostra novo post
-    echo '<div>';
-    echo 'Veja o novo post em: <a href="' . esc_url(get_permalink($post_id)) . '"> Link </a>';
-    echo '</div>';
+    posts_publicado_render($usuario_id);
 
     die();
 }
@@ -392,9 +389,10 @@ function homologado_despublica_rede()
     // Renderizar aba da rede (preciso recarregar a rede)
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
     historico_parecer_readonly($entryRede, $rede);
-    cadastro_redes_render(relaciona($rede)[0], $entryRede, true);
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true');
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
+    posts_publicado_render($usuario_id);
 
     die();
 }
@@ -438,8 +436,8 @@ function historico_parecer_readonly($entry, $rede = "geral")
         $fld_historico = "fld_6135036";
         $fld_parecer = "fld_5960872";
     }
-
 ?>
+    
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">
