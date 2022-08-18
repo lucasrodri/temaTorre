@@ -53,7 +53,7 @@ function gerente_view()
                     <?php foreach ($entradas as $key => $entrada) : ?>
                         <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
                         <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>','true');">
-                            <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
+                            <td data-th="Data"><?php echo date_i18n('M d, Y', strtotime($entrada[1])); ?></td>
                             <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
                             <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_9748069')); ?></td>
                         </tr>

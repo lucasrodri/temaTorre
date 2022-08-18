@@ -42,8 +42,8 @@ function candidato_view()
             }
         }
     }
-
-    $date = date('M d, Y', strtotime($entradas["date"]));
+    //$date = date_i18n('d', strtotime($entradas["date"]))." de ".date_i18n('F', strtotime($entradas["date"]))." de ".date_i18n('Y', strtotime($entradas["date"]));
+    $date = date_i18n('M d, Y', strtotime($entradas["date"]));
     $redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
 
     /**
@@ -144,14 +144,15 @@ function candidato_view()
                         $entrada = $entradas[$form_id];
                         $statusRede = valida($entrada, 'fld_3707629');
                         $redeAtiva = valida($entrada, 'fld_4663810');
-                        $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
+                        $styleRedeAtiva = $redeAtiva == "true" && $statusRede != 'publicado' ? '' : 'display:none;';
                         $styleAtualizaAtiva = $redeAtiva == "true" && $statusRede == "pendente" ? '' : 'display:none;';
+                        $styleRedePublicada = $redeAtiva == "true" && $statusRede == 'publicado' ? '' : 'display:none;';
                         ?>
 
                         <?php candidato_avaliacao_redes_render($nomeRede, $entrada); ?>
 
                         <div id="tab_redes_<?php echo $i; ?>">
-                            <?php cadastro_redes_render($nomeRede, $entrada); ?>
+                            <?php cadastro_redes_render($nomeRede, $entrada, $flag_view = 'false', $flag_titulo = false); ?>
 
                             <input type="hidden" name="entrada_<?php echo $arrayRedes[$i - 2]; ?>" value="<?php echo $entradas_id[$form_id]; ?>">
                         </div>
@@ -183,6 +184,20 @@ function candidato_view()
                                     </div>
                                 </div>
 
+                                <div id="botaoEdita_<?php echo $i; ?>" class="mt-5 col-md-<?php if ($statusRede == "pendente") {
+                                                                                                echo "6";
+                                                                                            } else {
+                                                                                                echo "12";
+                                                                                            } ?>" style="<?php echo $styleRedePublicada; ?>">
+                                    <div class="text-<?php if ($statusRede == "pendente") {
+                                                            echo "right";
+                                                        } else {
+                                                            echo "center";
+                                                        } ?>">
+                                        <button class="br-button warning" type="button" onclick="editaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Editar entrada desta rede</button>
+                                    </div>
+                                </div>
+
                                 <div id="botaoAtualizar_<?php echo $i; ?>" class="mt-5 col-md-6" style="<?php echo $styleAtualizaAtiva; ?>">
                                     <div class="text-left">
                                         <button class="br-button primary" type="button" onclick="atualizaRedeCandidato('<?php echo $i; ?>', '<?php echo $arrayRedes[$i - 2]; ?>','<?php echo $entradas_id[$form_id]; ?>');">Atualizar Dados</button>
@@ -195,6 +210,54 @@ function candidato_view()
                     </div>
                 <?php endfor; ?>
             </div>
+
+            <?php
+            $user_posts = array();
+            $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
+            $flag_show_posts = false;
+            foreach ($post_types as $post_type) {
+                $args = array(
+                    'numberposts' => -1,
+                    'post_type' => $post_type,
+                    'author' => $usuario_id,
+                    'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+                );
+                $posts = get_posts($args);
+                if (!empty($posts)) {
+                    $flag_show_posts = true;
+                }
+                array_push($user_posts, $posts);
+            }
+            ?>
+            <?php if($flag_show_posts):?>
+                <div class="br-list" role="list">
+                    <div class="header">
+                        <div class="title">
+                            <div class="h5"> Publicações relacionadas: </div>
+                        </div>
+                    </div><span class="br-divider"></span>
+                    <?php
+                    for ($i=0; $i < count($user_posts); $i++) { 
+                        $user_post = $user_posts[$i][0];
+                        if ($user_post) {
+                            $post_id = $user_post->ID;
+                            $post_link = esc_url(get_permalink($post_id));
+                            $post_title = $user_post->post_title;
+                            $post_date = date_i18n('d', strtotime($user_post->post_date)) . " de " . date_i18n('F', strtotime($user_post->post_date)) . " de " . date_i18n('Y', strtotime($user_post->post_date));
+                    ?>
+                            <div class="align-items-center br-item py-4" role="listitem">
+                                <div class="row align-items-center">
+                                    <div class="col-auto"><i class="fas fa-newspaper" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col"><a href="<?php echo $post_link ?>" target="_blank"><?php echo $post_title." da Rede de ".relaciona_rede($post_types[$i])[2]; ?></a></div>
+                                    <div class="col-auto"><?php echo $post_date; ?></div>
+                                </div>
+                            </div><span class="br-divider"></span>
+                    <?php
+                        }
+                    } ?>
+                </div>
+            <? endif ?>
         </div>
     <?php endif ?>
 <?php
@@ -205,7 +268,9 @@ function render_geral_form($entrada)
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
 
 ?>
-
+    <div class="h4">Instituição
+        <?php render_status($statusFormInstituicao); ?>
+    </div>
     <!-- basta checar se tem algo no HISTÓRICO do parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_4416984')) > 1) : ?>
         <div class="col-md-12">
@@ -224,7 +289,7 @@ function render_geral_form($entrada)
 
     <div id="tab_instituicao">
         <form id="tab_instituicao_form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
-            <?php render_geral_data($entrada) ?>
+            <?php render_geral_data($entrada, $flag_view = 'false', $flag_titulo = false) ?>
 
             <div class="row mt-5">
                 <?php if ($statusFormInstituicao == "pendente") : ?>
@@ -240,7 +305,7 @@ function render_geral_form($entrada)
 }
 
 
-function render_geral_data($entrada, $flag_view = 'false')
+function render_geral_data($entrada, $flag_view = 'false', $flag_titulo = true)
 {
     $statusFormInstituicao = valida($entrada, 'fld_4899711');
 
@@ -250,13 +315,14 @@ function render_geral_data($entrada, $flag_view = 'false')
         : '';
 
 ?>
-    <p id="radio_function" style="display: none;"></p>
+    <!-- PQ tem esse p ai??? -->
+    <!-- <p id="radio_function" style="display: none;"></p>-->
     <!-- <h3>Instituição </h3> -->
-
-    <div class="h4">Instituição
-        <?php render_status($statusFormInstituicao); ?>
-    </div>
-
+    <?php if ($flag_titulo) : ?>
+        <div class="h4">Instituição
+            <?php render_status($statusFormInstituicao); ?>
+        </div>
+    <?php endif ?>
     <div class="mb-3">
         <div class="br-input">
             <label for="nomeDaInstituicao">Nome<span class="field_required" style="color:#ee0000;">*</span></label>
@@ -492,7 +558,16 @@ function render_geral_data($entrada, $flag_view = 'false')
 
 function candidato_avaliacao_redes_render($rede_nome, $entrada)
 {
+    $title = get_options($rede_nome)[0];
+    $statusRede = valida($entrada, 'fld_3707629');
 ?>
+    <div class="h4"><?php echo $title; ?>
+        <?php
+        if (valida($entrada, 'fld_4663810') == "true") {
+            if ($entrada != "") render_status($statusRede);
+        }
+        ?>
+    </div>
     <!-- condição falsa só pra guardar esse código -->
     <?php if (false) : ?>
         <div class="collapse-example">
@@ -589,6 +664,24 @@ function relaciona($s)
             return array("rede-de-tecnologia", FORM_ID_TECNOLOGIA, "Tecnologias Aplicadas");
         case "geral":
             return array("instituicao", FORM_ID_GERAL, "Instituição");
+    }
+}
+
+function relaciona_rede($s)
+{
+    switch ($s) {
+        case "rede-de-suporte":
+            return array("check_suporte", FORM_ID_SUPORTE, "Suporte");
+        case "rede-de-formacao":
+            return array("check_formacao", FORM_ID_FORMACAO, "Formação Tecnológica");
+        case "rede-de-pesquisa":
+            return array("check_pesquisa", FORM_ID_PESQUISA, "Pesquisa Aplicada");
+        case "rede-de-inovacao":
+            return array("check_inovacao", FORM_ID_INOVACAO, "Inovação");
+        case "rede-de-tecnologia":
+            return array("check_tecnologia", FORM_ID_TECNOLOGIA, "Tecnologias Aplicadas");
+        case "instituicao":
+            return array("geral", FORM_ID_GERAL, "Instituição");
     }
 }
 

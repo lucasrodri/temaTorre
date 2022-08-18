@@ -524,3 +524,11 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
     });
   });
 }
+
+function editaRedeCandidato(painel, redeArray, entrada) {
+  document.getElementById("botaoEdita_"+painel).style.display = 'none';
+  document.getElementById("botaoAtualizar_"+painel).style.display = '';  
+  document.getElementById("botaoAtualizar_"+painel).className = "mt-5 col-md-12";
+  document.getElementById("botaoAtualizar_"+painel).children[0].className = "text-center";
+  //TODO: liberar os campos para escrita
+}

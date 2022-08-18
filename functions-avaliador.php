@@ -62,7 +62,7 @@ function avaliador_view()
                     <?php foreach ($entradas as $key => $entrada) : ?>
                         <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
                         <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>');">
-                            <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
+                            <td data-th="Data"><?php echo date_i18n('M d, Y', strtotime($entrada[1])); ?></td>
                             <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
                             <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_9748069')); ?></td>
                         </tr>
@@ -165,7 +165,7 @@ function ajaxCarregaInstituicao()
             }
         }
     }
-    //$date = date('M d, Y', strtotime($entradas["date"]));
+    //$date = date_i18n('M d, Y', strtotime($entradas["date"]));
 
     if ($flag_gerente == 'true' || $flag_homologado == 'true') {
         historico_parecer_readonly($entradas[FORM_ID_GERAL], "geral");
@@ -215,7 +215,7 @@ function ajaxCarregaRede()
             }
         }
     }
-    //$date = date('M d, Y', strtotime($entradas["date"]));
+    //$date = date_i18n('M d, Y', strtotime($entradas["date"]));
 
     if ($flag_gerente == 'true' || $flag_homologado == 'true') {
         historico_parecer_readonly($entradas[relaciona($rede)[1]], $rede);
@@ -259,7 +259,7 @@ function campos_avaliador_redes($entry, $rede = "geral")
         }
 
     ?>
-        <div id="div_<?php echo $rede ?>">
+        <div id="div_<?php echo $rede; ?>">
 
             <div class="br-textarea mb-3">
                 <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>

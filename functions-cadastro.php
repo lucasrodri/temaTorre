@@ -345,7 +345,7 @@ function cadastro_form_render()
 }
 
 
-function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
+function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', $flag_titulo = true)
 {
     $title = get_options($rede_nome)[0];
     $opcoes = get_options($rede_nome)[1];
@@ -354,7 +354,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
 
     $statusRede = valida($entrada, 'fld_3707629');
 
-    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado") || $flag_view == 'true') ?
+    $disabled =  (($statusRede == "avaliacao") || ($statusRede == "homologado") || ($statusRede == "publicado") || $flag_view == 'true') ?
         'disabled'
         : '';
 
@@ -365,14 +365,15 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
     $rede_ativa = valida($entrada, 'fld_4663810') == "true" ? '' : 'display:none;';
 
 ?>
-
-    <div class="h4"><?php echo $title; ?>
-        <?php
-        if (valida($entrada, 'fld_4663810') == "true") {
-            if ($entrada != "") render_status($statusRede);
-        }
-        ?>
-    </div>
+    <?php if ($flag_titulo) : ?>
+        <div class="h4"><?php echo $title; ?>
+            <?php
+            if (valida($entrada, 'fld_4663810') == "true") {
+                if ($entrada != "") render_status($statusRede);
+            }
+            ?>
+        </div>
+    <?php endif ?>
 
     <div id="<?php echo $rede_nome; ?>" style="<?php if ($entrada != "") {
                                                     echo $rede_ativa;
@@ -420,7 +421,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
 
         <label>Abrangência<span class="field_required" style="color:#ee0000;">*</span></label>
 
-        <div class="mt-3 mb-1">
+        <div class="mt-3 mb-3">
             <?php foreach ($abrangencia as $key => $value) { ?>
                 <div class="br-checkbox d-inline">
                     <input id="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" name="check_abrangencia_<?php echo $key; ?>_<?php echo $rede_nome; ?>" value="<?php echo $value; ?>" type="checkbox" aria-label="<?php echo $value; ?>" class="check_abrangencia_<?php echo $rede_nome; ?>" onchange="changeErrorCheck(name)" <?php if (contem(valida($entrada, 'fld_2391778'), $value)) echo "checked"; ?> <?php echo $disabled; ?> />
@@ -429,6 +430,21 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false')
                 </div>
             <?php } ?>
         </div>
+
+        <?php
+        $tags = valida($entrada, 'fld_7938112');
+        if ($tags != "") :
+        ?>
+            <label>Tags Relacionadas<span class="field_required" style="color:#ee0000;">*</span></label>
+            <div class="post-taxonomies tag-links-rcc">
+                <?php
+                $arrayTags = explode(";", $tags);
+                for ($i = 0; $i < count($arrayTags) - 1; $i++) : ?>
+                    <a href="/tematres_wp/<?php echo strtolower(str_replace(" ", "-", stripAccents($arrayTags[$i]))); ?>/" rel="tag"><?php echo $arrayTags[$i]; ?></a>
+                <?php endfor ?>
+            </div>
+        <?php endif ?>
+
 
 
         <div class="h5"> Representante da instituição na <?php echo $title; ?></div>
@@ -1208,4 +1224,9 @@ function gera_select_cidade($codigoEstado, $codigoEstadoSelecionado = '', $cidad
     $select .=  '</div>'; //br-select
 
     return $select;
+}
+
+function stripAccents($str)
+{
+    return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
 }

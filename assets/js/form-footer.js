@@ -131,6 +131,7 @@ jQuery(document).ready(function ($) {
   $("#cpfRepresentante_rede-de-tecnologia").mask("999.999.999-99");
   
   //colocando um if para não dar erros em outras páginas
+  // if (document.getElementById('cadastro_wizard') || document.getElementById('radio_function')) {
   if (document.getElementById('cadastro_wizard') || document.getElementById('radio_function')) {
 
     /**

@@ -1055,7 +1055,7 @@ add_shortcode('shortcode_redes_inovacao', function () {
 });
 
 add_shortcode('shortcode_redes_produto', function () {
-	gerar_redes_principal('rede-de-produto', 'produto_categoria');
+	gerar_redes_principal('rede-de-tecnologia', 'tecnologia_categoria');
 });
 
 function chama_shortcode_redes($params) {
@@ -1101,7 +1101,7 @@ function query_post_type($query) {
         $post_type = $post_type;
 	}
     else {
-        $post_type = array('post','rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte'); // replace cpt to your custom post type
+        $post_type = array('post','rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-tecnologia','rede-de-suporte'); // replace cpt to your custom post type
 	}
     $query->set('post_type',$post_type);
     return $query;
@@ -1114,7 +1114,7 @@ add_action( 'pre_get_posts', 'tg_exclude_pages_from_search_results' );
 function tg_exclude_pages_from_search_results( $query ) {
   if ( $query->is_main_query() && $query->is_search() && ! is_admin() ) {
     //$query->set( 'post_type', array( 'post' ) );
-    $post_type = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte'); // 
+    $post_type = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-tecnologia','rede-de-suporte'); // 
     $query->set('post_type',$post_type);
   }    
 }
@@ -1164,7 +1164,7 @@ add_shortcode('shortcode_busca_avancada_old', 'busca_avancada_redes_old');
 //Primeira versão da busca avançada
 function busca_avancada_redes_old() {
 	//post types permitidos
-	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
+	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-tecnologia','rede-de-suporte');
 	
 	// pegar o form padrão do wp (pode mudar pra um form normal feito na mão, mas aí tem que fazer na mão a URL de busca rs)
 	#$form = get_search_form( false );
@@ -1207,7 +1207,7 @@ add_shortcode('shortcode_busca_avancada', 'busca_avancada_redes');
 function busca_avancada_redes() {
 	//post types permitidos
 	$myUrl = esc_url(admin_url('admin-ajax.php'));
-	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-produto','rede-de-suporte');
+	$post_types = array('rede-de-formacao','rede-de-inovacao','rede-de-pesquisa','rede-de-tecnologia','rede-de-suporte');
 	
 	// pegar o form padrão do wp (pode mudar pra um form normal feito na mão, mas aí tem que fazer na mão a URL de busca rs)
 	#$form = get_search_form( false );
@@ -1284,7 +1284,7 @@ function getNameRede($slugRede){
 			return "Rede de Inovação";
 		case "rede-de-pesquisa":
 			return "Rede de Pesquisa Aplicada";
-		case "rede-de-produto":
+		case "rede-de-tecnologia":
 			return "Rede de Tecnologias Aplicadas";
 		case "rede-de-suporte":
 			return "Rede de Suporte";
@@ -1299,8 +1299,8 @@ function getCategoryNameRede($slugRede){
 			return "inovacao_categoria";
 		case "rede-de-pesquisa":
 			return "pesquisa_categoria";
-		case "rede-de-produto":
-			return "produto_categoria";
+		case "rede-de-tecnologia":
+			return "tecnologia_categoria";
 		case "rede-de-suporte":
 			return "suporte_categoria_nova";
 	}
@@ -1374,7 +1374,7 @@ function buscaAvancadaAction() {
 	
 	// caso clique em "todas as redes"
 	if($rede == 'todasRedes' or $rede == '') {
-		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-produto&post_types[]=rede-de-suporte';
+		$url = get_site_url().'/?s='.$termoPesquisa.'&post_types[]=rede-de-formacao&post_types[]=rede-de-inovacao&post_types[]=rede-de-pesquisa&post_types[]=rede-de-tecnologia&post_types[]=rede-de-suporte';
 		header('Location:'.$url.$urlPublico);
 		return;
 	}

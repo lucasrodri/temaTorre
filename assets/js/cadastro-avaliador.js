@@ -56,6 +56,16 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
                 if (flag_gerente == 'false' && document.getElementById('action-avaliador-input')) {
                     document.getElementById('action-avaliador-input').value = 'Finalizar Avaliação de ' + nomeInstituicao;
                 }
+                if (document.getElementById('div_geral')) {
+                    var historico = document.getElementById('div_geral');
+                    var titulo = historico.nextSibling;
+                    while (titulo && titulo.nodeType != 1) {
+                        titulo = titulo.nextSibling;
+                    }
+                    if(historico && titulo){
+                        historico.before(titulo);
+                    }
+                }
             }
         });
     });
@@ -103,6 +113,16 @@ function chama_carrega_rede(painel, redeArray, user_id, flag_gerente, flag_homol
             },
             complete: function () {
                 $("#loading_carregar").css("display", "none");
+                if (document.getElementById('div_'+redeArray)) {
+                    var historico = document.getElementById('div_'+redeArray);
+                    var titulo = historico.nextSibling;
+                    while (titulo && titulo.nodeType != 1) {
+                        titulo = titulo.nextSibling;
+                    }
+                    if(historico && titulo){
+                        historico.before(titulo);
+                    }
+                }
             }
         });
     });

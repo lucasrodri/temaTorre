@@ -62,7 +62,7 @@ function homologado_view()
                     <?php foreach ($entradas as $key => $entrada) : ?>
                         <?php $redes = valida($entrada[0], 'fld_4891375'); ?>
                         <tr onclick="carrega_avaliador('<?php echo $key; ?>','<?php echo $redes; ?>', '<?php echo valida($entrada[0], 'fld_266564'); ?>','true','true');">
-                            <td data-th="Data"><?php echo date('M d, Y', strtotime($entrada[1])); ?></td>
+                            <td data-th="Data"><?php echo date_i18n('M d, Y', strtotime($entrada[1])); ?></td>
                             <td data-th="Nome"><?php echo valida($entrada[0], 'fld_266564'); ?></td>
                             <td data-th="Status"><?php render_status(valida($entrada[0], 'fld_4899711')); ?></td>
                         </tr>
@@ -452,5 +452,6 @@ function historico_parecer_readonly($entry, $rede = "geral")
             <textarea class="textarea-start-size disabled" id="parecerAvaliador_<?php echo $rede ?>" name="parecerAvaliador_<?php echo $rede ?>" placeholder="Não há último parecer" maxlength="800" readonly value="<?php echo valida($entry, $fld_parecer); ?>"><?php echo valida($entry, $fld_parecer); ?></textarea>
         </div>
     </div>
+
 <?php
 }
