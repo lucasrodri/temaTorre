@@ -110,7 +110,7 @@ function homologado_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
-            <a href="/homologados/" class="br-button secondary">Voltar para lista de Instituições</a>
+            <a href="<?php echo home_url();?>/homologados/" class="br-button secondary">Voltar para lista de Instituições</a>
         </div>
     </div>
 

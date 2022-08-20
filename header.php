@@ -85,8 +85,13 @@
             <div class="header-login">
               <div class="header-sign-in">
                 <!-- Para abrir o menu do usuário use data-trigger="login" -->
-                <button class="br-sign-in small" type="button" onclick="myFunctionEntrar()"><i class="fas fa-user" aria-hidden="true"></i><span class="d-sm-inline">Entrar</span>
+                <?php if (!is_user_logged_in()): ?>
+                <button id="botao-entrar" class="br-sign-in small" type="button" onclick="myFunctionEntrar()"><i class="fas fa-user" aria-hidden="true"></i><span class="d-sm-inline">Entrar</span>
                 </button>
+                <?php else: ?>
+                <button id="botao-sair" class="br-sign-in small" type="button" onclick="myFunctionSair()"><i class="fas fa-user" aria-hidden="true"></i><span class="d-sm-inline">Sair</span>
+                </button>
+                <?php endif ?>
               </div>
               <div class="header-avatar d-none">
                 <div class="avatar dropdown"><span class="br-avatar" title="Fulano da Silva"><span class="image"><img src="https://picsum.photos/id/823/400" alt="Avatar" /></span></span>
@@ -149,7 +154,7 @@
               </button>
             </div>
             <div class="header-info">
-              <div class="header-title"><a class="linkTitulo" href="/">Torre MCTI</a></div>
+              <div class="header-title"><a class="linkTitulo" href="<?php echo home_url();?>">Torre MCTI</a></div>
               <!-- <div class="header-subtitle">Subtítulo do Header</div> -->
             </div>
           </div>
@@ -187,39 +192,56 @@
                   </div>
                 </div>
                 <nav class="menu-body menu-body-border">
-                  <div><a class="menu-item" href="/">
+                  <div><a class="menu-item" href="<?php echo home_url();?>">
                       <span class="content">Início</span></a>
                   </div>
+                  <?php if (usuario_tem_role(wp_get_current_user(), 'candidato')): ?>
+                  <div><a class="menu-item" href="<?php echo home_url()?>/acompanhamento">
+                      <span class="content">Acompanhe o Cadastro da sua Instituição</span></a>
+                  </div>
+                  <? endif ?>
+
+                  <?php if (current_user_can('administrator') || usuario_tem_role(wp_get_current_user(), 'avaliador') || usuario_tem_role(wp_get_current_user(), 'visualizacao')): ?>
+                  <div><a class="menu-item" href="<?php echo home_url()?>/avaliador">
+                      <span class="content">Avalie as Instituições Cadastradas</span></a>
+                  </div>
+                  <div><a class="menu-item" href="<?php echo home_url()?>/homologados">
+                      <span class="content">Publique as Instituições Cadastradas</span></a>
+                  </div>
+                  <div><a class="menu-item" href="<?php echo home_url()?>/visualizacao">
+                      <span class="content">Visualize as Instituições Cadastradas</span></a>
+                  </div>
+                  <? endif ?>
 
                   <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">A Torre MCTI</span></a>
                     <ul>
-                      <li><a class="menu-item" href="/sobre-a-torre-mcti/"><span class="content">Sobre a Torre MCTI</span></a></li>
-                      <li><a class="menu-item" href="/#conheca"><span class="content">Conheça as instituições cadastradas</span></a></li>
-                      <li><a class="menu-item" href="/orientacoes"><span class="content">Orientações para cadastro</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/sobre-a-torre-mcti/"><span class="content">Sobre a Torre MCTI</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/#conheca"><span class="content">Conheça as instituições cadastradas</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/orientacoes"><span class="content">Orientações para cadastro</span></a></li>
                     </ul>
                   </div>
 
                   <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">Comitês</span></a>
                     <ul>
-                      <li><a class="menu-item" href="/comite-gestor"><span class="content">Comitê Gestor</span></a></li>
-                      <li><a class="menu-item" href="/comite-de-especialistas"><span class="content">Comitês de Especialistas</span></a></li>
-                      <li><a class="menu-item" href="/comite-de-implementacao"><span class="content">Comitê de Implantação e Manutenção Operacional</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/comite-gestor"><span class="content">Comitê Gestor</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/comite-de-especialistas"><span class="content">Comitês de Especialistas</span></a></li>
+                      <li><a class="menu-item" href="<?php echo home_url();?>/comite-de-implementacao"><span class="content">Comitê de Implantação e Manutenção Operacional</span></a></li>
                     </ul>
                   </div>
 
-                  <div><a class="menu-item" href="/beneficios-da-implantacao-da-torre-mcti">
+                  <div><a class="menu-item" href="<?php echo home_url();?>/beneficios-da-implantacao-da-torre-mcti">
                       <span class="content">Benefícios da implantação da Torre MCTI</span></a>
                   </div>
 
-                  <div><a class="menu-item" href="/faq">
+                  <div><a class="menu-item" href="<?php echo home_url();?>/faq">
                       <span class="content">FAQ</span></a>
                   </div>
 
-                  <div><a class="menu-item" href="/busca">
+                  <div><a class="menu-item" href="<?php echo home_url();?>/busca">
                       <span class="content">Busca Avançada</span></a>
                   </div>
 
-                  <div><a class="menu-item" href="/#contato">
+                  <div><a class="menu-item" href="<?php echo home_url();?>/#contato">
                       <span class="content">Contato</span></a>
                   </div>
                 </nav>

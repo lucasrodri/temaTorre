@@ -4,13 +4,45 @@
 
 function myFunctionEntrar() {
   //window.location.href = "https://acesso.gov.br/";
-  window.open('https://acesso.gov.br/', '_blank');
+  //window.open('https://acesso.gov.br/', '_blank');
+  window.location.href = my_ajax_object.site_url+"/wp-login.php";
+}
+
+function myFunctionSair() {
+  jQuery(function ($) {
+    var loaderContainer, loader;
+    $.ajax({
+      type: "POST",
+      url: my_ajax_object.ajax_url,
+      data: {
+        action: 'sair_da_torre',
+      },
+      beforeSend: function () {
+        var filterVal = 'blur(5px)';
+
+        $('<div/>', {
+          'class': 'loading medium',
+          'style': 'display: contents;',
+        }).insertAfter($('#botao-sair'));
+
+        $('#botao-sair')
+          .css('filter', filterVal)
+          .css('webkitFilter', filterVal)
+          .css('mozFilter', filterVal)
+          .css('oFilter', filterVal)
+          .css('msFilter', filterVal);
+      },
+      success: function (html) {
+        window.location.href = my_ajax_object.site_url;
+      }
+    });
+  });
 }
 
 function myFunctionBusca() {
   var termo = document.getElementById("searchbox").value;
   //console.log(termo)
-  window.location.href = "/?s=" + termo;
+  window.location.href = my_ajax_object.site_url+"/?s=" + termo;
 }
 
 function carregaCategorias(val, minhaUrl) {

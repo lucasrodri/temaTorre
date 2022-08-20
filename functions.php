@@ -448,6 +448,7 @@ function twenty_twenty_one_scripts() {
         'form-footer-js', 
         'my_ajax_object', array(
             'ajax_url' => admin_url('admin-ajax.php'),
+			'site_url' => site_url(),
         )
     );
 
@@ -1168,7 +1169,7 @@ function busca_avancada_redes_old() {
 	
 	// pegar o form padrão do wp (pode mudar pra um form normal feito na mão, mas aí tem que fazer na mão a URL de busca rs)
 	#$form = get_search_form( false );
-	$form = "<form role=\"search\" method=\"get\" id=\"formBuscaAvancada\" class=\"search-form\" action=\"https://torre.mcti.gov.br/\">";
+	$form = "<form role=\"search\" method=\"get\" id=\"formBuscaAvancada\" class=\"search-form\" action=\"".home_url()."\">";
 	$form .= "<div class=\"header-search\"><div class=\"br-input has-icon\">";
 	$form .= "<label for=\"search-form-3\">Pesquisa Avançada:</label>";
 	$form .= "<input class=\"has-icon\" id=\"search-form-3\" type=\"search\" placeholder=\"O que você procura?\" value=\"\" name=\"s\" data-swplive=\"true\">";
@@ -1447,6 +1448,34 @@ add_filter('wp_mail_smtp_custom_options', function( $phpmailer ) {
 
 	return $phpmailer;
 } );
+
+//Usado via ajax para sair do torre sem passar pela tela de certeza do WP
+function sairDaTorre()
+{
+	wp_logout();
+	die();
+}
+add_action('wp_ajax_sair_da_torre', 'sairDaTorre');
+add_action('wp_ajax_nopriv_sair_da_torre', 'sairDaTorre');
+
+//Para redirecionamento automatico do usuário candidato e homologado para ele não poder entrar no wp-admin
+add_action('admin_init', 'redirect_wp_admin');
+function redirect_wp_admin()
+{
+	//$url =  admin_url(sprintf(basename($_SERVER['REQUEST_URI'])));
+	//$wpAdmin = explode("/", $url)[3] == "wp-admin" ? true : false;
+	global $pagenow;
+	$wpAdmin = $pagenow == "profile.php" || $pagenow == "index.php" ? true : false;
+	if ($wpAdmin) {
+		if (usuario_tem_role(wp_get_current_user(), 'candidato') || usuario_tem_role(wp_get_current_user(), 'homologado')) {
+			wp_redirect(home_url('/acompanhamento'));
+		} else if (usuario_tem_role(wp_get_current_user(), 'visualizador')) {
+			wp_redirect(home_url('/visualizacao'));
+		} else if (usuario_tem_role(wp_get_current_user(), 'avaliador')) {
+			wp_redirect(home_url('/avaliador'));
+		}
+	}
+}
 
 include "criar-tabelas.php";
 include "functions-admin.php";

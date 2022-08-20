@@ -160,7 +160,7 @@
 
 			<?php } ?>
 
-			<?php if (current_user_can('administrator') || current_user_can('editor')) { ?>
+			<?php if (current_user_can('administrator') || current_user_can('editor') || current_user_can('homologado')) { ?>
 				<!-- Stuff here for administrators -->
 				<h3>Informações de Contato</h3>
 

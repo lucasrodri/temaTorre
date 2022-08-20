@@ -60,6 +60,7 @@ async function atualizaRedeCandidatoGeral() {
       },
       success: function (html) {
         $('#tab_instituicao').html(html);
+        $('#titulo-status-cadastro_' + redeArray).remove();
       },
       complete: function (data) {
         $("#loading_carregar").css("display", "none");
@@ -120,6 +121,14 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       success: function (html) {
         //console.log("Sucesso " + painel);
         $('#tab_redes_' + painel).html(html);
+
+        var primeiro = $('#titulo-status-cadastro_' + redeArray);
+        var segundo = $('#titulo-status-cadastro2_' + redeArray);
+        primeiro.insertAfter(segundo);
+
+        //$('#titulo-status-cadastro_' + redeArray).insertBefore($('#titulo-status-cadastro2_' + redeArray))
+        $('#titulo-status-cadastro_' + redeArray).remove();
+        //$('#titulo-status-cadastro2_' + redeArray).remove();
       },
       complete: function () {
         $("#loading_carregar").css("display", "none");
@@ -513,6 +522,9 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
       success: function (html) {
         //console.log("Sucesso " + painel);
         $('#tab_redes_' + painel).html(html);
+        $("#botaoEdita_"+painel).css("display", "none");
+        $('#titulo-status-cadastro_' + redeArray).remove();
+        $('#historico-status-cadastro_' + redeArray).remove();
       },
       complete: function () {
         $("#loading_carregar").css("display", "none");
@@ -520,6 +532,16 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
         $("#botaoAdicionar_" + painel).css("display", "inline");
         $("#botaoExcluir_" + painel).css("display", "none");
         atualizaStatusGeral();
+
+        //Para fazer voltar funcionar a mascara:
+        $("input[type='tel']").each(function (index) {
+          $(this).mask("(00) 0000-00009");
+        });
+        $("#cpfRepresentante_rede-de-suporte").mask("999.999.999-99");
+        $("#cpfRepresentante_rede-de-formacao").mask("999.999.999-99");
+        $("#cpfRepresentante_rede-de-inovacao").mask("999.999.999-99");
+        $("#cpfRepresentante_rede-de-pesquisa").mask("999.999.999-99");
+        $("#cpfRepresentante_rede-de-tecnologia").mask("999.999.999-99");
       }
     });
   });

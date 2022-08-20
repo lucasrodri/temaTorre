@@ -52,8 +52,11 @@ function admin_view()
                 <input type="submit" class="br-button primary" value="Deletar" name="enviar">
                 <input type="hidden" name="action" value="deletar_todas_entradas">
             </div>
-
-
+        </div>
+    </form>
+    <br>
+    <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
+        <div class="wizard-panel-content">
             <h4>Criar entradas vazias</h4>
             <p>Clique aqui para criar as entradas de todos os forms caldera</p>
 

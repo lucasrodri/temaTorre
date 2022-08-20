@@ -257,31 +257,36 @@ jQuery(document).ready(function ($) {
 
     });
   }
-
+  
   /**
    * Inclusão de loading ao submeter
    */
-  $(document).on("submit", "form.card", function (e) {
+  if (document.getElementById('cadastro_wizard')) {
+    $(document).on("submit", "form.card", function (e) {
+      var response = grecaptcha.getResponse();
+      if (response.length == 0) {
+        $("#google_recaptcha_warning").remove();
+        $("#google-recaptcha-cadastro").append('<span id="google_recaptcha_warning" class="feedback danger" role="alert"><i class="fas fa-times-circle" aria-hidden="true"></i>Prove que você é humano.</span>');
+        e.preventDefault();
+      } else {
+        //console.log('entrei no onSubmit ');
 
-    //console.log('entrei no onSubmit ');
+        var filterVal = 'blur(5px)';
 
-    var filterVal = 'blur(5px)';
+        $('<div/>', {
+          'class': 'loading medium',
+          'style': 'display: contents;',
+        }).insertAfter($('#cadastro_wizard'));
 
-    $('<div/>', {
-      'class': 'loading medium',
-      'style': 'display: contents;',
-    }).insertAfter($('#cadastro_wizard'));
-
-    $('#cadastro_wizard')
-      .css('filter', filterVal)
-      .css('webkitFilter', filterVal)
-      .css('mozFilter', filterVal)
-      .css('oFilter', filterVal)
-      .css('msFilter', filterVal);
-
-  });
-
-
+        $('#cadastro_wizard')
+          .css('filter', filterVal)
+          .css('webkitFilter', filterVal)
+          .css('mozFilter', filterVal)
+          .css('oFilter', filterVal)
+          .css('msFilter', filterVal);
+      }
+    });
+  }
 });
 
 

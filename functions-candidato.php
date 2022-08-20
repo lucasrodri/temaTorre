@@ -144,7 +144,7 @@ function candidato_view()
                         $entrada = $entradas[$form_id];
                         $statusRede = valida($entrada, 'fld_3707629');
                         $redeAtiva = valida($entrada, 'fld_4663810');
-                        $styleRedeAtiva = $redeAtiva == "true" && $statusRede != 'publicado' ? '' : 'display:none;';
+                        $styleRedeAtiva = $redeAtiva == "true" ? '' : 'display:none;';
                         $styleAtualizaAtiva = $redeAtiva == "true" && $statusRede == "pendente" ? '' : 'display:none;';
                         $styleRedePublicada = $redeAtiva == "true" && $statusRede == 'publicado' ? '' : 'display:none;';
                         ?>
@@ -514,7 +514,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
     $title = get_options($rede_nome)[0];
     $statusRede = valida($entrada, 'fld_3707629');
 ?>
-    <div class="h4"><?php echo $title; ?>
+    <div id="titulo-status-cadastro_<?php echo relaciona_rede($rede_nome)[0];?>" class="h4"><?php echo $title; ?>
         <?php
         if (valida($entrada, 'fld_4663810') == "true") {
             if ($entrada != "") render_status($statusRede);
@@ -551,7 +551,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
 
     <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
-        <div class="col-md-12">
+        <div id="historico-status-cadastro_<?php echo relaciona_rede($rede_nome)[0];?>" class="col-md-12">
             <div class="br-textarea mb-3">
                 <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico do parecer da rede</label>
                 <textarea class="textarea-start-size" name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
@@ -714,6 +714,13 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag 
         foreach ($dados_redes as $key => $value) {
             $dados_redes[$key] = "";
         }
+        //Se flag false, então significa que tem q zerar a rede toda, logo zeramos o historico e o parecer tbm
+        //campo_extra2 -> historico
+        Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada, "");
+        //campo_extra1 -> parecer
+        Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada, "");
+        //tags 
+        Caldera_Forms_Entry_Update::update_field_value('fld_7938112', $entrada, "");
         $status = "pendente";
     }
 
@@ -1097,6 +1104,12 @@ function exclui_rede_candidato_ajax()
     // renderiza novamente para o candidato
     cadastro_redes_render(relaciona($rede)[0], $entry);
 
+    //-------------------------------------------------------- deleta os posts
+    $current_user = wp_get_current_user();
+    $usuario_id = $current_user->ID;
+    $post_type = relaciona($rede)[0];
+    deleta_todos_posts($post_type, $usuario_id);
+
     die();
 }
 add_action('wp_ajax_exclui_rede_candidato', 'exclui_rede_candidato_ajax');
@@ -1156,6 +1169,12 @@ function desistir_candidato()
         $id = attachment_url_to_postid($doc2UnidadeUrl);
         wp_delete_attachment($id);
     }
+    //Apagando posts do usuário
+    $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
+    foreach ($post_types as $post_type) {
+        deleta_todos_posts($post_type, $usuario_id);
+    }
+
     //Apagar usuário
 
     //$user = get_user_by('id', $usuario_id);
@@ -1194,7 +1213,7 @@ function posts_publicado_render($usuario_id) {
     }
     ?>
     <?php if($flag_show_posts):?>
-        <div class="br-list" role="list">
+        <div id="posts-publicados" class="br-list" role="list">
             <div class="header">
                 <div class="title">
                     <div class="h5"> Publicações relacionadas: </div>

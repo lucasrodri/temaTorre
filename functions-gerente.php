@@ -106,7 +106,7 @@ function gerente_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
-            <a href="/visualizacao/" class="br-button secondary">Voltar para lista de Instituições</a>
+            <a href="<?php echo home_url();?>/visualizacao/" class="br-button secondary">Voltar para lista de Instituições</a>
             <!-- <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
             </button> -->
         </div>

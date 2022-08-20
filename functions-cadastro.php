@@ -322,7 +322,17 @@ function cadastro_form_render()
                                         <input id="emailDoCandidato" name="emailDoCandidato" type="email" placeholder="exemplo@exemplo.com" onchange="changeError(name)" onkeyup="validarEspecifico(name)" required />
                                     </div>
                                 </div>
+                                <!-- Colocando o Recaptcha Google -->
+                                <div id="google-recaptcha-cadastro" data-callback="imNotARobot" class="g-recaptcha" data-sitekey="6LcTFWAdAAAAAIAH67v72Ng5sz-VOLg7wcAJAiDC"></div>
+                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                <script type="text/javascript">
+                                    var imNotARobot = function() {
+                                        document.getElementById('google_recaptcha_warning').style.display = "none";
+                                    };
+                                </script>
                             </div>
+
+
                             <div class="wizard-panel-btn">
                                 <div class="row">
                                     <div class="col-md-6 align-button-right">
@@ -366,7 +376,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
 
 ?>
     <?php if ($flag_titulo) : ?>
-        <div class="h4"><?php echo $title; ?>
+        <div id="titulo-status-cadastro2_<?php echo relaciona_rede($rede_nome)[0];?>" class="h4"><?php echo $title; ?>
             <?php
             if (valida($entrada, 'fld_4663810') == "true") {
                 if ($entrada != "") render_status($statusRede);
@@ -440,7 +450,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
                 <?php
                 $arrayTags = explode(";", $tags);
                 for ($i = 0; $i < count($arrayTags) - 1; $i++) : ?>
-                    <a href="/tematres_wp/<?php echo strtolower(str_replace(" ", "-", stripAccents($arrayTags[$i]))); ?>/" rel="tag"><?php echo $arrayTags[$i]; ?></a>
+                    <a href="<?php echo home_url();?>/tematres_wp/<?php echo strtolower(str_replace(" ", "-", stripAccents($arrayTags[$i]))); ?>/" rel="tag"><?php echo $arrayTags[$i]; ?></a>
                 <?php endfor ?>
             </div>
         <?php endif ?>
@@ -645,9 +655,15 @@ define('FORM_ID_TECNOLOGIA', 'CF6298c879c2353');
 // Função para criar os roles necessário para o cadastro
 function custom_roles_cadastro()
 {
-    if (get_option('custom_roles_version') < 1) {
+    //Coloquei 2 pra atualizar sua versao Rebeca!
+    if (get_option('custom_roles_version') < 2) {
+        //Candidato e Homologado
         add_role('candidato', 'Candidato', array('read' => true, 'level_0' => true));
-        update_option('custom_roles_version', 1);
+        add_role('homologado', 'Homologado', array('read' => true, 'level_0' => true));
+        //Avaliador e Visualizador
+        add_role('avaliador', 'Avaliador Cadastros', array('read' => true, 'level_0' => true));
+        add_role('visualizador', 'Visualizador Cadastros', array('read' => true, 'level_0' => true));
+        update_option('custom_roles_version', 2);
     }
 }
 add_action('init', 'custom_roles_cadastro');
@@ -663,192 +679,228 @@ function cadastro_action_form()
 	* Função chamada pelo formulário "cadastro_form_usuario"
 	*/
 
-    if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
-    else $nomeDaInstituicao = "";
-    if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
-    else $descricaoDaInstituicao = "";
-    if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
-    else $natureza_op = "";
-    if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
-    else $porte_op = "";
 
-    if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
-        $porte_op = "";
-    }
+    //Colocando a validação do Captcha:
 
-    if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
-    else $cnpjDaInstituicao = "";
-    if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
-    else $CNAEDaInstituicao = "";
-    if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
-    else $urlDaInstituicao = "";
+    if (empty($_POST['g-recaptcha-response'])) {
+        // User didn't check recaptcha, handle the error
+        wp_redirect(home_url('/erro'));
+        exit;
+    } else {
+        $secret = "6LcTFWAdAAAAANr93WkJRN3hGafP6JNWhEZfA0Fo";
+        $params = http_build_query(array(
+            'secret' => $secret,
+            'response' => $_POST['g-recaptcha-response'],
+            //'remoteip'  => $some_ip 	//Optional. The user's IP address.
+        ));
 
-    if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
-    else $enderecoDaInstituicao = "";
-    if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
-    else $complementoDaInstituicao = "";
-    if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
-    else $estadoDaInstituicao = "";
-    if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
-    else $cidadeDaInstituicao = "";
-    if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
-    else $cepDaInstituicao = "";
+        $response = wp_remote_get('https://www.google.com/recaptcha/api/siteverify?' . $params);
 
-    //Redes checkbox
-    $redes = "";
-    if (isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
-    if (isset($_POST['check_formacao'])) $redes .= $_POST['check_formacao'] . ";";
-    if (isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
-    if (isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
-    if (isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
+        $captcha_resposne = false;
 
-    //Redes Específicas
-    $dados_redes = array(
-        "rede-de-suporte" => array(),
-        "rede-de-formacao" => array(),
-        "rede-de-pesquisa" => array(),
-        "rede-de-inovacao" => array(),
-        "rede-de-tecnologia" => array(),
-    );
-
-    foreach ($dados_redes as $key => $value) {
-        $opcoes = get_options($key)[1];
-        $publico = get_options($key)[2];
-        $abrangencia = get_options($key)[3];
-
-        if (isset($_POST['urlServico-' . $key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-' . $key]);
-        else $dados_redes[$key]["urlServico"] = "";
-        if (isset($_POST['produtoServicos-' . $key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-' . $key]);
-        else $dados_redes[$key]["produtoServicos"] = "";
-
-        //Pegando os checks das classificacoes
-        $classificacoes = "";
-        foreach ($opcoes as $i => $v) {
-            if (isset($_POST['check_classificacao_' . $i . '_' . $key])) $classificacoes .= $_POST['check_classificacao_' . $i . '_' . $key] . ";";
-        }
-        $dados_redes[$key]['classificacoes'] = $classificacoes;
-
-        if (isset($_POST['outroClassificacao_' . $key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_' . $key]);
-        else $dados_redes[$key]["outroClassificacao"] = "";
-
-
-        if (!str_contains($classificacoes, 'Outro;')) {
-            $dados_redes[$key]["outroClassificacao"] = '';
+        if (200 == $response['response']['code']) {
+            $captcha_resposne = json_decode($response['body'], true);
+            // missing-input-secret    The secret parameter is missing.
+            // invalid-input-secret    The secret parameter is invalid or malformed.
+            // missing-input-response  The response parameter is missing.
+            // invalid-input-response  The response parameter is invalid or malformed.
         }
 
-        //Pegando os checks do publico alvo
-        $publicos = "";
-        foreach ($publico as $i => $v) {
-            if (isset($_POST['check_publico_' . $i . '_' . $key])) $publicos .= $_POST['check_publico_' . $i . '_' . $key] . ";";
-        }
-        $dados_redes[$key]['publicos'] = $publicos;
+        // If captcha respsonse is true we sign them on
+        if ($captcha_resposne['success'] === true) {
+            // handle the success
+            if (isset($_POST['nomeDaInstituicao'])) $nomeDaInstituicao = ($_POST['nomeDaInstituicao']);
+            else $nomeDaInstituicao = "";
+            if (isset($_POST['descricaoDaInstituicao'])) $descricaoDaInstituicao = ($_POST['descricaoDaInstituicao']);
+            else $descricaoDaInstituicao = "";
+            if (isset($_POST['natureza_op'])) $natureza_op = ($_POST['natureza_op']);
+            else $natureza_op = "";
+            if (isset($_POST['porte_op'])) $porte_op = ($_POST['porte_op']);
+            else $porte_op = "";
 
-        //Pegando os checks da abrangencia
-        $abrangencias = "";
-        foreach ($abrangencia as $i => $v) {
-            if (isset($_POST['check_abrangencia_' . $i . '_' . $key])) $abrangencias .= $_POST['check_abrangencia_' . $i . '_' . $key] . ";";
-        }
-        $dados_redes[$key]['abrangencias'] = $abrangencias;
+            if (($natureza_op != "Instituição privada com fins lucrativos") && ($natureza_op != "Instituição privada sem fins lucrativos")) {
+                $porte_op = "";
+            }
 
-        //dados do representante
-        if (isset($_POST['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_' . $key]);
-        else $dados_redes[$key]["nomeCompleto"] = "";
-        if (isset($_POST['cpfRepresentante_' . $key])) $dados_redes[$key]["cpfRepresentante"] = ($_POST['cpfRepresentante_' . $key]);
-        else $dados_redes[$key]["cpfRepresentante"] = "";
-        if (isset($_POST['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_' . $key]);
-        else $dados_redes[$key]["emailRepresentante"] = "";
-        if (isset($_POST['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_' . $key]);
-        else $dados_redes[$key]["telefoneRepresentante"] = "";
-    }
+            if (isset($_POST['cnpjDaInstituicao'])) $cnpjDaInstituicao = ($_POST['cnpjDaInstituicao']);
+            else $cnpjDaInstituicao = "";
+            if (isset($_POST['CNAEDaInstituicao'])) $CNAEDaInstituicao = ($_POST['CNAEDaInstituicao']);
+            else $CNAEDaInstituicao = "";
+            if (isset($_POST['urlDaInstituicao'])) $urlDaInstituicao = ($_POST['urlDaInstituicao']);
+            else $urlDaInstituicao = "";
 
-    //Arquivos
-    //doc1
-    if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
-        $doc1Unidade = $_FILES['logo_instituicao'];
-    }
-    //doc2
-    if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
-        $doc2Unidade = $_FILES['guia_instituicao'];
-    }
+            if (isset($_POST['enderecoDaInstituicao'])) $enderecoDaInstituicao = ($_POST['enderecoDaInstituicao']);
+            else $enderecoDaInstituicao = "";
+            if (isset($_POST['complementoDaInstituicao'])) $complementoDaInstituicao = ($_POST['complementoDaInstituicao']);
+            else $complementoDaInstituicao = "";
+            if (isset($_POST['estadoDaInstituicao'])) $estadoDaInstituicao = ($_POST['estadoDaInstituicao']);
+            else $estadoDaInstituicao = "";
+            if (isset($_POST['cidadeDaInstituicao'])) $cidadeDaInstituicao = ($_POST['cidadeDaInstituicao']);
+            else $cidadeDaInstituicao = "";
+            if (isset($_POST['cepDaInstituicao'])) $cepDaInstituicao = ($_POST['cepDaInstituicao']);
+            else $cepDaInstituicao = "";
 
-    //Nome e email do candidato
-    if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
-    else $nomeDoCandidato = "";
-    if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
-    else $emailDoCandidato = "";
+            //Redes checkbox
+            $redes = "";
+            if (isset($_POST['check_suporte'])) $redes .= $_POST['check_suporte'] . ";";
+            if (isset($_POST['check_formacao'])) $redes .= $_POST['check_formacao'] . ";";
+            if (isset($_POST['check_pesquisa'])) $redes .= $_POST['check_pesquisa'] . ";";
+            if (isset($_POST['check_inovacao'])) $redes .= $_POST['check_inovacao'] . ";";
+            if (isset($_POST['check_tecnologia'])) $redes .= $_POST['check_tecnologia'] . ";";
 
-    //----------------------------submit
-    if (isset($_POST["enviar"])) {
-        // Tratamento dos arquivos
-        if (!is_null($doc1Unidade)) {
-            $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
-        }
-        if (!is_null($doc2Unidade)) {
-            $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
-        }
+            //Redes Específicas
+            $dados_redes = array(
+                "rede-de-suporte" => array(),
+                "rede-de-formacao" => array(),
+                "rede-de-pesquisa" => array(),
+                "rede-de-inovacao" => array(),
+                "rede-de-tecnologia" => array(),
+            );
 
-        // Criar o usuário
-        $password = wp_generate_password();
-        $username = str_replace(".", "", str_replace("@", "", strtolower($emailDoCandidato))) . gerar_numeros_aleatorios();
-        $first_name = explode(" ", $nomeDoCandidato)[0];
-        $last_name = implode(" ", array_slice(explode(" ", $nomeDoCandidato), 1));
+            foreach ($dados_redes as $key => $value) {
+                $opcoes = get_options($key)[1];
+                $publico = get_options($key)[2];
+                $abrangencia = get_options($key)[3];
 
-        $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
+                if (isset($_POST['urlServico-' . $key])) $dados_redes[$key]["urlServico"] = ($_POST['urlServico-' . $key]);
+                else $dados_redes[$key]["urlServico"] = "";
+                if (isset($_POST['produtoServicos-' . $key])) $dados_redes[$key]["produtoServicos"] = ($_POST['produtoServicos-' . $key]);
+                else $dados_redes[$key]["produtoServicos"] = "";
 
-        // Não deve entrar nesse if pq agora tem verificação no frontend, mas VAI QUE
-        if ($usuario_id == 0) {
-            // redirecionar para a página de erro
+                //Pegando os checks das classificacoes
+                $classificacoes = "";
+                foreach ($opcoes as $i => $v) {
+                    if (isset($_POST['check_classificacao_' . $i . '_' . $key])) $classificacoes .= $_POST['check_classificacao_' . $i . '_' . $key] . ";";
+                }
+                $dados_redes[$key]['classificacoes'] = $classificacoes;
+
+                if (isset($_POST['outroClassificacao_' . $key])) $dados_redes[$key]["outroClassificacao"] = ($_POST['outroClassificacao_' . $key]);
+                else $dados_redes[$key]["outroClassificacao"] = "";
+
+
+                if (!str_contains($classificacoes, 'Outro;')) {
+                    $dados_redes[$key]["outroClassificacao"] = '';
+                }
+
+                //Pegando os checks do publico alvo
+                $publicos = "";
+                foreach ($publico as $i => $v) {
+                    if (isset($_POST['check_publico_' . $i . '_' . $key])) $publicos .= $_POST['check_publico_' . $i . '_' . $key] . ";";
+                }
+                $dados_redes[$key]['publicos'] = $publicos;
+
+                //Pegando os checks da abrangencia
+                $abrangencias = "";
+                foreach ($abrangencia as $i => $v) {
+                    if (isset($_POST['check_abrangencia_' . $i . '_' . $key])) $abrangencias .= $_POST['check_abrangencia_' . $i . '_' . $key] . ";";
+                }
+                $dados_redes[$key]['abrangencias'] = $abrangencias;
+
+                //dados do representante
+                if (isset($_POST['nomeCompleto_' . $key])) $dados_redes[$key]["nomeCompleto"] = ($_POST['nomeCompleto_' . $key]);
+                else $dados_redes[$key]["nomeCompleto"] = "";
+                if (isset($_POST['cpfRepresentante_' . $key])) $dados_redes[$key]["cpfRepresentante"] = ($_POST['cpfRepresentante_' . $key]);
+                else $dados_redes[$key]["cpfRepresentante"] = "";
+                if (isset($_POST['emailRepresentante_' . $key])) $dados_redes[$key]["emailRepresentante"] = ($_POST['emailRepresentante_' . $key]);
+                else $dados_redes[$key]["emailRepresentante"] = "";
+                if (isset($_POST['telefoneRepresentante_' . $key])) $dados_redes[$key]["telefoneRepresentante"] = ($_POST['telefoneRepresentante_' . $key]);
+                else $dados_redes[$key]["telefoneRepresentante"] = "";
+            }
+
+            //Arquivos
+            //doc1
+            if (isset($_FILES['logo_instituicao']) && strlen($_FILES['logo_instituicao']['name']) > 0) {
+                $doc1Unidade = $_FILES['logo_instituicao'];
+            }
+            //doc2
+            if (isset($_FILES['guia_instituicao']) && strlen($_FILES['guia_instituicao']['name']) > 0) {
+                $doc2Unidade = $_FILES['guia_instituicao'];
+            }
+
+            //Nome e email do candidato
+            if (isset($_POST['nomeDoCandidato'])) $nomeDoCandidato = ($_POST['nomeDoCandidato']);
+            else $nomeDoCandidato = "";
+            if (isset($_POST['emailDoCandidato'])) $emailDoCandidato = ($_POST['emailDoCandidato']);
+            else $emailDoCandidato = "";
+
+            //----------------------------submit
+            if (isset($_POST["enviar"])) {
+                // Tratamento dos arquivos
+                if (!is_null($doc1Unidade)) {
+                    $doc1UnidadeUrl = upload_documento($doc1Unidade, $emailDoCandidato, "1");
+                }
+                if (!is_null($doc2Unidade)) {
+                    $doc2UnidadeUrl = upload_documento($doc2Unidade, $emailDoCandidato, "2");
+                }
+
+                // Criar o usuário
+                $password = wp_generate_password();
+                $username = str_replace(".", "", str_replace("@", "", strtolower($emailDoCandidato))) . gerar_numeros_aleatorios();
+                $first_name = explode(" ", $nomeDoCandidato)[0];
+                $last_name = implode(" ", array_slice(explode(" ", $nomeDoCandidato), 1));
+
+                $usuario_id = create_new_user($username, $password, $emailDoCandidato, $first_name, $last_name, "candidato");
+
+                // Não deve entrar nesse if pq agora tem verificação no frontend, mas VAI QUE
+                if ($usuario_id == 0) {
+                    // redirecionar para a página de erro
+                    wp_redirect(home_url('/erro'));
+                    //wp_redirect(get_permalink( 13832 ));
+                    exit;
+                }
+
+                //funcao para criar a entrada no Caldera (Form geral)
+                insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
+
+                //funcao para dá entrada no Caldera (Form especifico)
+                // esse explode gera uma iteração a mais por conta do último ";"
+
+                $flag = array(
+                    "rede-de-suporte" => false,
+                    "rede-de-formacao" => false,
+                    "rede-de-pesquisa" => false,
+                    "rede-de-inovacao" => false,
+                    "rede-de-tecnologia" => false,
+                );
+                foreach (explode(";", $redes) as $key => $value) {
+                    switch ($value) {
+                        case "check_suporte":
+                            $flag['rede-de-suporte'] = true;
+                            break;
+                        case "check_formacao":
+                            $flag['rede-de-formacao'] = true;
+                            break;
+                        case "check_pesquisa":
+                            $flag['rede-de-pesquisa'] = true;
+                            break;
+                        case "check_inovacao":
+                            $flag['rede-de-inovacao'] = true;
+                            break;
+                        case "check_tecnologia":
+                            $flag['rede-de-tecnologia'] = true;
+                            break;
+                    }
+                }
+                insert_entrada_form_especifico("CF6297eae06f088", $dados_redes["rede-de-suporte"], $usuario_id, $flag['rede-de-suporte']);
+                insert_entrada_form_especifico("CF6298c3e77962a", $dados_redes["rede-de-formacao"], $usuario_id, $flag['rede-de-formacao']);
+                insert_entrada_form_especifico("CF6298c6a36c130", $dados_redes["rede-de-pesquisa"], $usuario_id, $flag['rede-de-pesquisa']);
+                insert_entrada_form_especifico("CF6298c80222811", $dados_redes["rede-de-inovacao"], $usuario_id, $flag['rede-de-inovacao']);
+                insert_entrada_form_especifico("CF6298c879c2353", $dados_redes["rede-de-tecnologia"], $usuario_id, $flag['rede-de-tecnologia']);
+
+                envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
+                envia_email_avaliador('cadastro', $nomeDaInstituicao);
+
+                // redirecionar para a página de sucesso
+                wp_redirect(esc_url(home_url('/sucesso')));
+                //wp_redirect(get_permalink( 13832 ));
+                exit;
+            } //end do if de enviar
+        } else {
+            // handle the failure
             wp_redirect(home_url('/erro'));
-            //wp_redirect(get_permalink( 13832 ));
             exit;
         }
-
-        //funcao para criar a entrada no Caldera (Form geral)
-        insert_entrada_form("CF6297bfb727214", $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $redes, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $emailDoCandidato, $usuario_id);
-
-        //funcao para dá entrada no Caldera (Form especifico)
-        // esse explode gera uma iteração a mais por conta do último ";"
-
-        $flag = array(
-            "rede-de-suporte" => false,
-            "rede-de-formacao" => false,
-            "rede-de-pesquisa" => false,
-            "rede-de-inovacao" => false,
-            "rede-de-tecnologia" => false,
-        );
-        foreach (explode(";", $redes) as $key => $value) {
-            switch ($value) {
-                case "check_suporte":
-                    $flag['rede-de-suporte'] = true;
-                    break;
-                case "check_formacao":
-                    $flag['rede-de-formacao'] = true;
-                    break;
-                case "check_pesquisa":
-                    $flag['rede-de-pesquisa'] = true;
-                    break;
-                case "check_inovacao":
-                    $flag['rede-de-inovacao'] = true;
-                    break;
-                case "check_tecnologia":
-                    $flag['rede-de-tecnologia'] = true;
-                    break;
-            }
-        }
-        insert_entrada_form_especifico("CF6297eae06f088", $dados_redes["rede-de-suporte"], $usuario_id, $flag['rede-de-suporte']);
-        insert_entrada_form_especifico("CF6298c3e77962a", $dados_redes["rede-de-formacao"], $usuario_id, $flag['rede-de-formacao']);
-        insert_entrada_form_especifico("CF6298c6a36c130", $dados_redes["rede-de-pesquisa"], $usuario_id, $flag['rede-de-pesquisa']);
-        insert_entrada_form_especifico("CF6298c80222811", $dados_redes["rede-de-inovacao"], $usuario_id, $flag['rede-de-inovacao']);
-        insert_entrada_form_especifico("CF6298c879c2353", $dados_redes["rede-de-tecnologia"], $usuario_id, $flag['rede-de-tecnologia']);
-
-        envia_email('cadastro', $nomeDaInstituicao, $emailDoCandidato, '', $username, $password);
-        envia_email_avaliador('cadastro', $nomeDaInstituicao);
-
-        // redirecionar para a página de sucesso
-        wp_redirect(esc_url(home_url('/sucesso')));
-        //wp_redirect(get_permalink( 13832 ));
-        exit;
-    } //end do if de enviar
+    }
 }
 add_action('admin_post_nopriv_cadastro_candidato', 'cadastro_action_form');
 add_action('admin_post_cadastro_candidato', 'cadastro_action_form');
