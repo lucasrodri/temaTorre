@@ -199,7 +199,7 @@
                   <div><a class="menu-item" href="<?php echo home_url()?>/acompanhamento">
                       <span class="content">Acompanhe o Cadastro da sua Instituição</span></a>
                   </div>
-                  <? endif ?>
+                  <?php endif ?>
 
                   <?php if (current_user_can('administrator') || usuario_tem_role(wp_get_current_user(), 'avaliador') || usuario_tem_role(wp_get_current_user(), 'visualizacao')): ?>
                   <div><a class="menu-item" href="<?php echo home_url()?>/avaliador">
@@ -211,7 +211,7 @@
                   <div><a class="menu-item" href="<?php echo home_url()?>/visualizacao">
                       <span class="content">Visualize as Instituições Cadastradas</span></a>
                   </div>
-                  <? endif ?>
+                  <?php endif ?>
 
                   <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="content">A Torre MCTI</span></a>
                     <ul>
