@@ -62,7 +62,7 @@ async function carrega_avaliador(user_id, redes, nomeInstituicao = '', flag_gere
                     while (titulo && titulo.nodeType != 1) {
                         titulo = titulo.nextSibling;
                     }
-                    if(historico && titulo && titulo.id != "posts-publicados"){
+                    if (historico && titulo && titulo.id != "posts-publicados") {
                         historico.before(titulo);
                     }
                 }
@@ -113,13 +113,13 @@ function chama_carrega_rede(painel, redeArray, user_id, flag_gerente, flag_homol
             },
             complete: function () {
                 $("#loading_carregar").css("display", "none");
-                if (document.getElementById('div_'+redeArray)) {
-                    var historico = document.getElementById('div_'+redeArray);
+                if (document.getElementById('div_' + redeArray)) {
+                    var historico = document.getElementById('div_' + redeArray);
                     var titulo = historico.nextSibling;
                     while (titulo && titulo.nodeType != 1) {
                         titulo = titulo.nextSibling;
                     }
-                    if(historico && titulo && titulo.id != "posts-publicados"){
+                    if (historico && titulo && titulo.id != "posts-publicados") {
                         historico.before(titulo);
                     }
                 }

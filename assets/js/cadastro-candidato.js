@@ -522,7 +522,7 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
       success: function (html) {
         //console.log("Sucesso " + painel);
         $('#tab_redes_' + painel).html(html);
-        $("#botaoEdita_"+painel).css("display", "none");
+        $("#botaoEdita_" + painel).css("display", "none");
         $('#titulo-status-cadastro_' + redeArray).remove();
         $('#historico-status-cadastro_' + redeArray).remove();
       },

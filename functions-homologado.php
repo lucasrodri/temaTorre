@@ -110,7 +110,7 @@ function homologado_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
-            <a href="<?php echo home_url();?>/homologados/" class="br-button secondary">Voltar para lista de Instituições</a>
+            <a href="<?php echo home_url(); ?>/homologados/" class="br-button secondary">Voltar para lista de Instituições</a>
         </div>
     </div>
 
@@ -437,7 +437,7 @@ function historico_parecer_readonly($entry, $rede = "geral")
         $fld_parecer = "fld_5960872";
     }
 ?>
-    
+
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">

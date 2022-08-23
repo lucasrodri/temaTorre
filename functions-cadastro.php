@@ -376,7 +376,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
 
 ?>
     <?php if ($flag_titulo) : ?>
-        <div id="titulo-status-cadastro2_<?php echo relaciona_rede($rede_nome)[0];?>" class="h4"><?php echo $title; ?>
+        <div id="titulo-status-cadastro2_<?php echo relaciona_rede($rede_nome)[0]; ?>" class="h4"><?php echo $title; ?>
             <?php
             if (valida($entrada, 'fld_4663810') == "true") {
                 if ($entrada != "") render_status($statusRede);
@@ -450,7 +450,7 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
                 <?php
                 $arrayTags = explode(";", $tags);
                 for ($i = 0; $i < count($arrayTags) - 1; $i++) : ?>
-                    <a href="<?php echo home_url();?>/tematres_wp/<?php echo strtolower(str_replace(" ", "-", stripAccents($arrayTags[$i]))); ?>/" rel="tag"><?php echo $arrayTags[$i]; ?></a>
+                    <a href="<?php echo home_url(); ?>/tematres_wp/<?php echo strtolower(str_replace(" ", "-", stripAccents($arrayTags[$i]))); ?>/" rel="tag"><?php echo $arrayTags[$i]; ?></a>
                 <?php endfor ?>
             </div>
         <?php endif ?>

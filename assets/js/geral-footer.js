@@ -4,7 +4,7 @@ buscaCX.addEventListener("keyup", function (event) {
     event.preventDefault();
     var termo = document.getElementById("searchbox").value;
     //console.log(termo)
-    window.location.href = my_ajax_object.site_url+"/?s=" + termo;
+    window.location.href = my_ajax_object.site_url + "/?s=" + termo;
   }
 });
 

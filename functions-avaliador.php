@@ -127,7 +127,7 @@ function avaliador_view()
 
     <div class="row mt-5">
         <div id="entrada-voltar-btn" class="col-md-12 text-center" style="display: none;">
-            <a href="<?php echo home_url();?>/avaliador/" class="br-button secondary">Voltar para lista de Instituições</a>
+            <a href="<?php echo home_url(); ?>/avaliador/" class="br-button secondary">Voltar para lista de Instituições</a>
             <!-- <button class="br-button secondary" type="button" onclick="voltarListaEntradas();">Voltar para lista de Instituições
             </button> -->
         </div>
@@ -303,7 +303,7 @@ function avaliador_action_form()
 
     if (isset($_POST['usuario_id'])) $usuario_id = ($_POST['usuario_id']);
     else $usuario_id = "";
-    
+
 
     //Campos do Geral
     if (isset($_POST['historicoParecer_geral'])) $historicoParecer_geral = (trim($_POST['historicoParecer_geral']));
@@ -386,8 +386,8 @@ function avaliador_action_form()
 
         //Adicionando role de homologado para usuário
         if ($situacaoAvaliador_geral == "homologado") {
-            $user = get_user_by( 'ID', $usuario_id );
-            $user->add_role( 'homologado' );
+            $user = get_user_by('ID', $usuario_id);
+            $user->add_role('homologado');
         }
 
         $statusGeral = valida($entry, 'fld_9748069');

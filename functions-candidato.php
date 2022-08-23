@@ -210,7 +210,7 @@ function candidato_view()
                     </div>
                 <?php endfor; ?>
             </div>
-            <?php posts_publicado_render($usuario_id);?>
+            <?php posts_publicado_render($usuario_id); ?>
         </div>
     <?php endif ?>
 <?php
@@ -514,7 +514,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
     $title = get_options($rede_nome)[0];
     $statusRede = valida($entrada, 'fld_3707629');
 ?>
-    <div id="titulo-status-cadastro_<?php echo relaciona_rede($rede_nome)[0];?>" class="h4"><?php echo $title; ?>
+    <div id="titulo-status-cadastro_<?php echo relaciona_rede($rede_nome)[0]; ?>" class="h4"><?php echo $title; ?>
         <?php
         if (valida($entrada, 'fld_4663810') == "true") {
             if ($entrada != "") render_status($statusRede);
@@ -551,7 +551,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
 
     <!-- basta checar se tem algo no parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
-        <div id="historico-status-cadastro_<?php echo relaciona_rede($rede_nome)[0];?>" class="col-md-12">
+        <div id="historico-status-cadastro_<?php echo relaciona_rede($rede_nome)[0]; ?>" class="col-md-12">
             <div class="br-textarea mb-3">
                 <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico do parecer da rede</label>
                 <textarea class="textarea-start-size" name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
@@ -1194,7 +1194,8 @@ function desistir_candidato()
 add_action('admin_post_nopriv_desistir_candidato', 'desistir_candidato');
 add_action('admin_post_desistir_candidato', 'desistir_candidato');
 
-function posts_publicado_render($usuario_id) {
+function posts_publicado_render($usuario_id)
+{
     $user_posts = array();
     $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
     $flag_show_posts = false;
@@ -1211,8 +1212,8 @@ function posts_publicado_render($usuario_id) {
         }
         array_push($user_posts, $posts);
     }
-    ?>
-    <?php if($flag_show_posts):?>
+?>
+    <?php if ($flag_show_posts) : ?>
         <div id="posts-publicados" class="br-list" role="list">
             <div class="header">
                 <div class="title">
@@ -1220,7 +1221,7 @@ function posts_publicado_render($usuario_id) {
                 </div>
             </div><span class="br-divider"></span>
             <?php
-            for ($i=0; $i < count($user_posts); $i++) { 
+            for ($i = 0; $i < count($user_posts); $i++) {
                 $user_post = $user_posts[$i][0];
                 if ($user_post) {
                     $post_id = $user_post->ID;
@@ -1232,7 +1233,7 @@ function posts_publicado_render($usuario_id) {
                         <div class="row align-items-center">
                             <div class="col-auto"><i class="fas fa-newspaper" aria-hidden="true"></i>
                             </div>
-                            <div class="col"><a href="<?php echo $post_link ?>" target="_blank"><?php echo $post_title." da Rede de ".relaciona_rede($post_types[$i])[2]; ?></a></div>
+                            <div class="col"><a href="<?php echo $post_link ?>" target="_blank"><?php echo $post_title . " da Rede de " . relaciona_rede($post_types[$i])[2]; ?></a></div>
                             <div class="col-auto"><?php echo $post_date; ?></div>
                         </div>
                     </div><span class="br-divider"></span>
@@ -1241,5 +1242,5 @@ function posts_publicado_render($usuario_id) {
             } ?>
         </div>
     <?php endif ?>
-    <?php
+<?php
 }

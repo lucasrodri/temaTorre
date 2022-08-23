@@ -5,7 +5,7 @@
 function myFunctionEntrar() {
   //window.location.href = "https://acesso.gov.br/";
   //window.open('https://acesso.gov.br/', '_blank');
-  window.location.href = my_ajax_object.site_url+"/wp-login.php";
+  window.location.href = my_ajax_object.site_url + "/wp-login.php";
 }
 
 function myFunctionSair() {
@@ -42,7 +42,7 @@ function myFunctionSair() {
 function myFunctionBusca() {
   var termo = document.getElementById("searchbox").value;
   //console.log(termo)
-  window.location.href = my_ajax_object.site_url+"/?s=" + termo;
+  window.location.href = my_ajax_object.site_url + "/?s=" + termo;
 }
 
 function carregaCategorias(val, minhaUrl) {
