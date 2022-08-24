@@ -367,7 +367,9 @@ function avaliador_action_form()
 
     $resumo = '';
     $resumo .= '<ul>';
-    $resumo .= "<li>Informações da Instituição: " . relaciona_status($situacaoAvaliador_geral) . "</li>";
+    if ($situacaoAvaliador_geral != "") {
+        $resumo .= "<li>Informações da Instituição: " . relaciona_status($situacaoAvaliador_geral) . "</li>";
+    }
     foreach ($arrayRedes as $rede) {
         if ($situacaoAvaliador_rede[$rede] != "") {
             $resumo .= "<li>Rede de " . relaciona($rede)[2] . ": " . relaciona_status($situacaoAvaliador_rede[$rede]) . "</li>";
@@ -395,12 +397,11 @@ function avaliador_action_form()
         $emailDoCandidato  = valida($entry, 'fld_7868662');
 
         if ($statusGeral == 'pendente') {
-            //envia_email('pendente', $nomeDaInstituicao, $emailDoCandidato, $parecerAvaliador_geral);
             envia_email('resumo', $nomeDaInstituicao, $emailDoCandidato, '', '', '', $resumo);
             envia_email_avaliador('pendente', $nomeDaInstituicao);
         } else if ($statusGeral == 'homologado') {
             // caso homologado -> enviar as tags escolhidas
-            envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato);
+            envia_email('homologado', $nomeDaInstituicao, $emailDoCandidato, '', '', '', $resumo);
             envia_email_avaliador('homologado', $nomeDaInstituicao);
         }
 

@@ -169,7 +169,7 @@ function atualizaStatusGeral() {
         $('#tdStatus').html(html);
       },
       complete: function () {
-        // $("#loading_carregar_status").css("display", "none");
+        $("#loading_carregar_status").css("display", "none");
         // console.log('completo');
       }
     });

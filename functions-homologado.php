@@ -311,7 +311,17 @@ function homologado_action_form()
     update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
 
     //-------------------------------------------------------- envia emails
-    envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato);
+    $nomeRede = relaciona($rede)[2];
+
+    $nomesCategoria = explode(";",  rtrim($classificacoes, ";"));
+    $resumo = '';
+    $resumo .= '<ul>';
+    foreach ($nomesCategoria as $nomeCategoria) {
+        $resumo .= "<li>" . $nomeCategoria . ";</li>";
+    }
+    $resumo .= '</ul>';
+
+    envia_email('publicado', $nomeDaInstituicao, $emailDoCandidato, $nomeRede, '', '', $resumo);
     envia_email_avaliador('publicado', $nomeDaInstituicao);
 
     // Renderizar aba da rede (preciso recarregar a rede)

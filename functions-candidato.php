@@ -81,9 +81,11 @@ function candidato_view()
                     <tr class="noHover">
                         <td data-th="Data"><?php echo $date; ?></td>
                         <td data-th="Nome"><?php echo valida($entradas[FORM_ID_GERAL], 'fld_266564'); ?></td>
-                        <td data-th="Status" id="tdStatus">
+                        <td data-th="Status">
                             <div id='loading_carregar_status' class="loading small" style='display:none;'></div>
-                            <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
+                            <div id="tdStatus">
+                                <?php render_status(valida($entradas[FORM_ID_GERAL], 'fld_9748069')); ?>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -841,7 +843,7 @@ function atualiza_geral_candidato_ajax()
     //funcao para criar a entrada no Caldera (Form geral)
     update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, "avaliacao");
 
-    //TODO envia email de update
+    //TODO envia email de update --> mudei para o atualiza_status_geral_ajax
 
     $form = Caldera_Forms_Forms::get_form(FORM_ID_GERAL);
     $entry =  new Caldera_Forms_Entry($form, $entrada);
@@ -918,7 +920,7 @@ function atualiza_rede_candidato_ajax()
     // faz o update dos dados no caldera
     update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao");
 
-    //TODO envia email de update
+    //TODO envia email de update  --> mudei para o atualiza_status_geral_ajax
 
     $form_id = relaciona($rede)[1];
     $form = Caldera_Forms_Forms::get_form($form_id);
@@ -1020,7 +1022,7 @@ function atualiza_status_geral_ajax()
         }
     }
 
-    //$redes = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
+    $redesAntigas = valida($entradas[FORM_ID_GERAL], 'fld_4891375');
     //$arrayRedes = explode(";", $redes);
     $todas_redes = "check_suporte;check_formacao;check_pesquisa;check_inovacao;check_tecnologia;";
     $arrayRedes = explode(";", $todas_redes);
@@ -1055,16 +1057,52 @@ function atualiza_status_geral_ajax()
      * "fld_4899711" "status_instituicao"
      */
 
-    // Chama o update no campo geral de stats
+    // Chama o update no campo geral de status
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entradas_id[FORM_ID_GERAL], $situacaoGeral);
+    // Chama o update no campo de rede ativa true /false
     Caldera_Forms_Entry_Update::update_field_value('fld_4891375', $entradas_id[FORM_ID_GERAL], $redes);
 
     $nomeDaInstituicao = valida($entradas[FORM_ID_GERAL], 'fld_266564');
     $emailDoCandidato = valida($entradas[FORM_ID_GERAL], 'fld_7868662');
 
-    //envia o email de update
-    envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato);
-    envia_email_avaliador('reenviar', $nomeDaInstituicao);
+    //--------------------------------------------------------------- envia o email de update
+    // Checagem para envio de email
+    // se a rede já existia, só mudou de pendente para avaliacao --> será tratada no email 'reenviar'
+    // se a rede não existia, envia email de nova rede
+    // se a rede deixou de existir, envia email de rede excluida
+
+    $redesAntigasExplode = explode(";", rtrim($redesAntigas, ";"));
+    $redesNovasExplode = explode(";", rtrim($redes, ";"));
+
+    // checo novas redes
+    foreach ($redesNovasExplode as $rede) {
+
+        if (!in_array($rede, $redesAntigasExplode)) {
+            envia_email('rede_adicionada', $nomeDaInstituicao, $emailDoCandidato);
+        }
+
+        // checagem no caso de homolagado que mandou uma edicao, ou seja ele tem post e agora mudou o status para "avaliacao"
+        /*
+        if (user_tem_post_na_rede($usuario_id, $rede)) {
+            if (valida($entradas[relaciona($rede)[1]], 'fld_3707629') == "avaliacao") {
+                envia_email('editar', $nomeDaInstituicao, $emailDoCandidato);
+            }
+        }
+        */
+    }
+
+    // checo redes excluidas
+    foreach ($redesAntigasExplode as $rede) {
+        if (!in_array($rede, $redesNovasExplode)) {
+            envia_email('rede_excluida', $nomeDaInstituicao, $emailDoCandidato, relaciona($rede)[2]);
+        }
+    }
+
+    if ($situacaoGeral == 'avaliacao') {
+        // somente envia esse email caso o status geral passe a ser "avaliacao"
+        envia_email('reenviar', $nomeDaInstituicao, $emailDoCandidato);
+        envia_email_avaliador('reenviar', $nomeDaInstituicao);
+    }
 
     // Chama a função de renderizar
     render_status($situacaoGeral);
@@ -1199,6 +1237,7 @@ function posts_publicado_render($usuario_id)
     $user_posts = array();
     $post_types = array('rede-de-suporte', 'rede-de-formacao', 'rede-de-pesquisa', 'rede-de-inovacao', 'rede-de-tecnologia');
     $flag_show_posts = false;
+
     foreach ($post_types as $post_type) {
         $args = array(
             'numberposts' => -1,
@@ -1206,10 +1245,13 @@ function posts_publicado_render($usuario_id)
             'author' => $usuario_id,
             'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
         );
+
         $posts = get_posts($args);
+
         if (!empty($posts)) {
             $flag_show_posts = true;
         }
+
         array_push($user_posts, $posts);
     }
 ?>
@@ -1243,4 +1285,23 @@ function posts_publicado_render($usuario_id)
         </div>
     <?php endif ?>
 <?php
+}
+
+
+function user_tem_post_na_rede($usuario_id, $post_type)
+{
+    $args = array(
+        'numberposts' => -1,
+        'post_type' => $post_type,
+        'author' => $usuario_id,
+        'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+    );
+
+    $posts = get_posts($args);
+
+    if (!empty($posts)) {
+        return true;
+    }
+
+    return false;
 }
