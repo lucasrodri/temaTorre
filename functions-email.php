@@ -18,7 +18,7 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 {
 
   //$to = "torre@mcti.gov.br, "; //adicionar outros e-mails
-  $to = "lucasrc.rodri@gmail.com"; //bcasamo+torre@gmail.com
+  $to = "lucasrc.rodri@gmail.com, bcasamo@yahoo.com.br";
 
   $subject = '';
   $message = '';
@@ -138,7 +138,7 @@ function msg_despublicado_avaliador($nomeDaInstituicao)
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $rede = '', $username = '', $password = '', $resumo = '')
 {
 
-  $to = $emailDoCandidato . ", lucasrc.rodri@gmail.com";
+  $to = $emailDoCandidato . ", lucasrc.rodri@gmail.com, bcasamo@yahoo.com.br";
   //$to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
 
   $subject = '';
@@ -227,7 +227,7 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $rede = '', 
 function msg_cadastro($nomeDaInstituicao, $username, $password)
 {
 
-  $message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Recebemos a solicita&ccedil;&atilde;o de cadastro da sua institui&ccedil;&atilde;o na Torre MCTI.&nbsp;</p><p style="text-align: left;">Seu login de acesso &eacute; <strong>' . $username . '</strong> e sua senha &eacute; <strong>' . $password . '</strong>.</p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="' . home_url() . '/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A Sexec/MCTI poder&aacute; entrar em contato para solicitar complementa&ccedil;&atilde;o de informa&ccedil;&otilde;es e/ou sugerir modifica&ccedil;&otilde;es nos dados registrados antes de envio para homologa&ccedil;&atilde;o do cadastro.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Agradecemos novamente o interesse em fazer parte da Torre MCTI!</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
+  $message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Recebemos a solicita&ccedil;&atilde;o de cadastro da sua institui&ccedil;&atilde;o na Torre MCTI.&nbsp;</p><p style="text-align: left;">Seu login de acesso &eacute; <strong>' . $username . '</strong> e sua senha &eacute; <strong>' . $password . '</strong></p><p style="text-align: left;">Voc&ecirc; pode acompanhar seu processo na p&aacute;gina de <a href="' . home_url() . '/acompanhamento/" target="_blank" rel="noopener">Acompanhamento</a>.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">A Sexec/MCTI poder&aacute; entrar em contato para solicitar complementa&ccedil;&atilde;o de informa&ccedil;&otilde;es e/ou sugerir modifica&ccedil;&otilde;es nos dados registrados antes de envio para homologa&ccedil;&atilde;o do cadastro.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Agradecemos novamente o interesse em fazer parte da Torre MCTI!</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 
   //$message = '<p style="text-align: left;">Ol&aacute;, respons&aacute;vel pelo cadastro da(o) ' . $nomeDaInstituicao . ' na Torre MCTI.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Recebemos a solicita&ccedil;&atilde;o de cadastro da sua institui&ccedil;&atilde;o na Torre MCTI.&nbsp;</p><p style="text-align: left;">A Sexec/MCTI poder&aacute; entrar em contato para solicitar complementa&ccedil;&atilde;o de informa&ccedil;&otilde;es e/ou sugerir modifica&ccedil;&otilde;es nos dados registrados antes de envio para homologa&ccedil;&atilde;o do cadastro.</p><p style="text-align: left;">&nbsp;</p><p style="text-align: left;">Agradecemos novamente o interesse em fazer parte da Torre MCTI!</p><p style="text-align: left;">Cordialmente,</p><p style="text-align: left;">Equipe Torre MCTI.</p>';
 

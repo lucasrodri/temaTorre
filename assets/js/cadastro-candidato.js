@@ -530,6 +530,7 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
         $("#loading_carregar").css("display", "none");
         alert('Dados enviados!');
         $("#botaoAdicionar_" + painel).css("display", "inline");
+        $("#botaoAtualizar_" + painel).css("display", "none");
         $("#botaoExcluir_" + painel).css("display", "none");
         atualizaStatusGeral();
 

@@ -1082,13 +1082,11 @@ function atualiza_status_geral_ajax()
         }
 
         // checagem no caso de homolagado que mandou uma edicao, ou seja ele tem post e agora mudou o status para "avaliacao"
-        /*
-        if (user_tem_post_na_rede($usuario_id, $rede)) {
+        if (user_tem_post_na_rede(relaciona($rede)[0], $usuario_id)) {
             if (valida($entradas[relaciona($rede)[1]], 'fld_3707629') == "avaliacao") {
                 envia_email('editar', $nomeDaInstituicao, $emailDoCandidato);
             }
         }
-        */
     }
 
     // checo redes excluidas
@@ -1288,7 +1286,7 @@ function posts_publicado_render($usuario_id)
 }
 
 
-function user_tem_post_na_rede($usuario_id, $post_type)
+function user_tem_post_na_rede($post_type, $usuario_id)
 {
     $args = array(
         'numberposts' => -1,
