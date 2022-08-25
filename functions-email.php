@@ -17,8 +17,8 @@
 function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 {
 
-  //$to = "torre@mcti.gov.br, "; //adicionar outros e-mails
-  $to = "lucasrc.rodri@gmail.com, bcasamo@yahoo.com.br";
+  //$to = "torre@mcti.gov.br, "; //em produção
+  $to = "bcasamo@gmail.com"; //"julieta.cunha@mcti.gov.br";
 
   $subject = '';
   $message = '';
@@ -75,10 +75,14 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
       break;
   }
 
-  $headers = array('Content-Type: text/html; charset=UTF-8');
+  //https://stackoverflow.com/a/41400815
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  //$headers[] = 'From: Me Myself <me@example.net>';
+  //$headers[] = 'Cc: bcasamo@gmail.com';
+  $headers[] = 'Bcc: bcasamo@yahoo.com.br';
+  $headers[] = 'Bcc: lucasrc.rodri@gmail.com';
 
   wp_mail($to, $subject, $message, $headers);
-
 }
 
 function msg_candidatura_visualizar($nomeDaInstituicao)
@@ -138,8 +142,7 @@ function msg_despublicado_avaliador($nomeDaInstituicao)
 function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $rede = '', $username = '', $password = '', $resumo = '')
 {
 
-  $to = $emailDoCandidato . ", lucasrc.rodri@gmail.com, bcasamo@yahoo.com.br";
-  //$to = "lucasrc.rodri@gmail.com, bcasamo+torre@gmail.com";
+  $to = $emailDoCandidato;
 
   $subject = '';
   $message = '';
@@ -213,10 +216,14 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $rede = '', 
       break;
   }
 
-  $headers = array('Content-Type: text/html; charset=UTF-8');
+  //https://stackoverflow.com/a/41400815
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  //$headers[] = 'From: Me Myself <me@example.net>';
+  //$headers[] = 'Cc: bcasamo@gmail.com';
+  $headers[] = 'Bcc: bcasamo@yahoo.com.br';
+  //$headers[] = 'Bcc: lucasrc.rodri@gmail.com';
 
   wp_mail($to, $subject, $message, $headers);
-
 }
 
 

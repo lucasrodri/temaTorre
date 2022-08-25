@@ -1,5 +1,5 @@
 function publicaRede(painel, redeArray, entradaRedeId) {
-  let text = "Você tem certeza que quer publicar esta rede? Essa ação publicará um novo post no Torre MCTI.";
+  let text = "Você tem certeza que quer publicar esta rede? Essa ação publicará um novo post no Torre MCTI. Verifique se a instituição assinou o Termo de Adesão/Declaração de atendimento";
 
   if (!confirm(text)) {
     return;
