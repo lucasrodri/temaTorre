@@ -656,14 +656,15 @@ define('FORM_ID_TECNOLOGIA', 'CF6298c879c2353');
 function custom_roles_cadastro()
 {
     //Coloquei 2 pra atualizar sua versao Rebeca!
-    if (get_option('custom_roles_version') < 2) {
+    if (get_option('custom_roles_version') < 3) {
         //Candidato e Homologado
         add_role('candidato', 'Candidato', array('read' => true, 'level_0' => true));
         add_role('homologado', 'Homologado', array('read' => true, 'level_0' => true));
-        //Avaliador e Visualizador
+        //Avaliador, Visualizador e Publicador
         add_role('avaliador', 'Avaliador Cadastros', array('read' => true, 'level_0' => true));
         add_role('visualizador', 'Visualizador Cadastros', array('read' => true, 'level_0' => true));
-        update_option('custom_roles_version', 2);
+        add_role('publicador', 'Publicador Cadastros', array('read' => true, 'level_0' => true));
+        update_option('custom_roles_version', 3);
     }
 }
 add_action('init', 'custom_roles_cadastro');
