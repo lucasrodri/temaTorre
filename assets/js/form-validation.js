@@ -100,193 +100,6 @@ function ocultarAvisoValidacao(element) {
 
 }
 
-/*
-function validaFormulario( ) {
-  // This function deals with validation of the form fields
-  var x, y, i, s, r, t,
-    valid = true,
-    flag = false;
-
-  //x = document.getElementsByClassName( "tab" );
-  x = document.getElementsByClassName( "wizard-panel" );
-
-  currentTab = determinaPainelAtivo( x );
-
-  //console.log( "estou na tab " + currentTab );
-
-  if ( currentTab == 0 ) {
-
-    // Não funciona pegar element by ID
-    //y = x[ currentTab ].getElementByID( "checkConcordo" );
-
-    y = x[ currentTab ].getElementsByTagName( "input" );
-
-    if ( y[ 0 ].checked == false ) {
-      setarInvalido( y[ 0 ] );
-      valid = false;
-    }
-
-  } else {
-
-    console.log( "estou no else " );
-
-
-    y = x[ currentTab ].getElementsByTagName( "input" );
-    s = x[ currentTab ].getElementsByTagName( "select" );
-    t = x[ currentTab ].getElementsByTagName( "textarea" );
-
-    console.log( "tamanho de y (input) " + y.length );
-    console.log( "tamanho de s (select) " + s.length );
-    console.log( "tamanho de t (textarea) " + t.length );
-
-
-    // A loop that checks every input field in the current tab:
-
-    for ( i = 0; i < y.length; i++ ) {
-
-      console.log( "--------validando " + y[ i ].name );
-
-      if ( y[ i ].type == "email" ) {
-
-        console.log( "email" );
-
-        if ( !IsEmail( y[ i ].value ) ) {
-          y[ i ].className += " invalid";
-          document.getElementById( y[ i ].name + "_label" ).style = "";
-          valid = false;
-        }
-
-      } else if ( y[ i ].type == "file" ) {
-
-        return valid = true;
-        console.log( "file" );
-
-        if ( ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) || ( y[ i ].value != "" ) ) {
-          var nome = y[ i ].value.split( "." );
-          if ( nome[ nome.length - 1 ].toLowerCase( ) != "pdf" ) {
-            y[ i ].className += " invalid";
-            document.getElementById( y[ i ].name + "_label" ).style = "";
-            valid = false;
-          }
-        }
-
-      } else {
-
-        console.log( "outros" );
-
-        if ( y[ i ].type == "url" ) {
-
-          console.log( "url" );
-
-          if ( !IsURL( y[ i ].value ) ) {
-
-            console.log( "entrei no !IsURL( y[ i ].value" );
-
-            setarInvalido( y[ i ] );
-
-            //y[ i ].className += " invalid";
-            //document.getElementById( y[ i ].name + "_label" ).style = "";
-            valid = false;
-          } else {
-            console.log( "entrei no else " );
-          }
-
-        } else {
-
-          if ( y[ i ].name == "cnpjDaInstituicao" ) {
-
-            console.log( "cnpjDaInstituicao" );
-
-            if ( !IsCNPJ( y[ i ].value ) ) {
-              setarInvalido( y[ i ] );
-              valid = false;
-            }
-
-          } else {
-
-            console.log( "outros required" );
-
-            // If a field is required
-            if ( typeof y[ i ].attributes[ 'required' ] != 'undefined' ) {
-
-              console.log( "outros required" );
-
-              //testar required
-              //if (y[ i ].getAttribute( "required" ) !== '')
-
-              if ( y[ i ].value == "" ) {
-
-                setarInvalido( y[ i ] );
-
-                // add an "invalid" class to the field:
-                // y[ i ].className += " invalid";
-                // document.getElementById( y[ i ].name + "_label" ).style = "";
-                // and set the current valid status to false
-                valid = false;
-              }
-
-            }
-          }
-        }
-      }
-    }
-
-
-    for ( i = 0; i < s.length; i++ ) {
-      // If a field is required
-      if ( typeof s[ i ].attributes[ 'required' ] != 'undefined' ) {
-        if ( s[ i ].value == "" ) {
-          // add an "invalid" class to the field:
-          s[ i ].className += " invalid";
-          document.getElementById( s[ i ].name + "_label" ).style = "";
-          // and set the current valid status to false
-          valid = false;
-        }
-      }
-    }
-
-
-    for ( i = 0; i < t.length; i++ ) {
-      // If a field is required
-      if ( typeof t[ i ].attributes[ 'required' ] != 'undefined' ) {
-        if ( t[ i ].value == "" ) {
-
-          setarInvalido( t[ i ] );
-
-          // add an "invalid" class to the field:
-          //t[ i ].className += " invalid";
-          //document.getElementById( t[ i ].name + "_label" ).style = "";
-          // and set the current valid status to false
-          valid = false;
-        }
-      }
-    }
-
-    valid = validaFormularioRadio( x, "natureza-op", valid );
-
-    // valid = validaFormularioRadio( x, "requisitos", valid );
-
-    // valid = validaFormularioRadio( x, "generoDoGestor", valid );
-    // valid = validaFormularioRadio( x, "concursoDoGestor", valid );
-    // valid = validaFormularioRadio( x, "esferaDaUnidade", valid );
-    // valid = validaFormularioRadio( x, "espacoFisico", valid );
-    // valid = validaFormularioRadio( x, "recursosDaUnidade", valid );
-
-    // valid = validaFormularioGeral( x, "cepDaUnidade", true, valid );
-    // valid = validaFormularioGeral( x, "cepDoPrefeito", true, valid );
-
-    // valid = validaFormularioGeral( x, "telefoneDoPrefeito", true, valid );
-    // valid = validaFormularioGeral( x, "telefoneDoGestor", true, valid );
-    // valid = validaFormularioGeral( x, "telefoneDaUnidade", true, valid );
-    // valid = validaFormularioGeral( x, "faxDoPrefeito", false, valid );
-    // valid = validaFormularioGeral( x, "celDoGestor", false, valid );
-    // valid = validaFormularioGeral( x, "celDaUnidade", false, valid );
-
-  }
-  return valid; // return the valid status
-}
-*/
-
 function validaFormulario() {
 
   var x, y, t, currentTab, valid = true;
@@ -780,7 +593,16 @@ function getValueRadio(radioElement) {
   return "";
 }
 
+
+var alteradosArrayGlobal = [];
+
 function changeError(name) {
+  //incluo no array global qual item foi alterado
+  if (!alteradosArrayGlobal.includes(name)) {
+    alteradosArrayGlobal.push(name);
+    //console.log({ alteradosArrayGlobal });
+  }
+
   setarValido(document.getElementById(name));
 }
 
@@ -792,16 +614,26 @@ function changeErrorRadio(name) {
 
     for (i = 0; i < r.length; i++) {
       setarValido(r[i]);
+
+      if (r[i].checked == true) {
+        //incluo no array global qual item foi alterado
+        if (!alteradosArrayGlobal.includes(r[i].id)) {
+          alteradosArrayGlobal.push(r[i].id);
+          //console.log({ alteradosArrayGlobal });
+        }
+      }
     }
-
   }
-
-  // if ( document.getElementById( name + "_label" ) ) {
-  //   document.getElementById( name + "_label" ).style = "display: none;";
-  // }
 }
 
 function changeErrorCheck(name) {
+  if (!alteradosArrayGlobal.includes(name)) {
+    alteradosArrayGlobal.push(name);
+    //console.log({ alteradosArrayGlobal });
+  } else {
+    //check só deve salvar na primeira vez que for alterado
+    alteradosArrayGlobal.pop(name);
+  }
 
   //uso um element para pegar a classe
   element = document.getElementById(name);
@@ -817,125 +649,6 @@ function changeErrorCheck(name) {
       setarValido(r[i]);
     }
 
-  }
-}
-
-function changeSelect(name) {
-  if (document.getElementById(name).value == "Outro") {
-    document.getElementById(name + "outro").disabled = false;
-    document.getElementById(name + "outro").required = true;
-    document.getElementById(name + "outro").style = "";
-    document.getElementById(name + "outro" + "div").style = "";
-  } else {
-    document.getElementById(name + "outro").disabled = true;
-    document.getElementById(name + "outro").required = false;
-    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
-    document.getElementById(name + "outro").value = "";
-    document.getElementById(name + "outro" + "div").style = "display: none;";
-    changeError(name + "outro");
-  }
-  if (document.getElementById(name + "_label")) {
-    changeError(name)
-  }
-}
-
-function changeCheck(name) {
-  if (document.getElementById(name + "number").hasAttribute("disabled")) {
-    document.getElementById(name + "number").disabled = false;
-    document.getElementById(name + "number").required = true;
-    document.getElementById(name + "number").style = "";
-
-    if (document.getElementById(name + "outro" + "div")) {
-      document.getElementById(name + "outro" + "div").style = "";
-    }
-  } else {
-    document.getElementById(name + "number").disabled = true;
-    document.getElementById(name + "number").required = false;
-    document.getElementById(name + "number").style = "background-color: #bbbbbb;";
-    document.getElementById(name + "number").value = "";
-
-    if (document.getElementById(name + "outro" + "div")) {
-      document.getElementById(name + "outro" + "div").style = "display: none;";
-    }
-  }
-  if (document.getElementById(name + "_label")) {
-    changeError(name)
-  }
-  if (document.getElementById(name + "number_label")) {
-    changeError(name + "number")
-  }
-}
-
-function changeRadio(name) {
-  if (strcmp(getValueRadio(document.getElementsByName(name)), "Próprio")) {
-    document.getElementById(name + "outro").disabled = false;
-    document.getElementById(name + "outro").required = true;
-    document.getElementById(name + "outro").style = "";
-    document.getElementById(name + "outro" + "div").style = "";
-  } else {
-    document.getElementById(name + "outro").disabled = true;
-    document.getElementById(name + "outro").required = false;
-    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
-    document.getElementById(name + "outro").value = "";
-    document.getElementById(name + "outro" + "div").style = "display: none;";
-    changeError(name + "outro");
-  }
-  if (document.getElementById(name + "_label")) {
-    changeError(name)
-  }
-}
-
-function changeRadio2(name) {
-  if (strcmp(getValueRadio(document.getElementsByName(name)), "Outro")) {
-    document.getElementById(name + "outro").disabled = true;
-    document.getElementById(name + "outro").required = false;
-    document.getElementById(name + "outro").style = "background-color: #bbbbbb;";
-    document.getElementById(name + "outro").value = "";
-    document.getElementById(name + "outro" + "div").style = "display: none;";
-    changeError(name + "outro");
-  } else {
-    document.getElementById(name + "outro").disabled = false;
-    document.getElementById(name + "outro").required = true;
-    document.getElementById(name + "outro").style = "";
-    document.getElementById(name + "outro" + "div").style = "";
-  }
-  if (document.getElementById(name + "_label")) {
-    changeError(name)
-  }
-}
-
-function strcmp(a, b) {
-  a = a.toString(), b = b.toString();
-  for (var i = 0, n = Math.max(a.length, b.length); i < n && a.charAt(i) === b.charAt(i); ++i)
-    ;
-  if (i === n)
-    return 0;
-  return a.charAt(i) > b.charAt(i) ? -1 : 1;
-}
-
-function changeNumber(name) {
-  var valor, min, max;
-
-  valor = parseInt(document.getElementById(name).value);
-  min = parseInt(document.getElementById(name).min);
-  max = parseInt(document.getElementById(name).max);
-
-  if (valor) {
-    //para pegar só a parte inteira
-    document.getElementById(name).value = valor;
-
-    if (valor < min) {
-      document.getElementById(name).value = min;
-    } else if (valor > max) {
-      document.getElementById(name).value = max;
-    }
-  }
-
-  if (document.getElementById(name + "_label")) {
-    changeError(name)
-
-    //document.getElementById(name + "_label").style = "display: none;";
-    //document.getElementById(name).classList.remove("invalid");
   }
 }
 

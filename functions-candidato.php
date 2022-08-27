@@ -669,7 +669,7 @@ function relaciona_status($s)
 }
 
 
-function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $status = "avaliacao")
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, $status = "avaliacao")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -703,9 +703,11 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_223413', $entrada, $recursoInstituicao);
     //Campo: campo_extra1
     Caldera_Forms_Entry_Update::update_field_value('fld_299311', $entrada, $historicoRecursoInstituicao);
+    //Campo: campo_extra2
+    Caldera_Forms_Entry_Update::update_field_value('fld_2149513', $entrada, $alterados);
 }
 
-function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag = "true", $status = "avaliacao")
+function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag = "true", $status = "avaliacao", $alterados = "")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -724,6 +726,7 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag 
         //tags 
         Caldera_Forms_Entry_Update::update_field_value('fld_7938112', $entrada, "");
         $status = "pendente";
+        $alterados = "";
     }
 
     Caldera_Forms_Entry_Update::update_field_value('fld_605717', $entrada, $dados_redes["urlServico"]);
@@ -745,6 +748,9 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag 
 
     // campo_extra4
     Caldera_Forms_Entry_Update::update_field_value('fld_4663810', $entrada, $flag);
+
+    // campo_extra5
+    Caldera_Forms_Entry_Update::update_field_value('fld_2676148', $entrada, $alterados);
 
     //$versaoOld = valida($entrada, 'fld_2402818');
     //Caldera_Forms_Entry_Update::update_field_value('fld_2402818', $entrada, $versao);
@@ -827,6 +833,8 @@ function atualiza_geral_candidato_ajax()
     if (isset($_POST['recursoInstituicao'])) $recursoInstituicao = ($_POST['recursoInstituicao']);
     else $recursoInstituicao = "";
 
+    $alterados = (isset($_POST['alterados'])) ? $_POST['alterados'] : '';
+
     // apenas se tiver recurso escrito
     if (strlen($recursoInstituicao) > 1) {
         //Adicionando o recurso ao histórico:
@@ -841,7 +849,7 @@ function atualiza_geral_candidato_ajax()
     }
 
     //funcao para criar a entrada no Caldera (Form geral)
-    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, "avaliacao");
+    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, "avaliacao");
 
     //TODO envia email de update --> mudei para o atualiza_status_geral_ajax
 
@@ -917,8 +925,10 @@ function atualiza_rede_candidato_ajax()
         else $dados_redes[$key]["telefoneRepresentante"] = "";
     }
 
+    $alterados = (isset($_POST['alterados'])) ? $_POST['alterados'] : '';
+
     // faz o update dos dados no caldera
-    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao");
+    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao", $alterados);
 
     //TODO envia email de update  --> mudei para o atualiza_status_geral_ajax
 

@@ -391,11 +391,17 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
         <div class="br-textarea mb-3">
             <label for="urlServico-<?php echo $rede_nome; ?>">URL dos serviços relacionados na rede especificada<span class="field_required" style="color:#ee0000;">*</span></label>
             <textarea class="" id="urlServico-<?php echo $rede_nome; ?>" name="urlServico-<?php echo $rede_nome; ?>" placeholder="Escreva a URL dos serviços" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_605717'); ?>" <?php echo $disabled; ?>><?php echo valida($entrada, 'fld_605717'); ?></textarea>
+            <?php if ($statusRede == "pendente") : ?>
+                <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <?php endif; ?>
         </div>
 
         <div class="br-textarea mb-3">
             <label for="produtoServicos-<?php echo $rede_nome; ?>">Produtos, serviços e/ou ferramentas de CT&I ofertados relacionados à rede selecionada - proposta de valor<span class="field_required" style="color:#ee0000;">*</span></label>
             <textarea class="" id="produtoServicos-<?php echo $rede_nome; ?>" name="produtoServicos-<?php echo $rede_nome; ?>" placeholder="Descreva os Produtos, serviços e/ou ferramentas ofertados" rows="3" onchange="changeError(name)" value="<?php echo valida($entrada, 'fld_4486725'); ?>" <?php echo $disabled; ?>><?php echo valida($entrada, 'fld_4486725'); ?></textarea>
+            <?php if ($statusRede == "pendente") : ?>
+                <div class="text-base mt-1"><span class="limit">Limite máximo de <strong>800</strong> caracteres</span><span class="current"></span></div>
+            <?php endif; ?>
         </div>
 
         <label>Classificação<span class="field_required" style="color:#ee0000;">*</span></label>

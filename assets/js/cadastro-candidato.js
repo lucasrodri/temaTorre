@@ -40,6 +40,13 @@ async function atualizaRedeCandidatoGeral() {
   // tenho que enviar pelo FormData pq o jQuery ajax não aceita de outra forma
   formData.append("entrada", entradaGeral);
 
+  // Check dos itens alterados
+  var alterados = checarAlterados();
+  console.log({ alterados });
+
+  // TODO: adicionar check se tem algum alterado antes de enviar para o back?
+  formData.append("alterados", alterados);
+
   await jQuery(function ($) {
     $.ajax({
       type: "POST",
@@ -60,7 +67,8 @@ async function atualizaRedeCandidatoGeral() {
       },
       success: function (html) {
         $('#tab_instituicao').html(html);
-        $('#titulo-status-cadastro_' + redeArray).remove();
+        //tá quebrando o atualizar da aba instituição
+        //$('#titulo-status-cadastro_' + redeArray).remove();
       },
       complete: function (data) {
         $("#loading_carregar").css("display", "none");
@@ -101,7 +109,10 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
     }
   }
 
-  // console.log({ elements });
+  // Check dos itens alterados
+  var alterados = checarAlterados(redeArray);
+  console.log({ alterados });
+  // TODO: adicionar check se tem algum alterado antes de enviar para o back?
 
   await jQuery(function ($) {
     $.ajax({
@@ -112,6 +123,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
         entrada: entrada,
         rede: redeArray,
         elements: elements,
+        alterados: alterados,
       },
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
@@ -566,4 +578,37 @@ function editaRedeCandidato(painel, redeArray, entrada) {
       element.removeAttribute("disabled");
     }
   }
+}
+
+
+function checarAlterados(redeArray = "") {
+
+  // Check dos itens alterados
+  var alterados = [];
+
+  if (redeArray !== "") {
+    // Se a redeArray tiver algo, é uma atualização de rede
+    for (let i = 0; i < alteradosArrayGlobal.length; i++) {
+      // faço esse check caso o candidato mude algo em outra aba
+      if (alteradosArrayGlobal[i].includes(relaciona((redeArray))[0])) {
+        //só insiro quem tá dentro dessa rede
+        alterados.push(alteradosArrayGlobal[i])
+      }
+    }
+  } else {
+    // atualização de instituição
+    for (let i = 0; i < alteradosArrayGlobal.length; i++) {
+      // faço esse check caso o candidato mude algo em outra aba
+      if (!alteradosArrayGlobal[i].includes("rede-de")) {
+        //só insiro quem não tem esse "rede-de", ou seja, aba instituição
+        alterados.push(alteradosArrayGlobal[i])
+      }
+    }
+  }
+
+  // Remove os alterados do alteradosArrayGlobal
+  // https://stackoverflow.com/questions/19957348/remove-all-elements-contained-in-another-array
+  alteradosArrayGlobal = alteradosArrayGlobal.filter((el) => !alterados.includes(el));
+  // console.log({ alteradosArrayGlobal });
+  return alterados;
 }
