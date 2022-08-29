@@ -317,18 +317,16 @@ function avaliador_action_form()
     if (isset($_POST['entrada_geral'])) $entrada_geral = ($_POST['entrada_geral']);
     else $entrada_geral = "";
 
-    //Adicionando o parecer ao histórico:
-    date_default_timezone_set('America/Sao_Paulo');
-    $date = date('d/m/Y h:i:sa', time());
-
-    // se já houver alguma coisa, acrescenta um \n
-    if (strlen($historicoParecer_geral) > 1)
-        $historicoParecer_geral .= "\n\n";
-
+    // Novo jeito de salvar histórico
     if (strlen($parecerAvaliador_geral) < 1)
         $parecerAvaliador_geral = "Avaliado como Homologado.";
 
-    $historicoParecer_geral .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_geral;
+    $novoHistorico = "Avaliação em " . retorna_data() . ":\n" . $parecerAvaliador_geral;
+
+    if (strlen($historicoParecer_geral) > 1)
+        $novoHistorico .= "\n\n" . $historicoParecer_geral;
+
+    $historicoParecer_geral = $novoHistorico;
 
     //Campos das redes
     foreach ($arrayRedes as $rede) {
@@ -354,15 +352,16 @@ function avaliador_action_form()
         if (isset($_POST['entrada_' . $rede])) $entrada_rede[$rede] = ($_POST['entrada_' . $rede]);
         else $entrada_rede[$rede] = "";
 
-        // se já houver alguma coisa, acrescenta um \n
-        if (strlen($historicoParecer_rede[$rede]) > 1)
-            $historicoParecer_rede[$rede] .= "\n\n";
-
+        // Novo jeito de salvar histórico
         if (strlen($parecerAvaliador_rede[$rede]) < 1)
             $parecerAvaliador_rede[$rede] = "Avaliado como Homologado.";
 
-        //Adicionando o parecer ao histórico:
-        $historicoParecer_rede[$rede] .= "Avaliação em " . $date . ":\n" . $parecerAvaliador_rede[$rede];
+        $novoHistorico = "Avaliação em " . retorna_data() . ":\n" . $parecerAvaliador_rede[$rede];
+
+        if (strlen($historicoParecer_rede[$rede]) > 1)
+            $novoHistorico .= "\n\n" . $historicoParecer_rede[$rede];
+
+        $historicoParecer_rede[$rede] = $novoHistorico;
     }
 
     $resumo = '';

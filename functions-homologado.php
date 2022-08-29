@@ -296,16 +296,14 @@ function homologado_action_form()
 
     //-------------------------------------------------------- atualizar status da rede como publicado
 
-    //Adicionando o parecer ao histórico:
-    date_default_timezone_set('America/Sao_Paulo');
-    $date = date('d/m/Y h:i:sa', time());
-
-    // se já houver alguma coisa, acrescenta um \n
-    if (strlen($historicoParecer) > 1)
-        $historicoParecer .= "\n\n";
-
+    // Novo jeito de salvar histórico  
     $parecerAvaliador = "Post da Rede publicado: " . esc_url(get_permalink($post_id)) . " .";
-    $historicoParecer .= "Atualização em " . $date . ":\n" . $parecerAvaliador;
+    $novoHistorico = "Atualização em " . retorna_data() . ":\n" . $parecerAvaliador;
+
+    if (strlen($historicoParecer) > 1)
+        $novoHistorico .= "\n\n" . $historicoParecer;
+
+    $historicoParecer = $novoHistorico;
     $status = 'publicado';
 
     update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
@@ -378,16 +376,14 @@ function homologado_despublica_rede()
 
     //-------------------------------------------------------- atualizar status da rede como despublicado
 
-    //Adicionando o parecer ao histórico:
-    date_default_timezone_set('America/Sao_Paulo');
-    $date = date('d/m/Y h:i:sa', time());
-
-    // se já houver alguma coisa, acrescenta um \n
-    if (strlen($historicoParecer) > 1)
-        $historicoParecer .= "\n\n";
-
+    // Novo jeito de salvar histórico  
     $parecerAvaliador = "Post da Rede despublicado.";
-    $historicoParecer .= "Atualização em " . $date . ":\n" . $parecerAvaliador;
+    $novoHistorico = "Atualização em " . retorna_data() . ":\n" . $parecerAvaliador;
+
+    if (strlen($historicoParecer) > 1)
+        $novoHistorico .= "\n\n" . $historicoParecer;
+
+    $historicoParecer = $novoHistorico;
     $status = 'homologado';
 
     update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);

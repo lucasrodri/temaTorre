@@ -669,7 +669,7 @@ function relaciona_status($s)
 }
 
 
-function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, $status = "avaliacao")
+function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, $status = "avaliacao", $historicoParecer = "", $parecerAvaliador = "")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -705,9 +705,15 @@ function update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoD
     Caldera_Forms_Entry_Update::update_field_value('fld_299311', $entrada, $historicoRecursoInstituicao);
     //Campo: campo_extra2
     Caldera_Forms_Entry_Update::update_field_value('fld_2149513', $entrada, $alterados);
+
+    // Novo jeito de salvar histórico  
+    //Campo: historico_parecer_instituicao
+    $historicoParecer && Caldera_Forms_Entry_Update::update_field_value('fld_4416984', $entrada, $historicoParecer);
+    //Campo: parecer_instituicao
+    $parecerAvaliador && Caldera_Forms_Entry_Update::update_field_value('fld_8529353', $entrada, $parecerAvaliador);
 }
 
-function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag = "true", $status = "avaliacao", $alterados = "")
+function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag = "true", $status = "avaliacao", $alterados = "", $historicoParecer = "", $parecerAvaliador = "")
 {
     /*
 	* Função para atualizar uma nova entrada em um Caldera Forms
@@ -727,6 +733,12 @@ function update_entrada_form_especifico_candidato($entrada, $dados_redes, $flag 
         Caldera_Forms_Entry_Update::update_field_value('fld_7938112', $entrada, "");
         $status = "pendente";
         $alterados = "";
+    } else {
+        // Novo jeito de salvar histórico  
+        //Campo: historico_parecer_instituicao
+        $historicoParecer && Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada, $historicoParecer);
+        //Campo: parecer_instituicao
+        $parecerAvaliador && Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada, $parecerAvaliador);
     }
 
     Caldera_Forms_Entry_Update::update_field_value('fld_605717', $entrada, $dados_redes["urlServico"]);
@@ -834,22 +846,35 @@ function atualiza_geral_candidato_ajax()
     else $recursoInstituicao = "";
 
     $alterados = (isset($_POST['alterados'])) ? $_POST['alterados'] : '';
+    //echo retorna_alterados_texto($alterados);
+
 
     // apenas se tiver recurso escrito
     if (strlen($recursoInstituicao) > 1) {
-        //Adicionando o recurso ao histórico:
-        date_default_timezone_set('America/Sao_Paulo');
-        $date = date('d/m/Y h:i:sa', time());
+        // Novo jeito de salvar histórico
+        $novoHistorico = "Mensagem enviada em " . retorna_data() . ":\n" . $recursoInstituicao;
 
         // se já houver alguma coisa, acrescenta um \n
         if (strlen($historicoRecursoInstituicao) > 1)
-            $historicoRecursoInstituicao .= "\n\n";
+            $novoHistorico .= "\n\n" . $historicoRecursoInstituicao;
 
-        $historicoRecursoInstituicao .= "Mensagem enviada em " . $date . ":\n" . $recursoInstituicao;
+        $historicoRecursoInstituicao = $novoHistorico;
     }
 
+    // Novo jeito de salvar histórico  
+    $parecerAvaliador = "Entrada da Instituição atualizada." . retorna_alterados_texto($alterados);
+    $novoHistorico = "Atualização em " . retorna_data() . ":\n" . $parecerAvaliador;
+
+    // achei mais fácil pegar o histórico assim que tentar mudar o html + js pra retorná-lo
+    $historicoParecer = retorna_value($entrada, FORM_ID_GERAL, GERAL_HISTORICO);
+
+    if (strlen($historicoParecer) > 1)
+        $novoHistorico .= "\n\n" . $historicoParecer;
+
+    $historicoParecer = $novoHistorico;
+    
     //funcao para criar a entrada no Caldera (Form geral)
-    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, "avaliacao");
+    update_entrada_form_candidato($entrada, $nomeDaInstituicao, $descricaoDaInstituicao, $natureza_op, $porte_op, $cnpjDaInstituicao, $CNAEDaInstituicao, $urlDaInstituicao, $enderecoDaInstituicao, $complementoDaInstituicao, $estadoDaInstituicao, $cidadeDaInstituicao, $cepDaInstituicao, $doc1UnidadeUrl, $doc2UnidadeUrl, $nomeDoCandidato, $recursoInstituicao, $historicoRecursoInstituicao, $alterados, "avaliacao", $historicoParecer, $parecerAvaliador);
 
     //TODO envia email de update --> mudei para o atualiza_status_geral_ajax
 
@@ -926,9 +951,22 @@ function atualiza_rede_candidato_ajax()
     }
 
     $alterados = (isset($_POST['alterados'])) ? $_POST['alterados'] : '';
+    //echo retorna_alterados_texto($alterados);
+
+    // Novo jeito de salvar histórico  
+    $parecerAvaliador = "Entrada da Rede atualizada." . retorna_alterados_texto($alterados); //se tiver algum alterado, concatena
+    $novoHistorico = "Atualização em " . retorna_data() . ":\n" . $parecerAvaliador;
+
+    // achei mais fácil pegar o histórico assim que tentar mudar o html + js pra retorná-lo
+    $historicoParecer = retorna_value($entrada, $dados_redes[relaciona($rede)[0]], REDES_HISTORICO);
+
+    if (strlen($historicoParecer) > 1)
+        $novoHistorico .= "\n\n" . $historicoParecer;
+
+    $historicoParecer = $novoHistorico;
 
     // faz o update dos dados no caldera
-    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao", $alterados);
+    update_entrada_form_especifico_candidato($entrada, $dados_redes[relaciona($rede)[0]], "true", "avaliacao", $alterados, $historicoParecer, $parecerAvaliador);
 
     //TODO envia email de update  --> mudei para o atualiza_status_geral_ajax
 
@@ -1312,4 +1350,108 @@ function user_tem_post_na_rede($post_type, $usuario_id)
     }
 
     return false;
+}
+
+function retorna_data()
+{
+    date_default_timezone_set('America/Sao_Paulo');
+    return date('d/m/Y h:i:sa', time());
+}
+
+//Definitions
+define('GERAL_HISTORICO', 'fld_4416984');
+define('REDES_HISTORICO', 'fld_6135036');
+
+function retorna_value($entrada, $form_id, $fld)
+{
+    $form = Caldera_Forms_Forms::get_form($form_id);
+    $entry = new Caldera_Forms_Entry($form, $entrada);
+    return valida($entry, $fld);
+}
+
+// EM DESENVOLVIMENTO
+function retorna_alterados_texto($alterados)
+{
+
+    $texto = "Os seguintes itens foram alterados: ";
+    $flag_natureza = false;
+    $flag_porte  = false;
+    $flag_check_classificacao  = false;
+    $flag_check_publico  = false;
+    $flag_check_abrangencia  = false;
+
+    // Exemplo da aba instituicao
+    //nomeDaInstituicao,natureza_op_4,natureza_op_2,natureza_op_1,natureza_op_3,porte_op_3,porte_op_4,porte_op_2,cnpjDaInstituicao,urlDaInstituicao,enderecoDaInstituicao,complementoDaInstituicao,cepDaInstituicao,nomeDoCandidato,descricaoDaInstituicao,CNAEDaInstituicao,logo_instituicao
+
+    // Exemplo da aba de redes
+    //check_classificacao_0_rede-de-suporte,check_classificacao_1_rede-de-suporte,check_classificacao_2_rede-de-suporte,check_classificacao_3_rede-de-suporte,check_classificacao_4_rede-de-suporte,check_classificacao_5_rede-de-suporte,check_classificacao_6_rede-de-suporte,check_classificacao_7_rede-de-suporte,check_classificacao_8_rede-de-suporte,check_classificacao_9_rede-de-suporte,check_classificacao_10_rede-de-suporte,check_classificacao_11_rede-de-suporte,outroClassificacao_rede-de-suporte,check_publico_0_rede-de-suporte,check_publico_1_rede-de-suporte,check_publico_2_rede-de-suporte,check_publico_4_rede-de-suporte,check_publico_5_rede-de-suporte,check_publico_6_rede-de-suporte,check_publico_7_rede-de-suporte,check_publico_8_rede-de-suporte,check_publico_9_rede-de-suporte,check_abrangencia_0_rede-de-suporte,check_abrangencia_1_rede-de-suporte,check_abrangencia_2_rede-de-suporte,nomeCompleto_rede-de-suporte,cpfRepresentante_rede-de-suporte,emailRepresentante_rede-de-suporte,telefoneRepresentante_rede-de-suporte,urlServico-rede-de-suporte,produtoServicos-rede-de-suporte
+
+    $alteradosLista = explode(",", $alterados);
+
+    foreach ($alteradosLista as $item) {
+
+        // checar se contem algum dos radio ou checkbox
+        /*      
+        str_contains($item, "natureza") && $flag_natureza = true;
+        str_contains($item, "porte") && $flag_porte = true;
+        str_contains($item, "check_classificacao") && $flag_check_classificacao = true;
+        str_contains($item, "check_publico") && $flag_check_publico = true;
+        str_contains($item, "check_abrangencia") && $flag_check_abrangencia = true;
+        */
+
+        $texto .= texto_bonito($item) . ", ";
+    }
+
+    return rtrim($texto, ", ") . ".";
+}
+
+
+function texto_bonito($item)
+{
+    switch ($item) {
+        // ----------------------------------------------- Aba geral
+        case 'nomeDaInstituicao':
+            return 'Nome da Instituição';
+            break;
+        case 'cnpjDaInstituicao':
+            return 'CNPJ da Instituição';
+            break;
+        case 'urlDaInstituicao':
+            return 'URL da Instituição';
+            break;
+        case 'enderecoDaInstituicao':
+            return 'Endereço da Instituição';
+            break;
+        case 'complementoDaInstituicao':
+            return 'Complemento do Endereço da Instituição';
+            break;
+        case 'cepDaInstituicao':
+            return 'CEP da Instituição';
+            break;
+        case 'nomeDoCandidato':
+            return 'Nome do Representate da Instituição';
+            break;
+        case 'descricaoDaInstituicao':
+            return 'Descrição da Instituição';
+            break;
+        case 'CNAEDaInstituicao':
+            return 'CNAE da Instituição';
+            break;
+        case 'logo_instituicao':
+            return 'Logo da Instituição';
+            break;
+        case 'guia_instituicao':
+            return 'Guia da Instituição';
+            break;
+        case 'natureza': //precisa de ajustes
+            return 'Natureza Jurídica da Instituição';
+            break;
+        case 'porte':  //precisa de ajustes
+            return 'Porte da Instituição';
+            break;
+        // ----------------------------------------------- Aba de redes
+        default:
+            return $item;
+            break;
+    }
 }

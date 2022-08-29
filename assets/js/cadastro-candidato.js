@@ -123,7 +123,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
         entrada: entrada,
         rede: redeArray,
         elements: elements,
-        alterados: alterados,
+        alterados: alterados.toString(), //necessário para que chegue uma string e não um array de strings no backend
       },
       beforeSend: function () {
         $("#loading_carregar").css("display", "block");
