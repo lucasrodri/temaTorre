@@ -72,7 +72,7 @@ async function atualizaRedeCandidatoGeral() {
       },
       complete: function (data) {
         $("#loading_carregar").css("display", "none");
-        alert('Dados enviados!');
+        //alert('Dados enviados!');
         atualizaStatusGeral();
       }
     });
@@ -144,7 +144,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
       },
       complete: function () {
         $("#loading_carregar").css("display", "none");
-        alert('Dados enviados!');
+        //alert('Dados enviados!');
 
         //mostrar div do botão de atualizar
         var divBotaoExcluir = document.getElementById("botaoExcluir_" + painel);
@@ -540,7 +540,7 @@ async function excluirRedeCandidato(painel, redeArray, entrada) {
       },
       complete: function () {
         $("#loading_carregar").css("display", "none");
-        alert('Dados enviados!');
+        //alert('Dados enviados!');
         $("#botaoAdicionar_" + painel).css("display", "inline");
         $("#botaoAtualizar_" + painel).css("display", "none");
         $("#botaoExcluir_" + painel).css("display", "none");

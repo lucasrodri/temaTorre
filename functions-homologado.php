@@ -447,8 +447,8 @@ function historico_parecer_readonly($entry, $rede = "geral")
     <div id="div_<?php echo $rede ?>">
 
         <div class="br-textarea mb-3">
-            <label for="historicoParecer_<?php echo $rede ?>">Histórico do parecer</label>
-            <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico do parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
+            <label for="historicoParecer_<?php echo $rede ?>">Histórico da Instituição</label>
+            <textarea class="textarea-start-size disabled" id="historicoParecer_<?php echo $rede ?>" name="historicoParecer_<?php echo $rede ?>" placeholder="Não há histórico de parecer" readonly value="<?php echo valida($entry, $fld_historico); ?>"><?php echo valida($entry, $fld_historico); ?></textarea>
         </div>
 
         <div class="br-textarea mb-3">

@@ -231,7 +231,7 @@ function render_geral_form($entrada)
         <div class="col-md-12">
 
             <div class="br-textarea mb-3">
-                <label for="historicoParecer">Histórico do parecer</label>
+                <label for="historicoParecer">Histórico da Instituição</label>
                 <textarea class="textarea-start-size" name="historicoParecer" value="<?php echo valida($entrada, 'fld_4416984'); ?>" disabled><?php echo valida($entrada, 'fld_4416984'); ?></textarea>
             </div>
             <div class="br-textarea mb-3">
@@ -268,7 +268,8 @@ function render_geral_data($entrada, $flag_view = 'false', $flag_titulo = true)
     $disabled =  (($statusFormInstituicao == "avaliacao") || ($statusFormInstituicao == "homologado") || $flag_view == 'true') ?
         'disabled'
         : '';
-
+    $mudanças = valida($entrada, 'fld_2149513'); 
+    echo $mudanças;
 ?>
     <!-- PQ tem esse p ai??? -->
     <!-- <p id="radio_function" style="display: none;"></p>-->
@@ -529,7 +530,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
             <div class="br-list" role="list" data-sub="data-sub">
                 <div class="align-items-center br-item" role="listitem" tabindex="0" data-toggle="collapse" data-target="c-l1">
                     <div class="content">
-                        <div class="flex-fill"><label>Histórico do parecer da rede</label></div><i class="fas fa-angle-down" aria-hidden="true"></i>
+                        <div class="flex-fill"><label>Histórico da Rede</label></div><i class="fas fa-angle-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="br-list" id="c-l1" role="list" hidden="hidden" data-sub="data-sub">
@@ -555,7 +556,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
     <?php if (strlen(valida($entrada, 'fld_5960872')) > 1) : ?>
         <div id="historico-status-cadastro_<?php echo relaciona_rede($rede_nome)[0]; ?>" class="col-md-12">
             <div class="br-textarea mb-3">
-                <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico do parecer da rede</label>
+                <label for="historicoParecer_<?php echo $rede_nome; ?>">Histórico da Rede</label>
                 <textarea class="textarea-start-size" name="historicoParecer_<?php echo $rede_nome; ?>" value="<?php echo valida($entrada, 'fld_6135036'); ?>" disabled><?php echo valida($entrada, 'fld_6135036'); ?></textarea>
             </div>
 
