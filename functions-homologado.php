@@ -325,7 +325,7 @@ function homologado_action_form()
     // Renderizar aba da rede (preciso recarregar a rede)
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
     historico_parecer_readonly($entryRede, $rede);
-    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true');
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true', false);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
 
@@ -395,7 +395,7 @@ function homologado_despublica_rede()
     // Renderizar aba da rede (preciso recarregar a rede)
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
     historico_parecer_readonly($entryRede, $rede);
-    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true');
+    cadastro_redes_render(relaciona($rede)[0], $entryRede, 'true', false);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entradaRedeId . '">';
     botao_publicado_render($entryRede, $entradaRedeId, $rede);
     posts_publicado_render($usuario_id);

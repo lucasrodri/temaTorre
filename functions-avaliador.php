@@ -178,9 +178,12 @@ function ajaxCarregaInstituicao()
 
     //se o $flag_gerente == 'false' && $flag_homologado == 'false' então ele é o avaliador
     //nesse caso temos que destacar as mudanças...
-    
+    $flag_avaliador = false;
+    if ($flag_gerente == 'false' && $flag_homologado == 'false'){
+        $flag_avaliador = true;
+    }
 
-    render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente, $flag_titulo);
+    render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente, $flag_titulo, $flag_avaliador);
     echo '<input type="hidden" id="entrada_geral" name="entrada_geral" value="' . $entrada . '">';
     echo '<input type="hidden" id="usuario_id" name="usuario_id" value="' . $usuario_id . '">';
 
@@ -230,7 +233,14 @@ function ajaxCarregaRede()
         $flag_titulo = false;
     }
 
-    cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente, $flag_titulo);
+    //se o $flag_gerente == 'false' && $flag_homologado == 'false' então ele é o avaliador
+    //nesse caso temos que destacar as mudanças...
+    $flag_avaliador = false;
+    if ($flag_gerente == 'false' && $flag_homologado == 'false'){
+        $flag_avaliador = true;
+    }
+
+    cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente, $flag_titulo, $flag_avaliador);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
 
     if ($flag_gerente == 'false') {
@@ -465,4 +475,32 @@ function update_entrada_avaliador($historicoParecer_geral, $parecerAvaliador_ger
 
     //Campo: status_geral_instituicao
     Caldera_Forms_Entry_Update::update_field_value('fld_9748069', $entrada_geral, $situacaoGeral);
+}
+
+function texto_mudancas($mudancas){
+    //todos os possiveis IDs das redes e da instituição: ???
+    //TODO!!!
+    $todosIds = 'check_classificacao_0_rede-de-suporte,check_classificacao_1_rede-de-suporte,check_classificacao_2_rede-de-suporte,check_classificacao_3_rede-de-suporte,check_classificacao_4_rede-de-suporte,check_classificacao_5_rede-de-suporte,check_classificacao_6_rede-de-suporte,check_classificacao_7_rede-de-suporte,check_classificacao_8_rede-de-suporte,check_classificacao_9_rede-de-suporte,check_classificacao_10_rede-de-suporte,check_classificacao_11_rede-de-suporte,outroClassificacao_rede-de-suporte,check_publico_0_rede-de-suporte,check_publico_1_rede-de-suporte,check_publico_2_rede-de-suporte,check_publico_4_rede-de-suporte,check_publico_5_rede-de-suporte,check_publico_6_rede-de-suporte,check_publico_7_rede-de-suporte,check_publico_8_rede-de-suporte,check_publico_9_rede-de-suporte,check_abrangencia_0_rede-de-suporte,check_abrangencia_1_rede-de-suporte,check_abrangencia_2_rede-de-suporte,nomeCompleto_rede-de-suporte,cpfRepresentante_rede-de-suporte,emailRepresentante_rede-de-suporte,telefoneRepresentante_rede-de-suporte,urlServico-rede-de-suporte,produtoServicos-rede-de-suporte';
+
+    $array_todos_ids = explode(",",$todosIds);
+    $array_mudancas = explode(",",$mudancas);
+
+    $html = "<p>Os seguintes campos foram modificados:</p><ul>";
+    foreach ($array_todos_ids as $id) {
+        if(in_array($id, $array_mudancas)) {
+            $html .= "<li>".relacionaId($id)."</li>";
+        }     
+    }
+    $html .= "</ul>";
+    
+
+    return $html;
+}
+
+function relacionaId($id){
+    //TODO
+    switch ($id) {
+        case 'nomeDaInstituicao':
+            return "Nome da Instituição";
+    }
 }

@@ -160,7 +160,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
         $("#botaoAdicionar_" + painel).css("display", "none");
         $("#botaoAtualizar_" + painel).css("display", "none");
         
-        if (document.getElementById("#status-"+redeArray)) {
+        if (document.getElementById("status-"+redeArray)) {
           $("#status-"+redeArray).replaceWith('<button id="status-'+redeArray+'" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
         } else {
           $('#titulo-status-cadastro_' + redeArray).append('<button id="status-'+redeArray+'" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
