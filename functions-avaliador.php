@@ -175,6 +175,11 @@ function ajaxCarregaInstituicao()
 
     // função alterada para não retornar um form
     // $flag_gerente é uma string!!!
+
+    //se o $flag_gerente == 'false' && $flag_homologado == 'false' então ele é o avaliador
+    //nesse caso temos que destacar as mudanças...
+    
+
     render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente, $flag_titulo);
     echo '<input type="hidden" id="entrada_geral" name="entrada_geral" value="' . $entrada . '">';
     echo '<input type="hidden" id="usuario_id" name="usuario_id" value="' . $usuario_id . '">';
