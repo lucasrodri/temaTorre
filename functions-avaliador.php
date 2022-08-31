@@ -167,13 +167,15 @@ function ajaxCarregaInstituicao()
     }
     //$date = date_i18n('M d, Y', strtotime($entradas["date"]));
 
+    $flag_titulo = true;#para saber se entrei no if abaixo, caso entre eu nao posso imprimir o titulo na funcao render_geral_data
     if ($flag_gerente == 'true' || $flag_homologado == 'true') {
         historico_parecer_readonly($entradas[FORM_ID_GERAL], "geral");
+        $flag_titulo = false;
     }
 
     // função alterada para não retornar um form
     // $flag_gerente é uma string!!!
-    render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente);
+    render_geral_data($entradas[FORM_ID_GERAL], $flag_gerente, $flag_titulo);
     echo '<input type="hidden" id="entrada_geral" name="entrada_geral" value="' . $entrada . '">';
     echo '<input type="hidden" id="usuario_id" name="usuario_id" value="' . $usuario_id . '">';
 
@@ -217,11 +219,13 @@ function ajaxCarregaRede()
     }
     //$date = date_i18n('M d, Y', strtotime($entradas["date"]));
 
+    $flag_titulo = true;#para saber se entrei no if abaixo, caso entre eu nao posso imprimir o titulo na funcao render_geral_data
     if ($flag_gerente == 'true' || $flag_homologado == 'true') {
         historico_parecer_readonly($entradas[relaciona($rede)[1]], $rede);
+        $flag_titulo = false;
     }
 
-    cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente);
+    cadastro_redes_render(relaciona($rede)[0], $entradas[relaciona($rede)[1]], $flag_gerente, $flag_titulo);
     echo '<input type="hidden" name="entrada_' . $rede . '" value="' . $entrada . '">';
 
     if ($flag_gerente == 'false') {

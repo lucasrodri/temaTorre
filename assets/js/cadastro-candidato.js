@@ -72,6 +72,8 @@ async function atualizaRedeCandidatoGeral() {
       },
       complete: function (data) {
         $("#loading_carregar").css("display", "none");
+        //Atualizando botão de status para avaliação
+        $("#status-instituicao").replaceWith('<button id="status-instituicao" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
         //alert('Dados enviados!');
         atualizaStatusGeral();
       }
@@ -139,7 +141,7 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
         primeiro.insertAfter(segundo);
 
         //$('#titulo-status-cadastro_' + redeArray).insertBefore($('#titulo-status-cadastro2_' + redeArray))
-        $('#titulo-status-cadastro_' + redeArray).remove();
+        //$('#titulo-status-cadastro_' + redeArray).remove();
         //$('#titulo-status-cadastro2_' + redeArray).remove();
       },
       complete: function () {
@@ -157,6 +159,9 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
 
         $("#botaoAdicionar_" + painel).css("display", "none");
         $("#botaoAtualizar_" + painel).css("display", "none");
+        
+        $("#status-"+redeArray).replaceWith('<button id="status-'+redeArray+'" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
+
         atualizaStatusGeral();
       }
     });

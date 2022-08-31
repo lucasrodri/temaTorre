@@ -224,7 +224,7 @@ function render_geral_form($entrada)
 
 ?>
     <div class="h4">Instituição
-        <?php render_status($statusFormInstituicao); ?>
+        <?php render_status($statusFormInstituicao, $id='status-instituicao'); ?>
     </div>
     <!-- basta checar se tem algo no HISTÓRICO do parecer (sempre vai ter se tiver sido avaliado) -->
     <?php if (strlen(valida($entrada, 'fld_4416984')) > 1) : ?>
@@ -269,10 +269,12 @@ function render_geral_data($entrada, $flag_view = 'false', $flag_titulo = true)
         'disabled'
         : '';
     $mudanças = valida($entrada, 'fld_2149513'); 
-    echo $mudanças;
+    
+    //TODO mostrar as mudanças apenas para o avaliador... nao podemos mostrar para o candidato
+    //echo $mudanças;
 ?>
-    <!-- PQ tem esse p ai??? -->
-    <!-- <p id="radio_function" style="display: none;"></p>-->
+    <!-- Esse p é usado para que funcione os radios buttons to porte quando o usuário alterar o tipo de instituição -->
+    <p id="radio_function" style="display: none;"></p>
     <!-- <h3>Instituição </h3> -->
     <?php if ($flag_titulo) : ?>
         <div class="h4">Instituição
@@ -520,7 +522,7 @@ function candidato_avaliacao_redes_render($rede_nome, $entrada)
     <div id="titulo-status-cadastro_<?php echo relaciona_rede($rede_nome)[0]; ?>" class="h4"><?php echo $title; ?>
         <?php
         if (valida($entrada, 'fld_4663810') == "true") {
-            if ($entrada != "") render_status($statusRede);
+            if ($entrada != "") render_status($statusRede, $id = 'status-'.relaciona_rede($rede_nome)[0]);
         }
         ?>
     </div>
@@ -641,20 +643,21 @@ function relaciona_rede($s)
     }
 }
 
-function render_status($status)
+function render_status($status, $id = "")
 {
+    if ($id != "") $id = 'id="'.$id.'"';
     switch ($status) {
         case 'homologado':
-            echo '<button class="br-button success small mt-3 mt-sm-0 noHover" type="button">Homologado</button>';
+            echo '<button '.$id.'  class="br-button success small mt-3 mt-sm-0 noHover" type="button">Homologado</button>';
             break;
         case 'publicado':
-            echo '<button class="botao-publicado br-button success small mt-3 mt-sm-0 noHover" type="button">Publicado</button>';
+            echo '<button '.$id.' class="botao-publicado br-button success small mt-3 mt-sm-0 noHover" type="button">Publicado</button>';
             break;
         case 'avaliacao':
-            echo '<button class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>';
+            echo '<button '.$id.' class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>';
             break;
         case 'pendente':
-            echo '<button class="br-button danger small mt-3 mt-sm-0 noHover" type="button">Ajustes Necessários</button>';
+            echo '<button '.$id.' class="br-button danger small mt-3 mt-sm-0 noHover" type="button">Ajustes Necessários</button>';
             break;
     }
 }
@@ -883,7 +886,8 @@ function atualiza_geral_candidato_ajax()
     $entry =  new Caldera_Forms_Entry($form, $entrada);
 
     // renderiza novamente para o candidato
-    render_geral_data($entry);
+    //Agora sem titulo pois vou atualizar o status do titulo via js
+    render_geral_data($entry, $flag_view = 'false', $flag_titulo = false);
 
     die();
 }
@@ -976,7 +980,8 @@ function atualiza_rede_candidato_ajax()
     $entry =  new Caldera_Forms_Entry($form, $entrada);
 
     // renderiza novamente para o candidato
-    cadastro_redes_render(relaciona($rede)[0], $entry);
+    //Agora sem titulo pois vou atualizar o status do titulo via js
+    cadastro_redes_render(relaciona($rede)[0], $entry, $flag_view = 'false', $flag_titulo = false);
 
     die();
 }

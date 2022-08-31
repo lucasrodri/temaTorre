@@ -438,11 +438,19 @@ function historico_parecer_readonly($entry, $rede = "geral")
     if ($rede == "geral") {
         $fld_historico = "fld_4416984";
         $fld_parecer = "fld_8529353";
+        $statusForm = valida($entry, 'fld_4899711');
+        $title = "Instituição";
     } else {
         $fld_historico = "fld_6135036";
         $fld_parecer = "fld_5960872";
+        $statusForm = valida($entry, 'fld_3707629');
+        $title = "Rede de ".relaciona($rede)[2];
     }
+    
 ?>
+    <div class="h4"><?php echo $title; ?>
+        <?php render_status($statusForm); ?>
+    </div>
 
     <div id="div_<?php echo $rede ?>">
 
