@@ -159,11 +159,11 @@ async function atualizaRedeCandidato(painel, redeArray, entrada) {
 
         $("#botaoAdicionar_" + painel).css("display", "none");
         $("#botaoAtualizar_" + painel).css("display", "none");
-        
-        if (document.getElementById("status-"+redeArray)) {
-          $("#status-"+redeArray).replaceWith('<button id="status-'+redeArray+'" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
+
+        if (document.getElementById("status-" + redeArray)) {
+          $("#status-" + redeArray).replaceWith('<button id="status-' + redeArray + '" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
         } else {
-          $('#titulo-status-cadastro_' + redeArray).append('<button id="status-'+redeArray+'" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
+          $('#titulo-status-cadastro_' + redeArray).append('<button id="status-' + redeArray + '" class="br-button warning small mt-3 mt-sm-0 noHover" type="button">Em Análise</button>');
         }
         atualizaStatusGeral();
       }
@@ -590,6 +590,9 @@ function editaRedeCandidato(painel, redeArray, entrada) {
 
 
 function checarAlterados(redeArray = "") {
+
+  // transformar em um Set
+  // var alteradosArrayGlobal = new Set(alteradosArrayGlobal);
 
   // Check dos itens alterados
   var alterados = [];

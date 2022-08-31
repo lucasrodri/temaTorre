@@ -444,9 +444,9 @@ function historico_parecer_readonly($entry, $rede = "geral")
         $fld_historico = "fld_6135036";
         $fld_parecer = "fld_5960872";
         $statusForm = valida($entry, 'fld_3707629');
-        $title = "Rede de ".relaciona($rede)[2];
+        $title = "Rede de " . relaciona($rede)[2];
     }
-    
+
 ?>
     <div class="h4"><?php echo $title; ?>
         <?php render_status($statusForm); ?>
