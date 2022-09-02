@@ -271,20 +271,21 @@ function render_geral_data($entrada, $flag_view = 'false', $flag_titulo = true, 
     //Feito mostrar as mudanças apenas para o avaliador... nao podemos mostrar para o candidato.
     if ($flag_avaliador && $statusFormInstituicao == "avaliacao") {
         $mudancas = valida($entrada, 'fld_2149513');
-        $array_mudancas = explode(",", $mudancas);
+        MOSTRA_ALTERADOS ? $array_mudancas = explode(",", $mudancas) : $array_mudancas = [];
         $texto_bonito = retorna_alterados_texto($mudancas);
         $styleRed = 'style="color: red;"';
-        if ($mudancas != "") {
+        if (MOSTRA_ALTERADOS) {
+            if ($mudancas != "") {
     ?>
-            <p><strong>Atenção:</strong> Todas as mudanças realizadas pelo <strong style="color: green;">Candidato</strong> estão destacadas em <strong style="color: red;">vermelho</strong>.</p>
-            <p><?php echo $texto_bonito; ?></p>
-        <?php
-        } else {
-        ?>
-            <p><strong>Atenção:</strong> O <strong style="color: green;">Candidato</strong> não realizou nenhuma mudança.</p>
+                <p><strong>Atenção:</strong> Todas as mudanças realizadas pelo <strong style="color: green;">Candidato</strong> estão destacadas em <strong style="color: red;">vermelho</strong>.</p>
+                <p><?php echo $texto_bonito; ?></p>
+            <?php
+            } else {
+            ?>
+                <p><strong>Atenção:</strong> O <strong style="color: green;">Candidato</strong> não realizou nenhuma mudança.</p>
     <?php
+            }
         }
-        //echo $mudancas;
     }
 
 
@@ -1447,7 +1448,11 @@ function retorna_alterados_texto($alterados)
         $texto .= texto_bonito($item) . ", ";
     }
 
-    return rtrim($texto, ", ") . ".";
+    if (MOSTRA_ALTERADOS) {
+        return rtrim($texto, ", ") . ".";
+    } else {
+        return "";
+    }
 }
 
 
@@ -1504,10 +1509,10 @@ function texto_bonito($item)
         case 'guia_instituicao':
             return 'Guia da Instituição';
             break;
-        case 'natureza': //precisa de ajustes
+        case 'natureza':
             return 'Natureza Jurídica da Instituição';
             break;
-        case 'porte':  //precisa de ajustes
+        case 'porte':
             return 'Porte da Instituição';
             break;
             // ----------------------------------------------- Aba de redes
@@ -1546,3 +1551,7 @@ function texto_bonito($item)
             break;
     }
 }
+
+
+//Definitions
+define('MOSTRA_ALTERADOS', false);

@@ -377,20 +377,21 @@ function cadastro_redes_render($rede_nome, $entrada = "", $flag_view = 'false', 
     //Feito mostrar as mudanças apenas para o avaliador... nao podemos mostrar para o candidato.
     if ($flag_avaliador && $statusRede == "avaliacao") {
         $mudancas = valida($entrada, 'fld_2676148');
-        $array_mudancas = explode(",", $mudancas);
+        MOSTRA_ALTERADOS ? $array_mudancas = explode(",", $mudancas) : $array_mudancas = [];
         $texto_bonito = retorna_alterados_texto($mudancas);
         $styleRed = 'style="color: red;"';
-        if ($mudancas != "") {
+        if (MOSTRA_ALTERADOS) {
+            if ($mudancas != "") {
     ?>
-            <p><strong>Atenção:</strong> Todas as mudanças realizadas pelo <strong style="color: green;">Candidato</strong> estão destacadas em <strong style="color: red;">vermelho</strong>.</p>
-            <p><?php echo $texto_bonito; ?></p>
-        <?php
-        } else {
-        ?>
-            <p><strong>Atenção:</strong> O <strong style="color: green;">Candidato</strong> não realizou nenhuma mudança.</p>
+                <p><strong>Atenção:</strong> Todas as mudanças realizadas pelo <strong style="color: green;">Candidato</strong> estão destacadas em <strong style="color: red;">vermelho</strong>.</p>
+                <p><?php echo $texto_bonito; ?></p>
+            <?php
+            } else {
+            ?>
+                <p><strong>Atenção:</strong> O <strong style="color: green;">Candidato</strong> não realizou nenhuma mudança.</p>
     <?php
+            }
         }
-        //echo $mudancas;
     }
 
     ?>

@@ -17,8 +17,7 @@
 function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
 {
 
-  //$to = "torre@mcti.gov.br, "; //em produção
-  $to = "bcasamo@gmail.com"; //"julieta.cunha@mcti.gov.br";
+  $to = "avaliador.torre@mcti.gov.br";
 
   $subject = '';
   $message = '';
