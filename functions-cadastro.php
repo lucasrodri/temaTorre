@@ -323,7 +323,7 @@ function cadastro_form_render()
                                     </div>
                                 </div>
                                 <!-- Colocando o Recaptcha Google -->
-                                <div id="google-recaptcha-cadastro" data-callback="imNotARobot" class="g-recaptcha" data-sitekey="6LcTFWAdAAAAAIAH67v72Ng5sz-VOLg7wcAJAiDC"></div>
+                                <div id="google-recaptcha-cadastro" data-callback="imNotARobot" class="g-recaptcha" data-sitekey="<?php echo get_option('recaptcha_site_key_conf');?>"></div>
                                 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
                                 <script type="text/javascript">
                                     var imNotARobot = function() {
@@ -714,7 +714,7 @@ function cadastro_action_form()
         wp_redirect(home_url('/erro'));
         exit;
     } else {
-        $secret = "6LcTFWAdAAAAANr93WkJRN3hGafP6JNWhEZfA0Fo";
+        $secret = get_option('recaptcha_secret_key_conf');
         $params = http_build_query(array(
             'secret' => $secret,
             'response' => $_POST['g-recaptcha-response'],
