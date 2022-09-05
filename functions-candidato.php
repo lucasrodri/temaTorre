@@ -1008,6 +1008,8 @@ add_action('wp_ajax_nopriv_atualiza_rede_candidato', 'atualiza_rede_candidato_aj
 
 function carrega_estado_cidade_selecionado($estadoSelecionado = '', $cidadeSelecionada = '')
 {
+    // Função que carrega o select de cidades para cada estado enquanto a página carrega, além disso retorna um Estado e uma Cidade já selecionados
+    
     global $wpdb;
     $sql = "SELECT codigo_uf, nome FROM " . $wpdb->prefix . "tematorre_estados order by nome;";
     $estados = $wpdb->get_results($sql);
