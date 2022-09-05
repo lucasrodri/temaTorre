@@ -1,14 +1,15 @@
 <?php
 
-function visao_send_post($body, $endpoint, $id_token = "")
+function visao_send($body, $endpoint, $id_token = "", $method = "")
 {
     /*
-	* Função para enviar a requisição post para o Visão
-	*/
+    * Função para enviar a requisição post para o Visão
+    */
 
     $url =  get_option('tematorre_visao_host') . $endpoint;
 
     $args = array(
+        'method'     => 'POST',
         'body'      => json_encode($body),
         'sslverify' => false,
         'headers' => array(
@@ -20,9 +21,14 @@ function visao_send_post($body, $endpoint, $id_token = "")
         $args['headers']['Authorization'] = 'Bearer ' . $id_token;
     }
 
-    return wp_remote_post($url, $args);
-}
+    // sobrepõe o method no caso de delete
+    if ($method == "DELETE") {
+        $args['method'] = 'DELETE';
+    }
 
+    //return wp_remote_post($url, $args);
+    return wp_remote_request($url, $args);
+}
 
 function visao_auth()
 {
@@ -36,16 +42,13 @@ function visao_auth()
 
     $endpoint = 'app/api/authenticate';
 
-    $response = visao_send_post($body, $endpoint);
+    $response = visao_send($body, $endpoint);
 
     if (is_wp_error($response)) {
         $error_message = $response->get_error_message();
         echo "Algo deu errado: " . $error_message;
         return false;
     } else {
-
-        // Exemplo de resposta:
-        // {"operacao":11,"handle":"123456789\/3","id":"17e45cdc-c681-4b91-b4ea-928ccc053a7a","status":0}
         $responseArray = json_decode($response["body"], true);
         //echo $responseArray["id_token"];
         return $responseArray["id_token"];
@@ -200,7 +203,7 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         // echo '<br>';
 
         $endpoint = 'app/api/layers';
-        $response = visao_send_post($body, $endpoint, $id_token);
+        $response = visao_send($body, $endpoint, $id_token);
 
         // echo 'Resposta:<br>';
         // var_dump($response);
@@ -210,9 +213,8 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
             $error_message = $response->get_error_message();
             echo "Algo deu errado: " . $error_message;
         } else {
-            // Exemplo de resposta:
             $responseArray = json_decode($response["body"], true);
-            echo 'Ponto criado!!!' . $responseArray["id"] . '<br>';
+            echo 'Ponto criado: ' . $responseArray["id"] . '<br>';
             // ID para salvar em um fld
             return $responseArray["id"];
         }
@@ -329,6 +331,38 @@ function conecta_visao($nomeUnidade, $telefoneUnidade, $estadoUnidade, $cidadeUn
     return "sucesso<br>";
 }
 
+
+function visao_deleta_ponto($id_ponto)
+{
+
+    $id_token = visao_auth();
+
+    if ($id_token) {
+        $endpoint = '/app/api/layers/' . $id_ponto;
+
+        // mando body vazio
+        $response = visao_send([], $endpoint, $id_token, "DELETE");
+
+        if (is_wp_error($response)) {
+            $error_message = $response->get_error_message();
+            echo "Algo deu errado: " . $error_message;
+            return false;
+        } else {
+            // No caso do delete, ele só me retorna que o status foi 200
+            if ($response['response']['code'] == 200) {
+                echo 'Ponto excluido' . $id_ponto;
+                return true;
+            } else {
+                $responseArray = json_decode($response["body"], true);
+                echo "Erro no request: " . $responseArray["title"];
+            }
+        }
+    }
+
+    return;
+}
+
+
 function retorna_uf($estadoDaInstituicao, $codigo = false)
 {
     // Função para retornar a sigla UF ou o codigo UF do estado a partir do nome
@@ -422,7 +456,13 @@ function visao_autentica()
     //chama funcao que procura Latitude e Longitude por UF/Cidade
     //echo retornaLatLon($ufDaInstituicao, "Acrelândia");
 
-    visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 3", "https://www.google.com/", "rede-de-pesquisa");
+    visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 4", "https://www.google.com/", "rede-de-suporte");
+    // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 5", "https://www.google.com/", "rede-de-formacao");
+    // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 6", "https://www.google.com/", "rede-de-pesquisa");
+    // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 7", "https://www.google.com/", "rede-de-inovacao");
+    // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 8", "https://www.google.com/", "rede-de-tecnologia");
+
+    // visao_deleta_ponto(415274);
 }
 add_action('admin_post_nopriv_visao_autentica', 'visao_autentica');
 add_action('admin_post_visao_autentica', 'visao_autentica');
