@@ -53,13 +53,12 @@ function visao_auth()
 }
 
 
-function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao)
+function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaInstituicao, $urlDaInstituicao, $rede)
 {
 
     $id_token = visao_auth();
 
     if ($id_token) {
-
 
         /*---------------------------------------------------------------------
         // Latitude e longitude
@@ -67,29 +66,71 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao)
 	    ----------------------------------------------------------------------*/
 
         // pega a UF do estado
-        $ufDaInstituicao = retornaUF($estadoDaInstituicao);
+        $ufDaInstituicao = retorna_uf($estadoDaInstituicao);
 
         //chama funcao que procura Latitude e Longitude por UF/Cidade
-        $latlong = retornaLatLon($estadoDaInstituicao, $cidadeDaInstituicao);
+        $latlong = retornaLatLon($ufDaInstituicao, $cidadeDaInstituicao);
 
         /*---------------------------------------------------------------------
-	// Descricao
-	Descrições da Unidade deve seguir o formato abaixo:
-	</br><b>Local :</b> Brasília/DF </br>
-	<b>Telefone: </b>(61) 3411.4366 </br>
-	<b>Natureza Jurídica: </b>Secretaria</br></br><base href="http://ppsinajuve.ibict.br/jspui/handle/123456789/" target="_blank">
-	<a href=96>Saiba Mais...</a>
+        // Descricao
+        Descrições do Ponto deve seguir o formato abaixo:
+        <b>Site: </b>https://www.gov.br/mcti/pt-br
+        <b>Localização: </b> Brasília - DF </br>
+        <b>E-mail: </b>a@a.com </br>
 
-	O link http://ppsinajuve.ibict.br/jspui/handle/123456789/ faz referência a subcomunidade criada no dspace-cris
-	//---------------------------------------------------------------------*/
+	    //---------------------------------------------------------------------*/
         $descricao     = "";
-
-        // $descricao .= "</br><b>Local: </b>" . $cidadeDaInstituicao . "/" . $ufDaInstituicao . "</br>";
+        $descricao .= "<b>Site: </b><a href=" . $urlDaInstituicao . " target=\"_blank\">" . $urlDaInstituicao . "</a>";
+        $descricao .= "<b>Localização: </b>" . $cidadeDaInstituicao . "-" . $ufDaInstituicao . "</br>";
         // $descricao .= "<b>E-mail: </b>" . $emailDaUnidade . "</br>";
-        // $descricao .= "</br><b>Responsável: </b>" . $nomeDoGestor . "</br>";
-        // $descricao .= "</br><a href=" . $urlDspace . " target=\"_blank\">Saiba Mais...</a>";
 
-        // recuperar lat,lon a partir do estado, cidade
+        /*---------------------------------------------------------------------
+        // Redes -> definem a cor do ponto no mapa
+                                            type	        icon    cor
+        REDE DE SUPORTE                     MARKER          -       Azul
+        REDE DE FORMAÇÃO TECNOLÓGICA        CUSTOM_MARKER   4       Laranja
+        REDE DE PESQUISA APLICADA           CUSTOM_MARKER   5       Verde Azulado
+        REDE DE INOVAÇÃO                    CUSTOM_MARKER   6       Amarelo
+        REDE DE TECNOLOGIAS APLICADAS       CUSTOM_MARKER   7       Vermelho
+
+        Outra forma: definindo as camadas na interface      
+        Id	 Nome	 Descrição	 Grande Área		
+        264	Rede de Suporte	-	Tecnologia e Inovação
+        265	Rede de Formação Tecnológica	-	Tecnologia e Inovação
+        266	Rede de Pesquisa Aplicada	-	Tecnologia e Inovação
+        267	Rede de Inovação	-	Tecnologia e Inovação
+        268	Rede de Tecnologias Aplicadas	-	Tecnologia e Inovação
+	    ----------------------------------------------------------------------*/
+        $type = "";
+        $icon = "";
+        $group_id = "";
+
+        // lógica para escolher type, icon e id
+        switch ($rede) {
+            case "rede-de-suporte":
+                $type = "MARKER";
+                $icon = "";
+                $group_id = "264";
+            case "rede-de-formacao":
+                $type = "CUSTOM_MARKER";
+                $icon = "4";
+                $group_id = "265";
+
+            case "rede-de-pesquisa":
+                $type = "CUSTOM_MARKER";
+                $icon = "5";
+                $group_id = "266";
+
+            case "rede-de-inovacao":
+                $type = "CUSTOM_MARKER";
+                $icon = "6";
+                $group_id = "267";
+
+            case "rede-de-tecnologia":
+                $type = "CUSTOM_MARKER";
+                $icon = "7";
+                $group_id = "268";
+        }
 
         // criar $body para gerar um ponto
 
@@ -110,36 +151,38 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao)
 
         $body = array();
 
+        $body["name"] = $nomeDaInstituicao;
+        $body["geoJson"] =  $latlong;
+        $body["description"]  = $descricao;
 
-        $body["name"] = '';
-        $body["geoJson"] = '';
-        $body["type"] = "MARKER";
-        $body["description"]  = '';
+        $body["type"] = $type;
+        $body["icon"] = $icon; //descobrir se é icon ou marker-icon
+        $body["group"]  = '{"id":' . $group_id . '}';
+
         $body["date"] = '';
-        $body["source"] = '';
         $body["dateChange"]  = '';
+        $body["source"] = 'Sistema de Cadastros da Torre MCTI';
         $body["note"]  = '';
-        $body["group"]  = '{"id":263}';
 
+        // após pegar datas fazer teste no postman do body
 
         $endpoint = 'app/api/layers';
-
         $response = visao_send_post($body, $endpoint, $id_token);
 
         if (is_wp_error($response)) {
             $error_message = $response->get_error_message();
             echo "Algo deu errado: " . $error_message;
         } else {
-
             // Exemplo de resposta:
             $responseArray = json_decode($response["body"], true);
-            return $responseArray["id_token"];
+            return $responseArray["id"];
         }
     }
 
     return;
 }
 
+// função antiga, só para consulta
 function conecta_visao($nomeUnidade, $telefoneUnidade, $estadoUnidade, $cidadeUnidade, $emailDaUnidade, $gestaoUnidade, $urlDspace, $nomeDoGestor, $emailDoGestor, $formulario, $flag)
 {
     /*
@@ -248,12 +291,22 @@ function conecta_visao($nomeUnidade, $telefoneUnidade, $estadoUnidade, $cidadeUn
 }
 
 
-function retornaUF($estadoDaInstituicao)
+function retorna_uf($estadoDaInstituicao)
 {
+    // Função para retornar a  UF do estado a partir do nome
+
+    global $wpdb;
+    $sql = "SELECT codigo_uf FROM " . $wpdb->prefix . "tematorre_estados WHERE nome=\"" . $estadoDaInstituicao . "\" order by nome;";
+    $estados = $wpdb->get_col($sql);
+
+    if (!empty($estados)) {
+        return $estados[0];
+    }
+
     return;
 }
 
-function retornaLatLon($estadoUnidade, $cidadeUnidade)
+function retornaLatLon($ufDaInstituicao, $cidadeDaInstituicao)
 {
     /*
 	* Função que retorna Latitude e Longitude a partir do endereço
@@ -261,16 +314,14 @@ function retornaLatLon($estadoUnidade, $cidadeUnidade)
 	*/
 
     global $wpdb;
-
-    $sql = "SELECT latitude, longitude FROM wp_municipios WHERE uf=\"" . $estadoUnidade . "\" AND nome=\"" . $cidadeUnidade . "\" order by nome limit 1;";
-
-    $result = $wpdb->get_row($sql,  ARRAY_A); #return as alphabetical array
+    $sql = "SELECT latitude, longitude FROM " . $wpdb->prefix . "tematorre_municipios WHERE codigo_uf=\"" . $ufDaInstituicao . "\" AND nome=\"" . $cidadeDaInstituicao . "\" order by nome limit 1;";
+    $result = $wpdb->get_row($sql,  ARRAY_A); // return as alphabetical array
 
     if (null !== $result) {
         $lat = $result['latitude'];
         $lon = $result['longitude'];
 
-        #retorna no formato do Visao
+        // retorna no formato do Visao
         return "[$lat, $lon]";
     } else {
         // no link found
@@ -322,7 +373,13 @@ function testar_visao()
 // Deleta todas as entradas de todos os forms
 function visao_autentica()
 {
-    visao_auth();
+    //visao_auth();
+
+    // pega a UF do estado
+    $ufDaInstituicao = retorna_uf("Acre");
+
+    //chama funcao que procura Latitude e Longitude por UF/Cidade
+    echo retornaLatLon($ufDaInstituicao, "Acrelândia");
 }
 add_action('admin_post_nopriv_visao_autentica', 'visao_autentica');
 add_action('admin_post_visao_autentica', 'visao_autentica');
