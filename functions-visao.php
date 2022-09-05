@@ -47,7 +47,7 @@ function visao_auth()
         // Exemplo de resposta:
         // {"operacao":11,"handle":"123456789\/3","id":"17e45cdc-c681-4b91-b4ea-928ccc053a7a","status":0}
         $responseArray = json_decode($response["body"], true);
-        echo $responseArray["id_token"];
+        //echo $responseArray["id_token"];
         return $responseArray["id_token"];
     }
 }
@@ -63,13 +63,14 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         /*---------------------------------------------------------------------
         // Latitude e longitude
         Formato = "[lat, lon]"
-	    ----------------------------------------------------------------------*/
+        ----------------------------------------------------------------------*/
 
         // pega a UF do estado
+        $codigoUFDaInstituicao = retorna_uf($estadoDaInstituicao, true);
         $ufDaInstituicao = retorna_uf($estadoDaInstituicao);
 
         //chama funcao que procura Latitude e Longitude por UF/Cidade
-        $latlong = retornaLatLon($ufDaInstituicao, $cidadeDaInstituicao);
+        $latlong = retornaLatLon($codigoUFDaInstituicao, $cidadeDaInstituicao);
 
         /*---------------------------------------------------------------------
         // Descricao
@@ -78,10 +79,10 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         <b>Localização: </b> Brasília - DF </br>
         <b>E-mail: </b>a@a.com </br>
 
-	    //---------------------------------------------------------------------*/
-        $descricao     = "";
-        $descricao .= "<b>Site: </b><a href=" . $urlDaInstituicao . " target=\"_blank\">" . $urlDaInstituicao . "</a>";
-        $descricao .= "<b>Localização: </b>" . $cidadeDaInstituicao . "-" . $ufDaInstituicao . "</br>";
+        //---------------------------------------------------------------------*/
+        $descricao  = "";
+        $descricao .= "<br><b>Site: </b><a href=" . $urlDaInstituicao . " target=\"_blank\">" . $urlDaInstituicao . "</a>";
+        $descricao .= "<br><b>Localização: </b>" . $cidadeDaInstituicao . " - " . $ufDaInstituicao . "</br>";
         // $descricao .= "<b>E-mail: </b>" . $emailDaUnidade . "</br>";
 
         /*---------------------------------------------------------------------
@@ -100,42 +101,66 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         266	Rede de Pesquisa Aplicada	-	Tecnologia e Inovação
         267	Rede de Inovação	-	Tecnologia e Inovação
         268	Rede de Tecnologias Aplicadas	-	Tecnologia e Inovação
-	    ----------------------------------------------------------------------*/
+        ----------------------------------------------------------------------*/
         $type = "";
-        $icon = "";
+        $icon_id = "";
         $group_id = "";
 
         // lógica para escolher type, icon e id
         switch ($rede) {
+            case "teste":
+                $type = "MARKER";
+                $icon_id = "";
+                $group_id = "263";
+                break;
             case "rede-de-suporte":
                 $type = "MARKER";
-                $icon = "";
+                $icon_id = "";
                 $group_id = "264";
+                break;
+
             case "rede-de-formacao":
                 $type = "CUSTOM_MARKER";
-                $icon = "4";
+                $icon_id = "4";
                 $group_id = "265";
+                break;
 
             case "rede-de-pesquisa":
                 $type = "CUSTOM_MARKER";
-                $icon = "5";
+                $icon_id = "5";
                 $group_id = "266";
+                break;
 
             case "rede-de-inovacao":
                 $type = "CUSTOM_MARKER";
-                $icon = "6";
+                $icon_id = "6";
                 $group_id = "267";
+                break;
 
             case "rede-de-tecnologia":
                 $type = "CUSTOM_MARKER";
-                $icon = "7";
+                $icon_id = "7";
                 $group_id = "268";
+                break;
         }
 
-        // criar $body para gerar um ponto
+        /*---------------------------------------------------------------------
+        // Data
+        Formato c	Data ISO 8601   2004-02-12T15:19:21+00:00
+        porém com "Z"
+        "dateChange":"2022-08-23T12:45:00.000Z",
 
-        /*
-         {
+        https: //stackoverflow.com/questions/17390784/how-to-format-an-utc-date-to-use-the-z-zulu-zone-designator-in-php
+
+        Resultado: no final vamos usar apenas o formato de data "c" que a API do visão consegue tratar
+        ----------------------------------------------------------------------*/
+
+        $date = date("c");
+
+        /*---------------------------------------------------------------------
+        // Body
+        criar $body para gerar um ponto
+        {
             "name":"DDD",
             "geoJson":"[10.0,10.0]",
             "type":"MARKER",
@@ -146,8 +171,7 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
             "note":"id customizado",
             "group":{"id":263}
         }
-
-         */
+        ----------------------------------------------------------------------*/
 
         $body = array();
 
@@ -156,18 +180,31 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         $body["description"]  = $descricao;
 
         $body["type"] = $type;
-        $body["icon"] = $icon; //descobrir se é icon ou marker-icon
-        $body["group"]  = '{"id":' . $group_id . '}';
 
-        $body["date"] = '';
-        $body["dateChange"]  = '';
+        if ($icon_id) {
+            //se não enviar icon_id, ele não manda isso no body 
+            $body["icon"] = array();
+            $body["icon"]["id"] = $icon_id;
+        }
+
+        $body["group"]  = array();
+        $body["group"]["id"] = $group_id;
+
+        $body["date"] = $date;
+        $body["dateChange"]  = $date;
         $body["source"] = 'Sistema de Cadastros da Torre MCTI';
         $body["note"]  = '';
 
-        // após pegar datas fazer teste no postman do body
+        // echo 'Enviando o $body <br>';
+        // var_dump($body);
+        // echo '<br>';
 
         $endpoint = 'app/api/layers';
         $response = visao_send_post($body, $endpoint, $id_token);
+
+        // echo 'Resposta:<br>';
+        // var_dump($response);
+        // echo '<br>';
 
         if (is_wp_error($response)) {
             $error_message = $response->get_error_message();
@@ -175,6 +212,8 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
         } else {
             // Exemplo de resposta:
             $responseArray = json_decode($response["body"], true);
+            echo 'Ponto criado!!!' . $responseArray["id"] . '<br>';
+            // ID para salvar em um fld
             return $responseArray["id"];
         }
     }
@@ -290,13 +329,15 @@ function conecta_visao($nomeUnidade, $telefoneUnidade, $estadoUnidade, $cidadeUn
     return "sucesso<br>";
 }
 
-
-function retorna_uf($estadoDaInstituicao)
+function retorna_uf($estadoDaInstituicao, $codigo = false)
 {
-    // Função para retornar a  UF do estado a partir do nome
+    // Função para retornar a sigla UF ou o codigo UF do estado a partir do nome
 
     global $wpdb;
-    $sql = "SELECT codigo_uf FROM " . $wpdb->prefix . "tematorre_estados WHERE nome=\"" . $estadoDaInstituicao . "\" order by nome;";
+
+    $coluna =  $codigo ? "codigo_uf" : "uf";
+
+    $sql = "SELECT " . $coluna . " FROM " . $wpdb->prefix . "tematorre_estados WHERE nome=\"" . $estadoDaInstituicao . "\" order by nome;";
     $estados = $wpdb->get_col($sql);
 
     if (!empty($estados)) {
@@ -376,10 +417,12 @@ function visao_autentica()
     //visao_auth();
 
     // pega a UF do estado
-    $ufDaInstituicao = retorna_uf("Acre");
+    //$ufDaInstituicao = retorna_uf("Acre");
 
     //chama funcao que procura Latitude e Longitude por UF/Cidade
-    echo retornaLatLon($ufDaInstituicao, "Acrelândia");
+    //echo retornaLatLon($ufDaInstituicao, "Acrelândia");
+
+    visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 3", "https://www.google.com/", "rede-de-pesquisa");
 }
 add_action('admin_post_nopriv_visao_autentica', 'visao_autentica');
 add_action('admin_post_visao_autentica', 'visao_autentica');
