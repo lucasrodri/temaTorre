@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 function menu_temaTorre()
 {
     add_options_page(
@@ -10,6 +10,7 @@ function menu_temaTorre()
         'menu_temaTorre_conteudo'
     );
 }
+
 function menu_temaTorre_conteudo()
 {
 ?>
@@ -168,7 +169,6 @@ function temaTorre_conf_campos()
         $args
     );
     register_setting("visao_settings_all", 'recaptcha_secret_key_conf');
-
 }
 add_action('admin_init', 'temaTorre_conf_campos');
 
@@ -228,15 +228,16 @@ function renderizar_campos($args)
             break;
     }
 }
-=======
 
+
+//------------------------------------------------------------------------------ Funções da API
 function visao_send($body, $endpoint, $id_token = "", $method = "")
 {
     /*
     * Função para enviar a requisição post para o Visão
     */
 
-    $url =  get_option('tematorre_visao_host') . $endpoint;
+    $url =  get_option('visao_hostname_conf') . $endpoint;
 
     $args = array(
         'method'     => 'POST',
@@ -263,12 +264,12 @@ function visao_send($body, $endpoint, $id_token = "", $method = "")
 function visao_auth()
 {
     /*
-	* Função para enviar a requisição de autenticação para o Visão e recuperar o token
-	*/
+    * Função para enviar a requisição de autenticação para o Visão e recuperar o token
+    */
 
     $body = array();
-    $body['username'] = get_option('tematorre_visao_user');
-    $body['password'] = get_option('tematorre_visao_pass');
+    $body['username'] = get_option('visao_username_conf');
+    $body['password'] = get_option('visao_password_conf');
 
     $endpoint = 'app/api/authenticate';
 
@@ -453,114 +454,6 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
     return;
 }
 
-// função antiga, só para consulta
-function conecta_visao($nomeUnidade, $telefoneUnidade, $estadoUnidade, $cidadeUnidade, $emailDaUnidade, $gestaoUnidade, $urlDspace, $nomeDoGestor, $emailDoGestor, $formulario, $flag)
-{
-    /*
-	* Função que conecta com o banco do Visao e insere um marcador referente a uma unidade
-	* Recebe as informações da unidade pelo formulário do sistema e a url gerada pelo dspace
-	* Gera as variáveis '$latlong', '$marcador', '$descricao', '$datahoje', '$fonte', '$datahoje', '$notas', '$icone', '$grupo' para o insert no banco
-	*   $latlong precisa de $estadoUnidade e $cidadeUnidade
-	*   $marcador e $grupo precisam de $gestaoUnidade
-	*   $descricao precisa de $telefoneUnidade, $naturezaUnidade e $urlDspace
-	*   $notas precisa de $emailSolicitante 
-	*/
-
-    /*---------------------------------------------------------------------
-	// Latitude e longitude
-	Formato = "[lat, lon]"
-	----------------------------------------------------------------------*/
-
-    //chama funcao que procura Latitude e Longitude por Estado/Cidade
-    $latlong = retornaLatLon($estadoUnidade, $cidadeUnidade);
-
-    /*---------------------------------------------------------------------
-	// Descricao
-	Descrições da Unidade deve seguir o formato abaixo:
-	</br><b>Local :</b> Brasília/DF </br>
-	<b>Telefone: </b>(61) 3411.4366 </br>
-	<b>Natureza Jurídica: </b>Secretaria</br></br><base href="http://ppsinajuve.ibict.br/jspui/handle/123456789/" target="_blank">
-	<a href=96>Saiba Mais...</a>
-
-	O link http://ppsinajuve.ibict.br/jspui/handle/123456789/ faz referência a subcomunidade criada no dspace-cris
-	//---------------------------------------------------------------------*/
-    $descricao     = "";
-
-    //tratar telefone
-    $descricao .= "</br><b>Local: </b>" . $cidadeUnidade . "/" . $estadoUnidade . "</br>";
-    $descricao .= "<b>Telefone: </b>" . $telefoneUnidade . "</br>";
-    $descricao .= "<b>E-mail: </b>" . $emailDaUnidade . "</br>";
-    $descricao .= "</br><b>Responsável: </b>" . $nomeDoGestor . "</br>";
-    $descricao .= "</br><a href=" . $urlDspace . " target=\"_blank\">Saiba Mais...</a>";
-
-    /*---------------------------------------------------------------------
-	// Gestao
-	Gestao: Federal, Estadual, Municipal
-				MARKER	group_id
-	Federal		"POLYGON" 	3
-	Estadual	"MARKER" 	4
-	Municipal	"CIRCLE"	5
-	----------------------------------------------------------------------*/
-    switch ($formulario) {
-        case "OG":
-            switch ($gestaoUnidade) {
-                case "Estadual":
-                    $marcador = "MARKER";
-                    $grupo = 10;
-                    break;
-                case "Municipal":
-                    $marcador = "CIRCLE";
-                    $grupo = 11;
-                    break;
-            }
-            break;
-
-        case "CJ":
-            switch ($gestaoUnidade) {
-                case "Federal":
-                    $marcador = "POLYGON";
-                    $grupo = 12;
-                    break;
-                case "Distrital":
-                    $marcador = "MARKER";
-                    $grupo = 13;
-                    break;
-                case "Estadual":
-                    $marcador = "MARKER";
-                    $grupo = 14;
-                    break;
-                case "Municipal":
-                    $marcador = "CIRCLE";
-                    $grupo = 15;
-                    break;
-            }
-            break;
-
-        case "OSC":
-            $marcador = "CIRCLE";
-            $grupo = 16;
-            break;
-    }
-    /*---------------------------------------------------------------------
-	// Data
-	Formato: ano-mês-dia
-	---------------------------------------------------------------------*/
-    $datahoje = date("Y-m-d");
-
-    //---------------------------------------------------------------------
-    // Outros
-    //---------------------------------------------------------------------
-    $fonte = "Portal Sinajuve";
-    $notas = $emailDoGestor; //para recuperar o registro depois
-    $icone = 1; //restrição do banco
-
-    //---------------------------------------------------------------------
-    // manda requisicao
-    //---------------------------------------------------------------------
-
-    return "sucesso<br>";
-}
-
 
 function visao_deleta_ponto($id_ponto)
 {
@@ -570,7 +463,7 @@ function visao_deleta_ponto($id_ponto)
     if ($id_token) {
         $endpoint = '/app/api/layers/' . $id_ponto;
 
-        // mando body vazio
+        // mando body vazio, esse request manda o id no endpoint
         $response = visao_send([], $endpoint, $id_token, "DELETE");
 
         if (is_wp_error($response)) {
@@ -635,7 +528,6 @@ function retornaLatLon($ufDaInstituicao, $cidadeDaInstituicao)
 }
 
 
-
 add_shortcode('shortcode_testar_visao', 'testar_visao');
 function testar_visao()
 {
@@ -643,26 +535,26 @@ function testar_visao()
     echo '<p><strong>';
     echo __('Currently, the saved host is: ', 'tematres-wp-integration');
     echo ' </strong>';
-    echo get_option('tematorre_visao_host');
+    echo get_option('visao_hostname_conf');
     echo '</p>';
 
     echo '<p><strong>';
     echo __('Currently, the saved username is: ', 'tematres-wp-integration');
     echo ' </strong>';
-    echo get_option('tematorre_visao_user');
+    echo get_option('visao_username_conf');
     echo '</p>';
 
     echo '<p><strong>';
     echo __('Currently, the saved password is: ', 'tematres-wp-integration');
     echo ' </strong>';
-    echo get_option('tematorre_visao_pass');
+    echo get_option('visao_password_conf');
     echo '</p>';
 ?>
 
     <form class="card" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
         <div class="wizard-panel-content">
-            <h4>Pegar Token do Visão</h4>
-            <p>Clique aqui para pegar um token do Visão</p>
+            <h4>Testar o Visão</h4>
+            <p>Clique aqui para enviar o comando de teste</p>
 
             <div class="col-md-6 align-button-left">
                 <input type="submit" class="br-button primary" value="Token" name="enviar">
@@ -672,10 +564,9 @@ function testar_visao()
     </form>
 
 <?php
-
 }
 
-// Deleta todas as entradas de todos os forms
+// Função de teste
 function visao_autentica()
 {
     //visao_auth();
@@ -696,4 +587,3 @@ function visao_autentica()
 }
 add_action('admin_post_nopriv_visao_autentica', 'visao_autentica');
 add_action('admin_post_visao_autentica', 'visao_autentica');
->>>>>>> visao
