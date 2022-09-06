@@ -386,10 +386,15 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
 
         https: //stackoverflow.com/questions/17390784/how-to-format-an-utc-date-to-use-the-z-zulu-zone-designator-in-php
 
-        Resultado: no final vamos usar apenas o formato de data "c" que a API do visão consegue tratar
+        Resultado 1: no final vamos usar apenas o formato de data "c" que a API do visão consegue tratar
+        Atualização: Visão deu erro por conta do -03:00 adicionado por alguma das datas que a gente trata no código
+
+        Resultado 2: usar outro tipo de formatação que mostra a data no formato 2022-09-05T14:57:49Z
         ----------------------------------------------------------------------*/
 
-        $date = date("c");
+        //$date = date("c");        
+        $data = new DateTime();
+        $date = $data->format('Y-m-d\TH:i:s\Z');
 
         /*---------------------------------------------------------------------
         // Body
@@ -445,7 +450,7 @@ function visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaIns
             echo "Algo deu errado: " . $error_message;
         } else {
             $responseArray = json_decode($response["body"], true);
-            echo 'Ponto criado: ' . $responseArray["id"] . '<br>';
+            //echo 'Ponto criado: ' . $responseArray["id"] . '<br>';
             // ID para salvar em um fld
             return $responseArray["id"];
         }
@@ -473,7 +478,7 @@ function visao_deleta_ponto($id_ponto)
         } else {
             // No caso do delete, ele só me retorna que o status foi 200
             if ($response['response']['code'] == 200) {
-                echo 'Ponto excluido' . $id_ponto;
+                //echo 'Ponto excluido' . $id_ponto;
                 return true;
             } else {
                 $responseArray = json_decode($response["body"], true);
@@ -557,7 +562,7 @@ function testar_visao()
             <p>Clique aqui para enviar o comando de teste</p>
 
             <div class="col-md-6 align-button-left">
-                <input type="submit" class="br-button primary" value="Token" name="enviar">
+                <input type="submit" class="br-button primary" value="Testar" name="enviar">
                 <input type="hidden" name="action" value="visao_autentica">
             </div>
         </div>
@@ -583,7 +588,24 @@ function visao_autentica()
     // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 7", "https://www.google.com/", "rede-de-inovacao");
     // visao_cria_ponto("Acre", "Acrelândia", "Teste Rebeca 8", "https://www.google.com/", "rede-de-tecnologia");
 
-    // visao_deleta_ponto(415274);
+    // visao_deleta_ponto(415276);
 }
 add_action('admin_post_nopriv_visao_autentica', 'visao_autentica');
 add_action('admin_post_visao_autentica', 'visao_autentica');
+
+
+function relaciona_link_visao($s)
+{
+    switch ($s) {
+        case "rede-de-suporte":
+            return "https://visao.ibict.br/app/#/visao?chart=1&grupCategory=220&l=264";
+        case "rede-de-formacao":
+            return "https://visao.ibict.br/app/#/visao?chart=1&grupCategory=220&l=265";
+        case "rede-de-pesquisa":
+            return "https://visao.ibict.br/app/#/visao?chart=1&grupCategory=220&l=266";
+        case "rede-de-inovacao":
+            return "https://visao.ibict.br/app/#/visao?chart=1&grupCategory=220&l=267";
+        case "rede-de-tecnologia":
+            return "https://visao.ibict.br/app/#/visao?chart=1&grupCategory=220&l=268";
+    }
+}

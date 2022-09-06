@@ -306,7 +306,12 @@ function homologado_action_form()
     $historicoParecer = $novoHistorico;
     $status = 'publicado';
 
-    update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
+    // Integrando com Visão
+    $ponto_visao = visao_cria_ponto($estadoDaInstituicao, $cidadeDaInstituicao, $nomeDaInstituicao, $urlDaInstituicao, $post_type);
+
+    $ponto_visao && add_post_meta($post_id, 'visao', relaciona_link_visao($post_type));
+
+    update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId, $ponto_visao);
 
     //-------------------------------------------------------- envia emails
     $nomeRede = relaciona($rede)[2];
@@ -369,6 +374,7 @@ function homologado_despublica_rede()
     $entryRede = new Caldera_Forms_Entry($form, $entradaRedeId);
 
     $historicoParecer = valida($entryRede, 'fld_6135036');
+    $ponto_visao = valida($entryRede, 'fld_9425460');
 
     //-------------------------------------------------------- deleta os posts
     $post_type = relaciona($rede)[0];
@@ -386,6 +392,10 @@ function homologado_despublica_rede()
     $historicoParecer = $novoHistorico;
     $status = 'homologado';
 
+    // Integrando com Visão
+    $ponto_visao && visao_deleta_ponto($ponto_visao);
+
+    // como ponto_visao = "" por default, ele vai apagar o registro anterior
     update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entradaRedeId);
 
     //-------------------------------------------------------- envia emails
@@ -423,7 +433,7 @@ function deleta_todos_posts($post_type, $usuario_id)
     }
 }
 
-function update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entrada_rede)
+function update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $status, $entrada_rede, $ponto_visao = "")
 {
     //Campo: status_*
     Caldera_Forms_Entry_Update::update_field_value('fld_3707629', $entrada_rede, $status);
@@ -431,6 +441,9 @@ function update_entrada_rede_homologado($historicoParecer, $parecerAvaliador, $s
     Caldera_Forms_Entry_Update::update_field_value('fld_6135036', $entrada_rede, $historicoParecer);
     //Campo: campo_extra1
     Caldera_Forms_Entry_Update::update_field_value('fld_5960872', $entrada_rede, $parecerAvaliador);
+
+    // campo_extra6
+    Caldera_Forms_Entry_Update::update_field_value('fld_9425460', $entrada_rede, $ponto_visao);
 }
 
 function historico_parecer_readonly($entry, $rede = "geral")

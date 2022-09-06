@@ -57,7 +57,7 @@
 			<?php if (get_field('visao')) { ?>
 				<div class="mt-3 mb-3">
 					<div class="visao-texto">
-						<p>Veja no mapa as unidades:</p>
+						<p>Veja no mapa as instituições:</p>
 						<a href="<?php the_field('visao'); ?>" target="_blank"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/visao.png" alt="Visão" style="width: 50px;"> </a>
 					</div>
 				</div>
@@ -143,19 +143,19 @@
 				</div>
 
 				<!-- <div class="row"> -->
-					<?php if (get_field('endereco')) { ?>
-						<div class="mt-3 mb-3">
-							<p class="font-weight-bold">Endereço</p>
-							<p><?php the_field('endereco'); ?></p>
-						</div>
-					<?php } ?>
+				<?php if (get_field('endereco')) { ?>
+					<div class="mt-3 mb-3">
+						<p class="font-weight-bold">Endereço</p>
+						<p><?php the_field('endereco'); ?></p>
+					</div>
+				<?php } ?>
 
-					<?php if (get_field('complemento')) { ?>
-						<div class="mt-3 mb-3">
-							<p class="font-weight-bold">Complemento</p>
-							<p><?php the_field('complemento'); ?></p>
-						</div>
-					<?php } ?>
+				<?php if (get_field('complemento')) { ?>
+					<div class="mt-3 mb-3">
+						<p class="font-weight-bold">Complemento</p>
+						<p><?php the_field('complemento'); ?></p>
+					</div>
+				<?php } ?>
 				<!-- </div> -->
 
 			<?php } ?>
