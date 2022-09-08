@@ -25,7 +25,7 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
   switch ($etapa) {
     case 'cadastro':
       $subject = 'Cadastro Torre MCTI';
-      $message = msg_candidatura_visualizar($nomeDaInstituicao);
+      $message = msg_candidatura_avaliar($nomeDaInstituicao);
       break;
 
     case 'desistir':
