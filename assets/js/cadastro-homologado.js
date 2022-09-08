@@ -55,7 +55,7 @@ function publicaRede(painel, redeArray, entradaRedeId) {
 }
 
 function despublicaRede(painel, redeArray, entradaRedeId) {
-  let text = "Você tem certeza que quer despublicar esta rede? Essa ação transformará o post existente como rascunho no Torre MCTI.";
+  let text = "Você tem certeza que quer despublicar esta rede? Essa ação excluirá o post existente no Torre MCTI.";
 
   if (!confirm(text)) {
     return;
