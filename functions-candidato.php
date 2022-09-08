@@ -1265,6 +1265,14 @@ function desistir_candidato()
     $doc1UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_5438248');
     $doc2UnidadeUrl = valida($entradas[FORM_ID_GERAL], 'fld_9588438');
 
+    foreach ($form_ids as $form_id) {
+        $ponto_visao = valida($entradas[$form_id], 'fld_9425460');
+
+        if ($ponto_visao != "") {
+            visao_deleta_ponto($ponto_visao);
+        }
+    }
+
     //Apagando as entradas:
     foreach ($entradas_id as $key => $value) {
         Caldera_Forms_Entry_Bulk::delete_entries(array($value));
