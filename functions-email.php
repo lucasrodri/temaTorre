@@ -81,7 +81,7 @@ function envia_email_avaliador($etapa, $nomeDaInstituicao, $parecer = '')
   $headers[] = 'Bcc: bcasamo@yahoo.com.br';
   $headers[] = 'Bcc: lucasrc.rodri@gmail.com';
 
-  //wp_mail($to, $subject, $message, $headers);
+  wp_mail($to, $subject, $message, $headers);
 }
 
 function msg_candidatura_visualizar($nomeDaInstituicao)
@@ -222,7 +222,7 @@ function envia_email($etapa, $nomeDaInstituicao, $emailDoCandidato, $rede = '', 
   $headers[] = 'Bcc: bcasamo@yahoo.com.br';
   //$headers[] = 'Bcc: lucasrc.rodri@gmail.com';
 
-  //wp_mail($to, $subject, $message, $headers);
+  wp_mail($to, $subject, $message, $headers);
 }
 
 

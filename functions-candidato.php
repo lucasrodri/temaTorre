@@ -1565,4 +1565,4 @@ function texto_bonito($item)
 
 
 //Definitions
-define('MOSTRA_ALTERADOS', false);
+define('MOSTRA_ALTERADOS', true);
